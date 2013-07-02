@@ -1,0 +1,306 @@
+!DOCTYPE HTML SYSTEM "-//Adobe//DWExtension layout-engine 10.0//floater">
+<html xmlns:MMString="http://www.macromedia.com/schemes/data/string/">
+	<head>
+		<title>Nemo</title>
+		<script language="JavaScript">
+			//CS6 Version!
+
+			var block = true;
+
+			function canShow(platform) {
+				return 'true';
+			}
+
+			function initialSize() {
+				return '60,60';
+			}
+
+			function selectionChanged() {
+				
+				if (!block) {
+					//get the selected node
+					var theDOM = dw.getDocumentDOM();
+					if (theDOM != null) {
+						var theNode = theDOM.getSelectedNode();
+						document.getElementById("status").innerHTML = "selected: " + theNode.tagName + "-" + theNode.id;
+
+						if (theNode.stay != null) {
+							document.body.style.background = "#d6d6d6";
+							document.getElementById("stayInput").value = theNode.stay;
+
+						} else {
+							document.body.style.background = "#bdbdbd";
+							document.getElementById("stayInput").value = "0";
+						}
+						
+						var nrSlides = getCurrentSlides();
+						document.getElementById("slidesInput").value = nrSlides;
+						if(document.getElementById("slidesContainer").childNodes.length != nrSlides+1){
+
+							//fill div container
+							document.getElementById("slidesContainer").innerHTML = "";
+							for(var i=0; i<nrSlides; i++){
+								document.getElementById("slidesContainer").innerHTML+='\
+								<li id="slide'+i+'" class="slide"> \
+								Slide'+(i+1);
+								if(i>0)document.getElementById("slidesContainer").innerHTML+='<input type="button" class="slideButton upButton" onclick="moveSlideUp('+i+')" value="u" />';
+								if(i<nrSlides-1)document.getElementById("slidesContainer").innerHTML+='<input type="button" class="slideButton downButton" onclick="moveSlideDown('+i+')" value="d" />'
+								document.getElementById("slidesContainer").innerHTML+='<input type="button" class="slideButton remButton" onclick="remSlide('+i+')" value="x" /></li>'
+							}
+							document.getElementById("slidesContainer").innerHTML+='<li id="addASlide", class="slide">\
+							<input type="button" class="SlideButton AddButton" onclick="addASlide();" value="Add a Slide" />\
+							</li>'
+
+						}
+					} else {
+						document.getElementById("status").innerHTML = "nothing selected"
+					}					
+				} else {
+					document.body.style.background = "#939393";
+				}
+			}
+
+			// update the document with any changes made by	the user in the textarea
+			function updateScript() {
+				block = true;
+				var theDOM2 = dw.getDocumentDOM();
+				if (theDOM2 != null) {
+					document.body.style.background = "#d4d4d4";
+					var theNode = theDOM2.getSelectedNode();
+					theNode.stay = document.getElementById("stayInput").value;
+				}
+				block = false;
+
+			}
+
+			function updateSlides(givenConfirm) {
+				block = true;
+				var currentSlides = getCurrentSlides();
+				if (parseInt(document.getElementById("slidesInput").value) == currentSlides) {
+					//do nothing!
+					document.getElementById("status").innerHTML = "do nothing!";
+				} else {
+					if (parseInt(document.getElementById("slidesInput").value) > currentSlides) {
+						for (var i = currentSlides; i < parseInt(document.getElementById("slidesInput").value); i++) {
+							dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + i + '" style="left: ' + (i * 1024) + 'px;"><div class="comment">'+(i+1)+ '</div></div>');
+						}
+
+						document.getElementById("status").innerHTML = "adding slide";
+					} else {
+						//check if content
+						var hasContent = false;
+						for (var i = currentSlides; i > parseInt(document.getElementById("slidesInput").value); i--) {
+							//if (dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i - 1)].innerHTML.length > 36) {
+							if (dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i-1)].childNodes.length > 1) {
+								//if(dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i-1)].childNodes.length>0){
+								hasContent = true;
+								//break;
+							}
+							//dw.getDocumentDOM().getElementById("contentDiv").removeChild(dw.getDocumentDOM().getElementById("slide2"));
+						}
+
+						//confirm
+						if (hasContent && givenConfirm) {
+							if (!confirm("Some of the slides have content. Are you sure you wish to remove the X slides?")) {
+								document.getElementById("slidesInput").value = getCurrentSlides();
+								return;
+							}
+						}
+
+						//rem
+						for (var i = currentSlides; i > parseInt(document.getElementById("slidesInput").value); i--) {
+							dw.getDocumentDOM().getElementById("contentDiv").innerHTML = dw.getDocumentDOM().getElementById("contentDiv").innerHTML.substring(0, dw.getDocumentDOM().getElementById("contentDiv").innerHTML.lastIndexOf('<div class="slide"'));
+
+						}
+
+						//trimm slides. warn if slides have content
+						//for(var i = currentSlides; i>parseInt(document.getElementById("slidesInput").value); i--){
+						//dw.getDocumentDOM().getElementById("contentDiv").removeChild(dw.getDocumentDOM().getElementById("slide2"));
+						//}
+						document.getElementById("status").innerHTML = "trimm slide";
+					}
+				}
+				document.getElementById("slidesInput").value = getCurrentSlides();
+				block = false;
+			}
+
+			function remSlide(index){
+				//move the selected slide to the end
+				var slideToBeRemoved = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
+				var lastSlide = getCurrentSlides()-1;
+				var bottomSlide;
+
+				//confirm
+				if((dw.getDocumentDOM().getElementById("contentDiv").childNodes[index].childNodes.length > 1) && !confirm("The slide has content. Are you sure you wish to remove it?")) {
+					return; //do nothing.
+				}
+
+				//remove
+				for(var i=index; i<lastSlide; i++){
+					dw.getDocumentDOM().getElementById("slide" + i).innerHTML = dw.getDocumentDOM().getElementById("slide" + (i+1)).innerHTML;
+
+					var nodes = dw.getDocumentDOM().getElementById("slide" + (i)).childNodes;
+					for (var j = 0; j < nodes.length; j++) {
+						if (nodes[j].class == "comment slidenumber")
+							nodes[j].innerHTML = (i);
+					}
+				}
+				//then do the usual removing thing.
+				document.getElementById("slidesInput").value = (lastSlide);
+				updateSlides(false);
+
+			}
+
+			function moveSlideDown(index){
+				var bottomSlide = dw.getDocumentDOM().getElementById("slide" + (index+1)).innerHTML;
+				dw.getDocumentDOM().getElementById("slide" + (index+1)).innerHTML = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
+				dw.getDocumentDOM().getElementById("slide" + index).innerHTML = bottomSlide;
+
+				var nodes = dw.getDocumentDOM().getElementById("slide" + (index)).childNodes;
+				for (var i = 0; i < nodes.length; i++) {
+					if (nodes[i].class == "comment slidenumber")
+						nodes[i].innerHTML = (index+1);
+				}
+				nodes = dw.getDocumentDOM().getElementById("slide" + (index+1)).childNodes;
+				for ( i = 0; i < nodes.length; i++) {
+					if (nodes[i].class == "comment slidenumber")
+						nodes[i].innerHTML = (index+2);
+				}				
+			}
+
+			function moveSlideUp(index){
+				var bottomSlide = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
+				dw.getDocumentDOM().getElementById("slide" + index).innerHTML = dw.getDocumentDOM().getElementById("slide" + (index-1)).innerHTML;
+				dw.getDocumentDOM().getElementById("slide" + (index-1)).innerHTML = bottomSlide;
+
+				var nodes = dw.getDocumentDOM().getElementById("slide" + (index)).childNodes;
+				for (var i = 0; i < nodes.length; i++) {
+					if (nodes[i].class == "comment slidenumber")
+						nodes[i].innerHTML = (index+1);
+				}
+				nodes = dw.getDocumentDOM().getElementById("slide" + (index-1)).childNodes;
+				for ( i = 0; i < nodes.length; i++) {
+					if (nodes[i].class == "comment slidenumber")
+						nodes[i].innerHTML = (index);
+				}				
+			}
+
+			function addASlide() {
+				var j = getCurrentSlides();
+				dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '" style="left: ' + (j * 1024) + 'px;"><div class="comment">'+(j+1)+ '</div></div>');
+				//j-1? no idea why that is needed.
+				document.getElementById("slidesInput").value = getCurrentSlides();
+				document.getElementById("slidesInput").value = "9001";
+				selectionChanged();
+			}
+
+			function getCurrentSlides() {
+				var r = 0;
+				var nodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
+				for ( i = 0; i < nodes.length; i++) {
+					if (nodes[i].class == "slide")
+						r++;
+				}
+				return r;
+
+				
+			}
+
+			function updateScriptKey(e) {
+
+			}
+
+			function isResizable() {
+				return true;
+			}
+
+
+			document.getElementById("status").innerHTML = "Started";
+		</script>
+
+		<style>
+			html, body, div {
+				padding: 0px;
+				margin: 0px;
+				font-size: 12px;
+				font-family: arial;
+			}
+
+			body {
+				background-color: #bdbdbd;
+			}
+
+			input {
+				width: 40px;
+			}
+
+			#slidesDiv{
+				border:		1px solid #AAA;
+			}
+			#slidesContainer{
+				width: 		100%;
+				height:		300px;
+				overflow: 	scroll;
+				border:		1px solid #777;
+				margin:		0px;
+				padding:	1px;
+			}
+
+			.slide{
+				height:		20px;
+				width:		100%;
+				background-color: #bdbdbd;
+				border:		1px solid #AAA;
+				padding:	0px;
+				margin:		0px;
+			}
+			.slideButton{
+				height:		18px;
+				width:		18px;
+				margin:		0px;
+				padding:	0px;
+				position: 	absolute;
+				margin-top:	-9px;
+			}
+			.remButton{
+				right:		0px;
+			}
+			.downButton{
+				right:		20px;
+			}
+			.upButton{
+				right:		40px;
+			}
+			.AddButton{
+				width:		60px;
+				right:		0px;
+			}
+			#maindiv {
+			}
+		</style>
+
+	</head>
+	<body onfocus="getSel()">
+		<div id="status">
+			Loading...
+		</div>
+		<div id="maindiv">
+			<div id="staydiv">
+				Stay:
+				<input type="text" id="stayInput" style="margin-left: 16px" align="right" value = "2" onblur="updateScript(true)" oninput="updateScript()" />
+			</div>
+			<div id="slidesDiv">
+				<div id="slidesControlsDiv">
+					Total Frames: 
+					<input type="text" id="slidesInput" style="margin-left: 5px" align="right" value = "10" />
+					<input type="button" id="slidesButton" style="margin-left: 5px" value="Apply" onclick="updateSlides(true)" />
+				</div>
+				<ul id="slidesContainer">
+				</ul>
+			</div>
+		</div>
+		<script>
+			block = false;
+		</script>
+	</body>
+</html>

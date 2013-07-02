@@ -1,0 +1,95 @@
+html{
+	font-family:			Arial;
+	font-size:				12px;
+	width: 					1024px;
+}
+
+.comment{
+	display:				none;
+}
+
+
+#contentDiv{
+	background-image:		url("background.svg");
+	position:				absolute;
+	top:					0px;
+	left:					0px;
+	width:					1024px;
+	height:					643px;
+	overflow:				hidden;
+}
+
+.nm_TextField, .nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Input, .nm_Explanation{
+	border-radius:			15px;
+	background-color: 		rgb(255, 255, 255);
+	border: 				2px solid black;
+	padding:				7px;
+	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+}
+
+.nm_TextField{			
+	text-align:				justify;
+	text-justify:			auto;
+}
+
+.nm_Exclamation{
+	background-color: 		#00adef;
+}
+
+.nm_TextBubble{	
+	background-color: 		rgba(0,0,0,0);
+	border-style:			solid;
+	border-width:			15px 80px 70px 24px;
+	-o-border-image:		url("point.svg") 10% 30% 50% 10%;
+	-webkit-border-image:	url("point.svg") 10% 30% 50% 10%;
+	border-image:			url("point.svg") 10% 30% 50% 10% fill;	
+	padding:				0px;
+}
+.nm_Explanation{
+	background-color: 		rgba(0,0,0,0);
+	border-style:			solid;
+	border-width:			15px 80px 70px 24px;
+	-o-border-image:		url("point-blue.svg") 10% 30% 50% 10%;
+	-webkit-border-image:	url("point-blue.svg") 10% 30% 50% 10%;
+	border-image:			url("point-blue.svg") 10% 30% 50% 10% fill;	
+	padding:				0px;
+}
+.nm_TextBubbleContent, .nm_ExplanationContent{	
+	padding:				10px 10px 7px 1px;
+	margin:					-16px -77px -16px -15px;
+	text-align:				justify;
+	text-justify:			auto;
+}
+
+.nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
+	border-radius: 			50%;	
+	background-repeat:		repeat;
+	background-attachment:	fixed;
+}
+.nm_Hatching_blue{background-image: url("hatching-blue.svg");}
+.nm_Hatching_red{background-image: url("hatching-red.svg");}
+.nm_Hatching_green{background-image: url("hatching-green.svg");}
+
+
+.nm_TextfieldNJ{
+}
+
+.nm_Input{
+}
+
+
+.nm_Ground{
+	background-image:		url("ground.svg");
+	background-repeat:		no-repeat;
+	width:					786px;
+	height:					75px;
+}
+
+
+.slide{
+	position:				absolute;
+	width:					1024px;
+	height:					660px;
+	z-index: 				2;
+}
