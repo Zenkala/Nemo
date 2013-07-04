@@ -1,3 +1,9 @@
+/* colors:
+	red: #eb1f3a;
+	green: #20af4b;
+	blue: #009ec2;
+*/
+
 html{
 	font-family:			Arial;
 	font-size:				12px;
@@ -15,11 +21,11 @@ html{
 	top:					0px;
 	left:					0px;
 	width:					1024px;
-	height:					643px;
+	height:					672px;
 	overflow:				hidden;
 }
 
-.nm_TextField, .nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Input, .nm_Explanation{
+.nm_TextField, .nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Explanation{
 	border-radius:			15px;
 	background-color: 		rgb(255, 255, 255);
 	border: 				2px solid black;
@@ -28,13 +34,27 @@ html{
 	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
 }
 
+.nm_Input_range, .nm_Input_text{
+	border-radius:			15px;
+	background-color: 		rgb(255, 255, 255);
+	border: 				2px solid black;
+	padding:				7px;
+	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+}
+.nm_Input_range{
+	background-color: 		#20af4b;
+	width:					200px;
+	height:					50px;
+}
+
 .nm_TextField{			
 	text-align:				justify;
 	text-justify:			auto;
 }
 
 .nm_Exclamation{
-	background-color: 		#00adef;
+	background-color: 		#5bb8e8;
 }
 
 .nm_TextBubble{	
@@ -71,13 +91,11 @@ html{
 .nm_Hatching_red{background-image: url("hatching-red.svg");}
 .nm_Hatching_green{background-image: url("hatching-green.svg");}
 
-
 .nm_TextfieldNJ{
 }
 
 .nm_Input{
 }
-
 
 .nm_Ground{
 	background-image:		url("ground.svg");
@@ -86,10 +104,9 @@ html{
 	height:					75px;
 }
 
-
 .slide{
 	position:				absolute;
 	width:					1024px;
-	height:					660px;
+	height:					672px;
 	z-index: 				2;
 }

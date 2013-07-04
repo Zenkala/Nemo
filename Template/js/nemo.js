@@ -84,22 +84,28 @@ function startNemoScript(){
 		$(".slide").css("border", '');
 				
 		//swap work css to display css 
-		//var oldlink = document.getElementById("mainCSS").item(cssLinkIndex);
 		var oldlink = document.getElementById("mainCSS");
- 
 		var newlink = document.createElement("link");
 		newlink.setAttribute("rel", "stylesheet");
 		newlink.setAttribute("type", "text/css");
-		newlink.setAttribute("href", "css/nemo.css");
-		
+		newlink.setAttribute("href", "css/nemo.css");		
 		document.getElementsByTagName("head")[0].replaceChild(newlink, oldlink);	
 		console.log("Swapping " + oldlink.getAttribute("href") + " with " + newlink.getAttribute("href"));	
 		 		
+		//add jqplot css
 		var fileref=document.createElement("link");
 		fileref.setAttribute("rel", "stylesheet");
 		fileref.setAttribute("type", "text/css");
 		fileref.setAttribute("href", "js/jqplot/jquery.jqplot.min.css");
 		document.getElementsByTagName("head")[0].appendChild(fileref);				
+
+		//add jquery ui css
+		var fileref=document.createElement("link");
+		fileref.setAttribute("rel", "stylesheet");
+		fileref.setAttribute("type", "text/css");
+		fileref.setAttribute("href", "css/ui-lightness/jquery-ui-1.10.3.custom.min.css");
+		document.getElementsByTagName("head")[0].appendChild(fileref);				
+		
 		
 		//set original parent of each element.
 		$(".slide").children().each(function(){
@@ -122,6 +128,10 @@ function startNemoScript(){
 			$(this).append(divBuffer);
 		});
 		
+		//make sliders
+		console.log("do sliders");
+		$(".nm_slider").slider({ step: 5, value: 15, min: 0, max: 30 });
+
 		//make title
 		$("#title").html(document.title);
 		
