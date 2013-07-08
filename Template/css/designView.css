@@ -4,7 +4,9 @@ html{
 }
 
 #contentDiv{
-	height:				641px; /*672px doesn't work?*/
+	top:				0px;
+	height:				auto;
+	width:				auto;
 }
 #title{
 	display:			none;
@@ -73,4 +75,5 @@ html{
 	border: 1px black solid;
 	z-index: 2;
 	text-align: center;
+
 }

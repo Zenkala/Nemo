@@ -1,0 +1,84 @@
+﻿<macromedia-extension
+	 name="Nemo"
+	 version="0.1.0"
+	 type="command"
+	 locked="false"
+	 requires-restart="True"
+	 pkgtype="mxp">
+
+	<author name="Willem van Vliet" />
+
+	<products>
+		<product name="Dreamweaver" version="12" primary="true" />
+	</products>
+
+	<update  />
+
+	<description>
+	<![CDATA[
+	Installs the OLO development enviorment for Dreamweaver and HTML5: Nemo.
+	Less Jesus praising; more fish.
+	]]>
+	</description>
+
+	<ui-access>
+	</ui-access>
+
+	<license-agreement>
+	</license-agreement>
+
+	<files>
+		<file source="Floaters\Nemo.htm" destination="$dreamweaver\Configuration\Floaters\Nemo.htm" />
+		<file source="Floaters\Animations.htm" destination="$dreamweaver\Configuration\Floaters\Animations.htm" />
+
+		<file source="Inspectors\NM_Input.htm" destination="$dreamweaver\Configuration\Inspectors\NM_Input.htm" />
+		<file source="Inspectors\NM_Input.js" destination="$dreamweaver\Configuration\Inspectors\NM_Input.js" />
+		<file source="Inspectors\NM_Input_2x.png" destination="$dreamweaver\Configuration\Inspectors\NM_Input_2x.png" />
+
+		<file source="Objects\Nemo\NM_Comment.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Comment.htm" />
+		<file source="Objects\Nemo\NM_Comment.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Comment.js" />
+		<file source="Objects\Nemo\NM_Comment.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Comment.png" />
+
+		<file source="Objects\Nemo\NM_Exclamation.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Exclamation.htm" />
+		<file source="Objects\Nemo\NM_Exclamation.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Exclamation.js" />
+		<file source="Objects\Nemo\NM_Exclamation.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Exclamation.png" />
+
+		<file source="Objects\Nemo\NM_Ground.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Ground.htm" />
+		<file source="Objects\Nemo\NM_Ground.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Ground.js" />
+		<file source="Objects\Nemo\NM_Ground.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Ground.png" />
+
+		<file source="Objects\Nemo\NM_Hatching.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Hatching.htm" />
+		<file source="Objects\Nemo\NM_Hatching.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Hatching.js" />
+		<file source="Objects\Nemo\NM_Hatching.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Hatching.png" />
+
+		<file source="Objects\Nemo\NM_Image.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Image.htm" />
+		<file source="Objects\Nemo\NM_Image.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Image.js" />
+		<file source="Objects\Nemo\NM_Image.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Image.png" />
+
+		<file source="Objects\Nemo\NM_Input.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Input.htm" />
+		<file source="Objects\Nemo\NM_Input.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Input.js" />
+		<file source="Objects\Nemo\NM_Input.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Input.png" />
+
+		<file source="Objects\Nemo\NM_TextBubble.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextBubble.htm" />
+		<file source="Objects\Nemo\NM_TextBubble.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextBubble.js" />
+		<file source="Objects\Nemo\NM_TextBubble.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextBubble.png" />\
+
+		<file source="Objects\Nemo\NM_TextField.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextField.htm" />
+		<file source="Objects\Nemo\NM_TextField.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextField.js" />
+		<file source="Objects\Nemo\NM_TextField.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextField.png" />
+		
+		<file source="Objects\insertbar.xml" destination="$dreamweaver\Configuration\Objects\insertbar.xml" />
+
+	</files>
+
+	<configuration-changes>
+		<menu-insert appendTo="DWMenu_Edit" skipSeparator="true">
+			<menuitem name="Nemo-Slides" enabled="true" command="dw.toggleFloater('Nemo')" checked="dw.getFloaterVisibility('Nemo')" />
+			<menuitem name="Nemo-Animations" enabled="true" command="dw.toggleFloater('Animations')" checked="dw.getFloaterVisibility('Animations')" />      
+			<menuitem name="Extention" enabled="true" command="dw.toggleFloater('Extention')" checked="dw.getFloaterVisibility('Extention')" />	
+		</menu-insert>
+	</configuration-changes>
+
+	<signatures />
+
+</macromedia-extension>

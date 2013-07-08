@@ -7,7 +7,7 @@ var canvas;
 function newSlideHdl(index, backwards){
 	console.log("newSlideHdl called " + index + " backwards: " + backwards);	
 	if(index==1){
-		jQuery.Edge.getComposition( "starcrafts" ).getStage().stop(0);
+		//jQuery.Edge.getComposition( "starcrafts" ).getStage().stop(0);
 	}
 }
 
@@ -15,7 +15,7 @@ function newSlideHdl(index, backwards){
 function newSlideStopHdl(index, backwards){
 	console.log("newSlideStopHdlcalled " + index + " backwards: " + backwards);
 	if(index==1){
-		jQuery.Edge.getComposition( "starcrafts" ).getStage().play(0);
+		//jQuery.Edge.getComposition( "starcrafts" ).getStage().play(0);
 	}
 }
 		
