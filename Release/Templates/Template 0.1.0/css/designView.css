@@ -1,0 +1,79 @@
+html{
+	font-family:		Arial;
+	font-size:			12px;
+}
+
+#contentDiv{
+	top:				0px;
+	height:				auto;
+	width:				auto;
+}
+#title{
+	display:			none;
+}
+#navigation{
+	display:			none;
+}
+
+.comment{
+	display:			block;
+	color:				purple;
+}
+
+.nm_TextField, .nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, input, .nm_Explanation{{
+	background-color: 		rgb(255, 255, 255);
+	border: 				12px solid black;
+	padding:				7px;
+	text-align:				left;
+}
+
+.nm_TextBubble{	
+	background-image: 		url("point-design.png");
+	background-repeat: 		no-repeat;
+	background-position: 	right bottom;
+	background-attachment: 	fixed;
+	padding:				10px 10px 45px 10px;
+}
+
+ .nm_Explanation{
+ 	background-color: 		#5bb8e8;
+ }
+
+ .nm_Exclamation{
+	background-color: 		#5bb8e8;
+}
+
+.nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
+	border-radius: 			50%;	
+	background-repeat:		no-repeat;
+	background-attachment:	fixed;
+}
+.nm_Hatching_blue{background-image: url("hatching-blue.png");}
+.nm_Hatching_red{background-image: url("hatching-red.png");}
+.nm_Hatching_green{background-image: url("hatching-green.png");}
+
+.nm_Input{
+
+}
+
+.nm_Animation{
+	background-image:	url("animation-proxy.png");
+	background-repeat:	repeat;
+}
+
+.nm_Ground{
+	background-image:	url("ground.png");
+	background-repeat:	no-repeat;
+	width:				786px;
+	height:				75px;
+}
+
+.slide{
+	position: absolute;
+	width: 1024px;
+	height: 641px;
+	border: 1px black solid;
+	z-index: 2;
+	text-align: center;
+
+}
