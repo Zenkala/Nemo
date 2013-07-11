@@ -166,12 +166,13 @@
 				}
 				//then do the usual removing thing.
 				document.getElementById("slidesInput").value = (lastSlide);
+
 				updateSlides(false);
 
 			}
 
 			function moveSlideDown(index){
-				var bottomSlide = dw.getDocumentDOM().getElementById("slide" + (index+1)).innerHTML;
+				/*var bottomSlide = dw.getDocumentDOM().getElementById("slide" + (index+1)).innerHTML;
 				dw.getDocumentDOM().getElementById("slide" + (index+1)).innerHTML = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
 				dw.getDocumentDOM().getElementById("slide" + index).innerHTML = bottomSlide;
 
@@ -185,10 +186,15 @@
 					if (nodes[i].class == "comment slidenumber")
 						nodes[i].innerHTML = (index+2);
 				}		
+				nextSlide();*/
+				currentSlide = getCurrentSlide();
+				var goto = currentSlide + 1;
+				moveSlide(currentSlide, goto);
+				gotoSlide(goto);
 			}
 
 			function moveSlideUp(index){
-				var bottomSlide = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
+				/*var bottomSlide = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
 				dw.getDocumentDOM().getElementById("slide" + index).innerHTML = dw.getDocumentDOM().getElementById("slide" + (index-1)).innerHTML;
 				dw.getDocumentDOM().getElementById("slide" + (index-1)).innerHTML = bottomSlide;
 
@@ -201,16 +207,49 @@
 				for ( i = 0; i < nodes.length; i++) {
 					if (nodes[i].class == "comment slidenumber")
 						nodes[i].innerHTML = (index);
-				}		
+				}*/
+				currentSlide = getCurrentSlide();
+				var goto = currentSlide - 1;
+				moveSlide(currentSlide, goto);
+				gotoSlide(goto);
+			}
+
+			function moveSlide(fromPos, toPos) {
+				// Store the two object slides that will be swapped
+				var fromSlide = dw.getDocumentDOM().getElementById("slide" + fromPos);
+				var toSlide = dw.getDocumentDOM().getElementById("slide" + toPos);
+
+				// Store content of slides that will be swapped
+				var contentOfFromSlide = dw.getDocumentDOM().getElementById("slide" + fromPos).innerHTML;
+				var contentOfToSlide = dw.getDocumentDOM().getElementById("slide" + toPos).innerHTML;
+
+				// Swap content of the two selected slides
+				toSlide.innerHTML = contentOfFromSlide;
+				fromSlide.innerHTML = contentOfToSlide;
+				
+				// Total reset of all comments inside all slides
+				// The ContentDiv should only contain slide-divs 
+				var nodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
+				var j = 0;
+				for(i = 0; i < nodes.length; i++) {
+					var childrenOfNode = nodes[i].childNodes;
+					for(k = 0; k < childrenOfNode.length; k++) {
+						childrenOfNode[k].innerHTML = i+1;
+					}
+				}
 			}
 
 			function addASlide() {
 				var j = getTotalSlides();
+				var c = currentSlide;
 				dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '" style="left: ' + (j * 1024) + 'px;"><div class="comment">'+(j+1)+ '</div></div>');
 				//j-1? no idea why that is needed.
+				
 				document.getElementById("slidesInput").value = getTotalSlides();
 				document.getElementById("slidesInput").value = "9001";
 				selectionChanged();
+				moveSlide(j, (c+1));
+				gotoSlide(c+1);
 			}
 
 			function getCurrentSlide() {
