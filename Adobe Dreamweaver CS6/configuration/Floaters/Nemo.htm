@@ -197,6 +197,16 @@
 				selectionChanged();
 			}
 
+			function getCurrentSlide() {
+				var nodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
+				for ( i = 0; i < nodes.length; i++) {
+					if (nodes[i].style.display == "block") {
+						return i;
+					}
+				}				
+				return -1;
+			}
+
 			function getTotalSlides() {
 				var r = 0;
 				var nodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
@@ -223,16 +233,16 @@
 						}
 					} 
 				}
-				
-
 			}
 
 			function nextSlide() {
+				currentSlide = getCurrentSlide();
 				var goto = currentSlide + 1;
 				gotoSlide(goto);
 			}
 			
 			function prevSlide() {
+				currentSlide = getCurrentSlide();
 				var goto = currentSlide - 1;
 				gotoSlide(goto);
 			}
