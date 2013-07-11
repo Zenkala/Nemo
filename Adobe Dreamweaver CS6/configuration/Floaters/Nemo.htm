@@ -7,6 +7,7 @@
 			//CS6 Version!
 
 			var block = true;
+			var currentSlide = 0;			
 
 			function canShow(platform) {
 				return 'true';
@@ -34,7 +35,7 @@
 							document.getElementById("stayInput").value = "0";
 						}
 						
-						var nrSlides = getCurrentSlides();
+						var nrSlides = getTotalSlides();
 						document.getElementById("slidesInput").value = nrSlides;
 						if(document.getElementById("slidesContainer").childNodes.length != nrSlides+1){
 
@@ -77,7 +78,7 @@
 
 			function updateSlides(givenConfirm) {
 				block = true;
-				var currentSlides = getCurrentSlides();
+				var currentSlides = getTotalSlides();
 				if (parseInt(document.getElementById("slidesInput").value) == currentSlides) {
 					//do nothing!
 					document.getElementById("status").innerHTML = "do nothing!";
@@ -104,7 +105,7 @@
 						//confirm
 						if (hasContent && givenConfirm) {
 							if (!confirm("Some of the slides have content. Are you sure you wish to remove the X slides?")) {
-								document.getElementById("slidesInput").value = getCurrentSlides();
+								document.getElementById("slidesInput").value = getTotalSlides();
 								return;
 							}
 						}
@@ -122,14 +123,14 @@
 						document.getElementById("status").innerHTML = "trimm slide";
 					}
 				}
-				document.getElementById("slidesInput").value = getCurrentSlides();
+				document.getElementById("slidesInput").value = getTotalSlides();
 				block = false;
 			}
 
 			function remSlide(index){
 				//move the selected slide to the end
 				var slideToBeRemoved = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
-				var lastSlide = getCurrentSlides()-1;
+				var lastSlide = getTotalSlides()-1;
 				var bottomSlide;
 
 				//confirm
@@ -188,15 +189,15 @@
 			}
 
 			function addASlide() {
-				var j = getCurrentSlides();
+				var j = getTotalSlides();
 				dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '" style="left: ' + (j * 1024) + 'px;"><div class="comment">'+(j+1)+ '</div></div>');
 				//j-1? no idea why that is needed.
-				document.getElementById("slidesInput").value = getCurrentSlides();
+				document.getElementById("slidesInput").value = getTotalSlides();
 				document.getElementById("slidesInput").value = "9001";
 				selectionChanged();
 			}
 
-			function getCurrentSlides() {
+			function getTotalSlides() {
 				var r = 0;
 				var nodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
 				for ( i = 0; i < nodes.length; i++) {
@@ -204,9 +205,38 @@
 						r++;
 				}
 				return r;
-
-				
 			}
+
+			function gotoSlide(index) {
+				var theDOM = dw.getDocumentDOM();
+				var slideCount = getTotalSlides();
+				
+				if (theDOM != null && slideCount > 0) {
+					if(index >= 0 && index < slideCount) {
+						theDOM.getElementById("slide" + currentSlide).removeAttribute("style");
+						theDOM.getElementById("slide" + index).setAttribute("style", "display: block;");
+						currentSlide = index;
+						document.getElementById("currentSlideText").innerHTML = "Current slide: " + currentSlide;
+						
+						if(dw.canFitSize()) {
+						//	dw.fitWidth();
+						}
+					} 
+				}
+				
+
+			}
+
+			function nextSlide() {
+				var goto = currentSlide + 1;
+				gotoSlide(goto);
+			}
+			
+			function prevSlide() {
+				var goto = currentSlide - 1;
+				gotoSlide(goto);
+			}
+
 
 			function updateScriptKey(e) {
 
@@ -315,6 +345,11 @@
 				</div>
 				<ul id="slidesContainer">
 				</ul>
+			</div>
+			<div id="navigation">
+				<div id="currentSlideText">Current slide: 0</div>
+				<input type="button" onclick="prevSlide();" value="Previous slide" />
+				<input type="button" onclick="nextSlide();" value="Next slide" />
 			</div>
 		</div>
 		<script>
