@@ -187,9 +187,8 @@
 						nodes[i].innerHTML = (index+2);
 				}		
 				nextSlide();*/
-				currentSlide = getCurrentSlide();
-				var goto = currentSlide + 1;
-				moveSlide(currentSlide, goto);
+				var goto = index + 1;
+				moveSlide(index, goto);
 				gotoSlide(goto);
 			}
 
@@ -208,9 +207,8 @@
 					if (nodes[i].class == "comment slidenumber")
 						nodes[i].innerHTML = (index);
 				}*/
-				currentSlide = getCurrentSlide();
-				var goto = currentSlide - 1;
-				moveSlide(currentSlide, goto);
+				var goto = index - 1;
+				moveSlide(index, goto);
 				gotoSlide(goto);
 			}
 
