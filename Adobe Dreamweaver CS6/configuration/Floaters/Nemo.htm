@@ -6,8 +6,8 @@
 		<script language="JavaScript">
 			//CS6 Version!
 
-			var block = true;
-			var currentSlide = 0;			
+			var block = true;		
+			var currentSlide = 0;
 
 			function canShow(platform) {
 				return 'true';
@@ -44,7 +44,7 @@
 							for(var i=0; i<nrSlides; i++){
 								document.getElementById("slidesContainer").innerHTML+='\
 								<li id="slide'+i+'" class="slide"> \
-								Slide'+(i+1);
+								<input type="button" value="gotoSlide" onclick="gotoSlide('+i+')" />Slide'+(i+1);
 
 								if(i>0)document.getElementById("slidesContainer").innerHTML+='<input type="image" class="imageButton upButton" src="Images/nemo_arrow_up.png" onclick="moveSlideUp('+i+')" />';
 								if(i<nrSlides-1)document.getElementById("slidesContainer").innerHTML+='<input type="image" class="imageButton downButton" src="Images/nemo_arrow_down.png" onclick="moveSlideDown('+i+')" />'
@@ -53,6 +53,8 @@
 							document.getElementById("slidesContainer").innerHTML+='<li id="addASlide", class="slide">\
 							<input type="button" class="SlideButton AddButton" onclick="addASlide();" value="Add a Slide" />\
 							</li>'
+							
+							highlightSlideMenuItem();
 
 						}
 					} else {
@@ -73,6 +75,20 @@
 					theNode.stay = document.getElementById("stayInput").value;
 				}
 				block = false;
+
+			}
+
+			// hightlight current slide menu item
+			function highlightSlideMenuItem() {
+				var nrSlides = getTotalSlides();
+				for(var i=0; i<nrSlides; i++){
+					var currentElement = document.getElementById("slide"+i);
+					currentElement.className = "slide";
+					if(currentSlide == i) {
+						currentElement.className = currentElement.className + " active";
+					}
+				}
+
 
 			}
 
@@ -168,7 +184,7 @@
 				for ( i = 0; i < nodes.length; i++) {
 					if (nodes[i].class == "comment slidenumber")
 						nodes[i].innerHTML = (index+2);
-				}				
+				}		
 			}
 
 			function moveSlideUp(index){
@@ -185,7 +201,7 @@
 				for ( i = 0; i < nodes.length; i++) {
 					if (nodes[i].class == "comment slidenumber")
 						nodes[i].innerHTML = (index);
-				}				
+				}		
 			}
 
 			function addASlide() {
@@ -223,6 +239,7 @@
 				
 				if (theDOM != null && slideCount > 0) {
 					if(index >= 0 && index < slideCount) {
+						currentSlide = getCurrentSlide();
 						theDOM.getElementById("slide" + currentSlide).removeAttribute("style");
 						theDOM.getElementById("slide" + index).setAttribute("style", "display: block;");
 						currentSlide = index;
@@ -231,6 +248,7 @@
 						if(dw.canFitSize()) {
 						//	dw.fitWidth();
 						}
+						highlightSlideMenuItem();
 					} 
 				}
 			}
@@ -297,6 +315,12 @@
 				padding:	0px;
 				margin:		0px;
 			}
+
+			.active {
+				background-color: #afc6db;
+				font-weight:  bold;
+			}
+
 			.slideButton{
 				height:		18px;
 				width:		18px;
