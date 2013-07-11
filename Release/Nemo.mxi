@@ -68,6 +68,7 @@
 		<file source="Objects\Nemo\NM_TextField.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextField.png" />
 		
 		<file source="Objects\insertbar.xml" destination="$dreamweaver\Configuration\Objects\insertbar.xml" />
+		<file source="Menus\menus.xml" destination="$dreamweaver\Configuration\Menus\menus.xml" />
 
 	</files>
 

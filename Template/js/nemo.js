@@ -4,33 +4,32 @@ var sliding = false;
 
 var scripts = [	'js/jquery.transit.min.js',
 				'js/jquery-ui-1.10.3.custom.min.js',
-				'js/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',
-				"js/jqplot/jquery.jqplot.min.js",
-				"js/jqplot/plugins/jqplot.logAxisRenderer.min.js",
-				"js/jqplot/plugins/jqplot.canvasTextRenderer.min.js",
-				"js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js",
-				"js/jqplot/plugins/jqplot.canvasOverlay.min.js",
-				"js/jqplot/plugins/jqplot.pointLabels.min.js"
+				'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',
+				"http://uitlegapp.allyne.net/js-libs//jqplot/jquery.jqplot.min.js",
+				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.logAxisRenderer.min.js",
+				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.canvasTextRenderer.min.js",
+				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js",
+				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.canvasOverlay.min.js",
+				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.pointLabels.min.js",
+				"http://uitlegapp.allyne.net/js-libs//jqplot/jquery.jqplot.min.css",
+				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css"
 			];
 var animations;
 			
 function nemoInit(givenAnimations){
+	console.log("-----------NemoInit-----------");
 	animations = givenAnimations;
 	
 	//first thing: load jquery
-	console.log("load jquery");
-	
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
-		console.log("jquery-1.9.1.min.js loaded!");	
+		console.log("loaded: jquery-1.9.1.min.js");	
 		loadAnims();
-	}, { charset: "utf-8" }, 5000);
-	
+	}, { charset: "utf-8" }, 5000);	
 }
 
 //load the EDGE animations
 function loadAnims(){
-	console.log("load " + animations.length + " animations");
-	
+	console.log("load " + animations.length + " animations");	
 	if(animations.length>0){
 		animations.push("animations/starcrafts/edge_includes/edge.1.5.0.min.js");
 		animations.push("animations/starcrafts/starcrafts_edge.js");
@@ -51,8 +50,7 @@ function loadAnims(){
 }
 
 //load all the other library's we use
-function loadLibs(){
-	
+function loadLibs(){	
 	$(function() {
 		console.log("loading libraries");
 		yepnope([{
@@ -68,9 +66,7 @@ function loadLibs(){
 	});
 }
 
-function startNemoScript(){	
-	console.log("page loaded");
-	
+function startNemoScript(){		
 	//apply MathJax
 	console.log("configure MathJax");
 	MathJax.Hub.Configured();
@@ -92,41 +88,26 @@ function startNemoScript(){
 		document.getElementsByTagName("head")[0].replaceChild(newlink, oldlink);	
 		console.log("Swapping " + oldlink.getAttribute("href") + " with " + newlink.getAttribute("href"));	
 		 		
-		//add jqplot css
-		var fileref=document.createElement("link");
-		fileref.setAttribute("rel", "stylesheet");
-		fileref.setAttribute("type", "text/css");
-		fileref.setAttribute("href", "js/jqplot/jquery.jqplot.min.css");
-		document.getElementsByTagName("head")[0].appendChild(fileref);				
-
-		//add jquery ui css
-		var fileref=document.createElement("link");
-		fileref.setAttribute("rel", "stylesheet");
-		fileref.setAttribute("type", "text/css");
-		fileref.setAttribute("href", "css/ui-lightness/jquery-ui-1.10.3.custom.min.css");
-		document.getElementsByTagName("head")[0].appendChild(fileref);				
-		
-		
 		//set original parent of each element.
 		$(".slide").children().each(function(){
 			$(this).attr("org", $(this).parent().attr("id").substring(5));
-			console.log("set " + $(this).attr("id") + "(" + $(this).attr("class") + ") org to: " + $(this).attr("org"));
+			//console.log("set " + $(this).attr("id") + "(" + $(this).attr("class") + ") org to: " + $(this).attr("org"));
 		});
+		console.log("element origins set");
 		
 		//make nm_TextBubbleContent & nm_Explanation divs.
 		var divBuffer;		
 		$(".nm_TextBubble").each(function(){
-			console.log("create content: " + $(this).html());
 			divBuffer = $("<div>").html($(this).html()).addClass("nm_TextBubbleContent");
 			$(this).empty();
 			$(this).append(divBuffer);
 		});
 		$(".nm_Explanation").each(function(){
-			console.log("create content: " + $(this).html());
 			divBuffer = $("<div>").html($(this).html()).addClass("nm_ExplanationContent");
 			$(this).empty();
 			$(this).append(divBuffer);
 		});
+		console.log("content divs for bubbles made");
 		
 		//make sliders
 		console.log("do sliders");

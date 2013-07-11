@@ -91,6 +91,12 @@ html{
 .nm_Hatching_red{background-image: url("hatching-red.svg");}
 .nm_Hatching_green{background-image: url("hatching-green.svg");}
 
+/*Animation proxy's */
+.myAnimationName{
+	background-image:		url("animation-proxy.svg");
+	background-repeat:		repeat;
+}
+
 .nm_TextfieldNJ{
 }
 
@@ -110,3 +116,8 @@ html{
 	height:					672px;
 	z-index: 				2;
 }
+
+
+#slide0 { left: 			0px; }
+#slide1 { left: 			1024px; }
+#slide2 { left: 			2048px; }

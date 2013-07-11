@@ -36,7 +36,12 @@ html{
 }
 
  .nm_Explanation{
- 	background-color: 		#5bb8e8;
+	background-image: 		url("point-design.png");
+	background-color: 		#5bb8e8;
+	background-repeat: 		no-repeat;
+	background-position: 	right bottom;
+	background-attachment: 	fixed;
+	padding:				10px 10px 45px 10px;
  }
 
  .nm_Exclamation{

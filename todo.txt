@@ -1,0 +1,15 @@
+Todo list:
+Continue to refine the workflow
+
+Componenten:
+  NM_TextField:
+    Eindtermen parsing
+  NM_InfoBlok:
+    Maken :p
+  NM_Explanation:
+    wegklikbaar maken
+  NM_Input-text:
+    auto-controle functie maken (ala AR)
+  NM_Input-range:
+    labels, limit, steppings etc
+  
