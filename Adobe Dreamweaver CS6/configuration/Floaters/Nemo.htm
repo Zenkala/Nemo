@@ -47,7 +47,7 @@
 
 								if(i>0)document.getElementById("slidesContainer").innerHTML+='<input type="image" class="imageButton upButton" src="Images/nemo_arrow_up.png" onclick="moveSlideUp('+i+')" />';
 								if(i<nrSlides-1)document.getElementById("slidesContainer").innerHTML+='<input type="image" class="imageButton downButton" src="Images/nemo_arrow_down.png" onclick="moveSlideDown('+i+')" />'
-								document.getElementById("slidesContainer").innerHTML+='<input type="button" class="slideButton remButton" onclick="remSlide('+i+')" value="x" /></li>'
+								document.getElementById("slidesContainer").innerHTML+='<input type="image" class="imageButton remButton" src="Images/nemo_delete.png" onclick="remSlide('+i+')" value="x" /></li>'
 							}
 							document.getElementById("slidesContainer").innerHTML+='<li id="addASlide", class="slide">\
 							<input type="button" class="SlideButton AddButton" onclick="addASlide();" value="Add a Slide" />\
