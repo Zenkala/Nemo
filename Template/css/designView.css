@@ -1,6 +1,8 @@
 html{
 	font-family:		Arial;
 	font-size:			12px;
+	font-weight: 		normal;
+	font-variant: 		normal;
 }
 
 #contentDiv{
@@ -80,5 +82,7 @@ html{
 	border: 1px black solid;
 	z-index: 2;
 	text-align: center;
+	left:	0px;
+	display: none;
 
 }

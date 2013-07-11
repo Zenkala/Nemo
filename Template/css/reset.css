@@ -45,17 +45,4 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-}#contentDiv {
-	font-weight: bold;
-	width: 186px;
-	height: 76px;
-	left: 149px;
-	top: 117px;
-}
-#contentDiv {
-	font-style: italic;
-	width: 200px;
-	height: 53px;
-	left: 123px;
-	top: 127px;
 }

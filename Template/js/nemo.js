@@ -79,6 +79,14 @@ function startNemoScript(){
 		//set other css styles which are set for workview
 		$(".slide").css("border", '');
 				
+		//position all the slides.
+		console.log("positioning the slides");
+		var i = 0;
+		$(".slide").each(function() {
+			$(this).css("left", (i*1024) + "px");
+			i++;
+		});
+
 		//swap work css to display css 
 		var oldlink = document.getElementById("mainCSS");
 		var newlink = document.createElement("link");

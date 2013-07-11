@@ -14,7 +14,6 @@ html{
 	display:				none;
 }
 
-
 #contentDiv{
 	background-image:		url("background.svg");
 	position:				absolute;
@@ -83,7 +82,7 @@ html{
 }
 
 .nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
-	border-radius: 			50%;	
+	border-radius: 			50%;
 	background-repeat:		repeat;
 	background-attachment:	fixed;
 }
@@ -116,8 +115,3 @@ html{
 	height:					672px;
 	z-index: 				2;
 }
-
-
-#slide0 { left: 			0px; }
-#slide1 { left: 			1024px; }
-#slide2 { left: 			2048px; }

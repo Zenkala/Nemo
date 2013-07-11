@@ -6,6 +6,7 @@
 			//CS6 Version!
 
 			var block = true;
+			var slideIndex = 0;
 
 			function canShow(platform) {
 				return 'true';
@@ -202,8 +203,33 @@
 						r++;
 				}
 				return r;
+			}
 
+			function setSlide(direction) {
+				var theDOM = dw.getDocumentDOM();
+				var slideCount = getCurrentSlides();
+				alert("going to " + slideIndex);
+				if (theDOM != null && slideCount > 0) {
+					dw.getDocumentDOM().getElementById("slide" + slideIndex).style.display = "none";
+					slideIndex+=direction;
+					dw.getDocumentDOM().getElementById("slide" + slideIndex).style.display = "block";
+				}
+/*
+				slideIndex += direction;
+				alert("going to " + slideIndex);
 				
+				if (theDOM != null && slideCount > 0) {
+					if(slideIndex >= 0 && slideIndex < slideCount) {
+						var trayPos = "position: absolute; left: " + -1024*(slideIndex) + "px";
+						theDOM.getElementById("contentDiv").setAttribute("style", trayPos);
+						document.getElementById("currentSlide").innerHTML = "Current slide: " + slideIndex;
+						
+						if(dw.canFitSize()) {
+							dw.fitWidth();
+						}
+					} 
+				}
+				*/
 			}
 
 			function updateScriptKey(e) {
@@ -239,8 +265,8 @@
 			}
 			#slidesContainer{
 				width: 		100%;
-				height:		300px;
-				overflow: 	scroll;
+				height:		auto;
+				overflow: 	hidden;
 				border:		1px solid #777;
 				margin:		0px;
 				padding:	1px;
@@ -277,10 +303,18 @@
 			}
 			#maindiv {
 			}
+			#navigation {
+				width:		100%;
+				height:		30px;
+				background-color: yellow;
+			}
+			.navButton {
+
+			}
 		</style>
 
 	</head>
-	<body onfocus="getSel()">
+	<body onfocus="getSel()">	
 		<div id="status">
 			Loading...
 		</div>
@@ -297,6 +331,7 @@
 				</div>
 				<ul id="slidesContainer">
 				</ul>
+
 			</div>
 		</div>
 		<script>
