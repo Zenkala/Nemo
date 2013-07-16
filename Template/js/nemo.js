@@ -119,7 +119,10 @@ function startNemoScript(){
 		$("#contentDiv").css("height", "643px");
 		//set other css styles which are set for workview
 		$(".slide").css("border", '');
-				
+		
+		//remove commentSlide
+		$("#commentslide").remove();
+
 		//position all the slides.
 		console.log("positioning the slides");
 		var i = 0;
@@ -148,7 +151,7 @@ function startNemoScript(){
 		var divBuffer;		
 		$(".nm_TextBubble").each(function(){
 			divBuffer = $("<div>").html($(this).html()).addClass("nm_TextBubbleContent");
-			$(this).empty();
+			$(this).empty(); 
 			$(this).append(divBuffer);
 		});
 		$(".nm_Explanation").each(function(){
