@@ -9,9 +9,11 @@ html{
 	top:				0px;
 	height:				auto;
 	width:				auto;
+	visibility: hidden;
 }
 #title{
 	display:			none;
+	visibility: hidden;
 }
 #navigation{
 	display:			none;
@@ -84,5 +86,10 @@ html{
 	text-align: center;
 	left:	0px;
 	display: none;
+	visibility: visible;
 
+}
+
+#commentslide {
+	background: #F1F2F2	url("commentslide.png") 356px 288px no-repeat;
 }
