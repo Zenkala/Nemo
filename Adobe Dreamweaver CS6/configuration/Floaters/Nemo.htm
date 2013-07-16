@@ -2,7 +2,6 @@
 <html xmlns:MMString="http://www.macromedia.com/schemes/data/string/">
 	<head>
 		<title>Nemo</title>
-		<script src="nemo_functions.js" language="JavaScript" />
 		<script language="JavaScript">
 			//CS6 Version!
 
@@ -87,9 +86,11 @@
 				if(currentSlide >= 0) {
 					for(var i=0; i<nrSlides; i++){
 						var currentElement = document.getElementById("slide"+i);
-						currentElement.className = "slide";
-						if(currentSlide == i) {
-							currentElement.className = currentElement.className + " highlight";
+						if(currentElement){
+							currentElement.className = "slide";
+							if(currentSlide == i) {
+								currentElement.className = currentElement.className + " highlight";
+							}
 						}
 					}
 				} else {
@@ -102,45 +103,47 @@
 			function updateSlides(givenConfirm) {
 				block = true;
 				var currentSlides = getTotalSlides();
-				if (parseInt(document.getElementById("slidesInput").value) == currentSlides) {
+				var targetAmount = parseInt(document.getElementById("slidesInput").value);
+				if (targetAmount == currentSlides) {
 					//do nothing!
 					document.getElementById("status").innerHTML = "do nothing!";
 				} else {
-					if (parseInt(document.getElementById("slidesInput").value) > currentSlides) {
-						for (var i = currentSlides; i < parseInt(document.getElementById("slidesInput").value); i++) {
-							dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + i + '"><div class="comment">'+(i+1)+ '</div></div>');
+					if (targetAmount > currentSlides) {
+						//Add slides
+						for (var i = currentSlides; i < targetAmount; i++) {
+							currentSlide = i-1;
+							addASlide();
 						}
 
 						document.getElementById("status").innerHTML = "adding slide";
-					} else {
+					} else { //remove slides. Do targetAmount+1 because of the commentSlide
 						//check if content
+
 						var hasContent = false;
-						for (var i = currentSlides; i > parseInt(document.getElementById("slidesInput").value); i--) {
+						for (var i = currentSlides; i > targetAmount; i--) {
 							//if (dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i - 1)].innerHTML.length > 36) {
 							if (dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i-1)].childNodes.length > 1) {
-								//if(dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i-1)].childNodes.length>0){
 								hasContent = true;
-								//break;
+								break;
 							}
-							//dw.getDocumentDOM().getElementById("contentDiv").removeChild(dw.getDocumentDOM().getElementById("slide2"));
 						}
 
 						//confirm
 						if (hasContent && givenConfirm) {
-							if (!confirm("Some of the slides have content. Are you sure you wish to remove the X slides?")) {
+							if (!confirm("Some of the slides have content. Are you sure you wish to remove the " + (currentSlides-targetAmount) + " slides?")) {
 								document.getElementById("slidesInput").value = getTotalSlides();
 								return;
 							}
 						}
 
 						//rem
-						for (var i = currentSlides; i > parseInt(document.getElementById("slidesInput").value); i--) {
-							dw.getDocumentDOM().getElementById("contentDiv").innerHTML = dw.getDocumentDOM().getElementById("contentDiv").innerHTML.substring(0, dw.getDocumentDOM().getElementById("contentDiv").innerHTML.lastIndexOf('<div class="slide"'));
+						for (var i = currentSlides; i > targetAmount; i--) {
+							dw.getDocumentDOM().getElementById("contentDiv").innerHTML = dw.getDocumentDOM().getElementById("contentDiv").innerHTML.substring(0, dw.getDocumentDOM().getElementById("contentDiv").innerHTML.lastIndexOf('<div class="slide'));
 
 						}
 
 						//trimm slides. warn if slides have content
-						//for(var i = currentSlides; i>parseInt(document.getElementById("slidesInput").value); i--){
+						//for(var i = currentSlides; i>targetAmount; i--){
 						//dw.getDocumentDOM().getElementById("contentDiv").removeChild(dw.getDocumentDOM().getElementById("slide2"));
 						//}
 						document.getElementById("status").innerHTML = "trimm slide";
@@ -218,13 +221,13 @@
 			function addASlide() {
 				var j = getTotalSlides();
 				var c = currentSlide;
-				if(j==0){
+				/*if(j==0){
 					dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide slideActive" id="slide' + j + '"><div class="comment slideNumber">'+(j+1)+ '</div></div>');
 					//j-1? no idea why that is needed.
-				}else{
+				}else{*/
 					dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '"><div class="comment slideNumber">'+(j+1)+ '</div></div>');
 					//j-1? no idea why that is needed.
-				}
+				//}
 				document.getElementById("slidesInput").value = getTotalSlides();
 				document.getElementById("slidesInput").value = "9001";
 				selectionChanged();

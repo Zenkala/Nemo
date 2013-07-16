@@ -5,8 +5,8 @@
 		<script language="JavaScript">
 			//CS6 Version!
 
-			var block = true;
-			var slideIndex = 0;
+			var block = true;		
+			var currentSlide = -1; // default set is the comment slide 
 
 			function canShow(platform) {
 				return 'true';
@@ -19,6 +19,7 @@
 			function selectionChanged() {
 				
 				if (!block) {
+					
 					//get the selected node
 					var theDOM = dw.getDocumentDOM();
 					if (theDOM != null) {
@@ -34,7 +35,7 @@
 							document.getElementById("stayInput").value = "0";
 						}
 						
-						var nrSlides = getCurrentSlides();
+						var nrSlides = getTotalSlides();
 						document.getElementById("slidesInput").value = nrSlides;
 						if(document.getElementById("slidesContainer").childNodes.length != nrSlides+1){
 
@@ -43,19 +44,24 @@
 							for(var i=0; i<nrSlides; i++){
 								document.getElementById("slidesContainer").innerHTML+='\
 								<li id="slide'+i+'" class="slide"> \
-								Slide'+(i+1);
-								if(i>0)document.getElementById("slidesContainer").innerHTML+='<input type="button" class="slideButton upButton" onclick="moveSlideUp('+i+')" value="u" />';
-								if(i<nrSlides-1)document.getElementById("slidesContainer").innerHTML+='<input type="button" class="slideButton downButton" onclick="moveSlideDown('+i+')" value="d" />'
-								document.getElementById("slidesContainer").innerHTML+='<input type="button" class="slideButton remButton" onclick="remSlide('+i+')" value="x" /></li>'
+								<input type="button" value="gotoSlide" onclick="gotoSlide('+i+')" />Slide'+(i+1);
+
+								if(i>0)document.getElementById("slidesContainer").innerHTML+='<input type="image" class="imageButton upButton" src="Images/nemo_arrow_up.png" onclick="moveSlideUp('+i+')" />';
+								if(i<nrSlides-1)document.getElementById("slidesContainer").innerHTML+='<input type="image" class="imageButton downButton" src="Images/nemo_arrow_down.png" onclick="moveSlideDown('+i+')" />'
+								document.getElementById("slidesContainer").innerHTML+='<input type="image" class="imageButton remButton" src="Images/nemo_delete.png" onclick="remSlide('+i+')" value="x" /></li>'
 							}
 							document.getElementById("slidesContainer").innerHTML+='<li id="addASlide", class="slide">\
 							<input type="button" class="SlideButton AddButton" onclick="addASlide();" value="Add a Slide" />\
 							</li>'
+							
+							highlightSlideMenuItem();
 
 						}
+
 					} else {
 						document.getElementById("status").innerHTML = "nothing selected"
-					}					
+					}	
+								
 				} else {
 					document.body.style.background = "#939393";
 				}
@@ -74,65 +80,87 @@
 
 			}
 
+			// hightlight current slide menu item
+			function highlightSlideMenuItem() {
+				var nrSlides = getTotalSlides();
+				if(currentSlide >= 0) {
+					for(var i=0; i<nrSlides; i++){
+						var currentElement = document.getElementById("slide"+i);
+						if(currentElement){
+							currentElement.className = "slide";
+							if(currentSlide == i) {
+								currentElement.className = currentElement.className + " highlight";
+							}
+						}
+					}
+				} else {
+					for(var i=0; i<nrSlides; i++){
+						document.getElementById("slide"+i).className = "slide";
+					}
+				}
+			}
+
 			function updateSlides(givenConfirm) {
 				block = true;
-				var currentSlides = getCurrentSlides();
-				if (parseInt(document.getElementById("slidesInput").value) == currentSlides) {
+				var currentSlides = getTotalSlides();
+				var targetAmount = parseInt(document.getElementById("slidesInput").value);
+				if (targetAmount == currentSlides) {
 					//do nothing!
 					document.getElementById("status").innerHTML = "do nothing!";
 				} else {
-					if (parseInt(document.getElementById("slidesInput").value) > currentSlides) {
-						for (var i = currentSlides; i < parseInt(document.getElementById("slidesInput").value); i++) {
-							dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + i + '" style="left: ' + (i * 1024) + 'px;"><div class="comment">'+(i+1)+ '</div></div>');
+					if (targetAmount > currentSlides) {
+						//Add slides
+						for (var i = currentSlides; i < targetAmount; i++) {
+							currentSlide = i-1;
+							addASlide();
 						}
 
 						document.getElementById("status").innerHTML = "adding slide";
-					} else {
+					} else { //remove slides. Do targetAmount+1 because of the commentSlide
 						//check if content
+
 						var hasContent = false;
-						for (var i = currentSlides; i > parseInt(document.getElementById("slidesInput").value); i--) {
+						for (var i = currentSlides; i > targetAmount; i--) {
 							//if (dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i - 1)].innerHTML.length > 36) {
 							if (dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i-1)].childNodes.length > 1) {
-								//if(dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i-1)].childNodes.length>0){
 								hasContent = true;
-								//break;
+								break;
 							}
-							//dw.getDocumentDOM().getElementById("contentDiv").removeChild(dw.getDocumentDOM().getElementById("slide2"));
 						}
 
 						//confirm
 						if (hasContent && givenConfirm) {
-							if (!confirm("Some of the slides have content. Are you sure you wish to remove the X slides?")) {
-								document.getElementById("slidesInput").value = getCurrentSlides();
+							if (!confirm("Some of the slides have content. Are you sure you wish to remove the " + (currentSlides-targetAmount) + " slides?")) {
+								document.getElementById("slidesInput").value = getTotalSlides();
 								return;
 							}
 						}
 
 						//rem
-						for (var i = currentSlides; i > parseInt(document.getElementById("slidesInput").value); i--) {
-							dw.getDocumentDOM().getElementById("contentDiv").innerHTML = dw.getDocumentDOM().getElementById("contentDiv").innerHTML.substring(0, dw.getDocumentDOM().getElementById("contentDiv").innerHTML.lastIndexOf('<div class="slide"'));
+						for (var i = currentSlides; i > targetAmount; i--) {
+							dw.getDocumentDOM().getElementById("contentDiv").innerHTML = dw.getDocumentDOM().getElementById("contentDiv").innerHTML.substring(0, dw.getDocumentDOM().getElementById("contentDiv").innerHTML.lastIndexOf('<div class="slide'));
 
 						}
 
 						//trimm slides. warn if slides have content
-						//for(var i = currentSlides; i>parseInt(document.getElementById("slidesInput").value); i--){
+						//for(var i = currentSlides; i>targetAmount; i--){
 						//dw.getDocumentDOM().getElementById("contentDiv").removeChild(dw.getDocumentDOM().getElementById("slide2"));
 						//}
 						document.getElementById("status").innerHTML = "trimm slide";
 					}
 				}
-				document.getElementById("slidesInput").value = getCurrentSlides();
+				document.getElementById("slidesInput").value = getTotalSlides();
 				block = false;
 			}
 
 			function remSlide(index){
 				//move the selected slide to the end
 				var slideToBeRemoved = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
-				var lastSlide = getCurrentSlides()-1;
+				var lastSlide = getTotalSlides()-1;
 				var bottomSlide;
 
 				//confirm
-				if((dw.getDocumentDOM().getElementById("contentDiv").childNodes[index].childNodes.length > 1) && !confirm("The slide has content. Are you sure you wish to remove it?")) {
+				if((getSlideNodes(false)[index].childNodes.length > 1) && !confirm("The slide has content. Are you sure you wish to remove it?")) {
 					return; //do nothing.
 				}
 
@@ -148,88 +176,143 @@
 				}
 				//then do the usual removing thing.
 				document.getElementById("slidesInput").value = (lastSlide);
+
 				updateSlides(false);
 
 			}
 
 			function moveSlideDown(index){
-				var bottomSlide = dw.getDocumentDOM().getElementById("slide" + (index+1)).innerHTML;
-				dw.getDocumentDOM().getElementById("slide" + (index+1)).innerHTML = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
-				dw.getDocumentDOM().getElementById("slide" + index).innerHTML = bottomSlide;
-
-				var nodes = dw.getDocumentDOM().getElementById("slide" + (index)).childNodes;
-				for (var i = 0; i < nodes.length; i++) {
-					if (nodes[i].class == "comment slidenumber")
-						nodes[i].innerHTML = (index+1);
-				}
-				nodes = dw.getDocumentDOM().getElementById("slide" + (index+1)).childNodes;
-				for ( i = 0; i < nodes.length; i++) {
-					if (nodes[i].class == "comment slidenumber")
-						nodes[i].innerHTML = (index+2);
-				}				
+				var goto = index + 1;
+				moveSlide(index, goto);
+				gotoSlide(goto);
 			}
 
 			function moveSlideUp(index){
-				var bottomSlide = dw.getDocumentDOM().getElementById("slide" + index).innerHTML;
-				dw.getDocumentDOM().getElementById("slide" + index).innerHTML = dw.getDocumentDOM().getElementById("slide" + (index-1)).innerHTML;
-				dw.getDocumentDOM().getElementById("slide" + (index-1)).innerHTML = bottomSlide;
+				var goto = index - 1;
+				moveSlide(index, goto);
+				gotoSlide(goto);
+			}
 
-				var nodes = dw.getDocumentDOM().getElementById("slide" + (index)).childNodes;
-				for (var i = 0; i < nodes.length; i++) {
-					if (nodes[i].class == "comment slidenumber")
-						nodes[i].innerHTML = (index+1);
+			function moveSlide(fromPos, toPos) {
+				// Store the two object slides that will be swapped
+				var fromSlide = dw.getDocumentDOM().getElementById("slide" + fromPos);
+				var toSlide = dw.getDocumentDOM().getElementById("slide" + toPos);
+
+				// Store content of slides that will be swapped
+				var contentOfFromSlide = dw.getDocumentDOM().getElementById("slide" + fromPos).innerHTML;
+				var contentOfToSlide = dw.getDocumentDOM().getElementById("slide" + toPos).innerHTML;
+
+				// Swap content of the two selected slides
+				toSlide.innerHTML = contentOfFromSlide;
+				fromSlide.innerHTML = contentOfToSlide;
+				
+				// Total reset of all comments inside all slides
+				// The ContentDiv should only contain slide-divs 
+				var nodes = getSlideNodes(false);
+				var j = 0;
+				for(i = 0; i < nodes.length; i++) {
+					var childrenOfNode = nodes[i].childNodes;
+					for(k = 0; k < childrenOfNode.length; k++) {
+						if(childrenOfNode[k].class == "comment slideNumber") childrenOfNode[k].innerHTML = i+1;
+					}
 				}
-				nodes = dw.getDocumentDOM().getElementById("slide" + (index-1)).childNodes;
-				for ( i = 0; i < nodes.length; i++) {
-					if (nodes[i].class == "comment slidenumber")
-						nodes[i].innerHTML = (index);
-				}				
 			}
 
 			function addASlide() {
-				var j = getCurrentSlides();
-				dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '" style="left: ' + (j * 1024) + 'px;"><div class="comment">'+(j+1)+ '</div></div>');
-				//j-1? no idea why that is needed.
-				document.getElementById("slidesInput").value = getCurrentSlides();
+				var j = getTotalSlides();
+				var c = currentSlide;
+				/*if(j==0){
+					dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide slideActive" id="slide' + j + '"><div class="comment slideNumber">'+(j+1)+ '</div></div>');
+					//j-1? no idea why that is needed.
+				}else{*/
+					dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '"><div class="comment slideNumber">'+(j+1)+ '</div></div>');
+					//j-1? no idea why that is needed.
+				//}
+				document.getElementById("slidesInput").value = getTotalSlides();
 				document.getElementById("slidesInput").value = "9001";
 				selectionChanged();
+				if(j>0)moveSlide(j, (c+1));
+				gotoSlide(c+1);
 			}
 
-			function getCurrentSlides() {
-				var r = 0;
-				var nodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
+			function getCurrentSlide() {
+				var nodes = getSlideNodes(true);
 				for ( i = 0; i < nodes.length; i++) {
-					if (nodes[i].class == "slide")
+					if (nodes[i].className == "slide activeSlide") {
+						return i-1; //commentslide is included
+					}
+				}				
+				return 0;
+			}
+
+			function getTotalSlides() {
+				var r = 0;
+				var nodes = getSlideNodes(false);
+				for ( i = 0; i < nodes.length; i++) {
+					if (nodes[i].class == "slide" || nodes[i].class == "slide activeSlide")
 						r++;
 				}
 				return r;
 			}
 
-			function setSlide(direction) {
+			function gotoSlide(index) {
 				var theDOM = dw.getDocumentDOM();
-				var slideCount = getCurrentSlides();
-				alert("going to " + slideIndex);
-				if (theDOM != null && slideCount > 0) {
-					dw.getDocumentDOM().getElementById("slide" + slideIndex).style.display = "none";
-					slideIndex+=direction;
-					dw.getDocumentDOM().getElementById("slide" + slideIndex).style.display = "block";
-				}
-/*
-				slideIndex += direction;
-				alert("going to " + slideIndex);
+				var slideCount = getTotalSlides();
 				
 				if (theDOM != null && slideCount > 0) {
-					if(slideIndex >= 0 && slideIndex < slideCount) {
-						var trayPos = "position: absolute; left: " + -1024*(slideIndex) + "px";
-						theDOM.getElementById("contentDiv").setAttribute("style", trayPos);
-						document.getElementById("currentSlide").innerHTML = "Current slide: " + slideIndex;
-						
-						if(dw.canFitSize()) {
-							dw.fitWidth();
+					currentSlide = getCurrentSlide();
+					if(index >= 0 && index < slideCount) {
+						if(currentSlide >= 0) {
+							theDOM.getElementById("slide" + currentSlide).className = "slide";
+							theDOM.getElementById("slide" + index).className = "slide activeSlide";
+						} else {
+							theDOM.getElementById("commentslide").className = "slide";
+							theDOM.getElementById("slide" + index).className = "slide activeSlide";
 						}
-					} 
+						currentSlide = index;
+						document.getElementById("currentSlideText").innerHTML = "Current slide: " + currentSlide;
+					} else {
+						if(currentSlide >= 0) {
+							theDOM.getElementById("slide" + currentSlide).className = "slide";
+							theDOM.getElementById("commentslide").className = "slide activeSlide";
+							currentSlide = -1;
+							document.getElementById("currentSlideText").innerHTML = "Current slide: " + currentSlide;
+						}
+					}
+					highlightSlideMenuItem();
 				}
-				*/
+			}
+
+			function nextSlide() {
+				currentSlide = getCurrentSlide();
+				var goto = currentSlide + 1;
+				gotoSlide(goto);
+			}
+			
+			function prevSlide() {
+				currentSlide = getCurrentSlide();
+				var goto = currentSlide - 1;
+				gotoSlide(goto);
+			}
+
+			// return all valid slides insides contentDiv 
+			function getSlideNodes(withComment){
+				var allNodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
+				var slideNodes = new Array();
+				if(withComment){
+					for(i=0; i< allNodes.length; i++) {
+						if(allNodes[i].class == "slide" || allNodes[i].class == "slide activeSlide") {
+							slideNodes.push(allNodes[i]);
+						}
+					}
+				}else{
+					for(i=0; i< allNodes.length; i++) {
+						if((allNodes[i].class == "slide" || allNodes[i].class == "slide activeSlide") && allNodes[i].id != "commentslide") {
+							slideNodes.push(allNodes[i]);
+						}
+					}
+				}
+				return slideNodes;
 			}
 
 			function updateScriptKey(e) {
@@ -254,6 +337,7 @@
 
 			body {
 				background-color: #bdbdbd;
+				margin: 0;
 			}
 
 			input {
@@ -265,8 +349,8 @@
 			}
 			#slidesContainer{
 				width: 		100%;
-				height:		auto;
-				overflow: 	hidden;
+				height:		300px;
+				overflow: 	scroll;
 				border:		1px solid #777;
 				margin:		0px;
 				padding:	1px;
@@ -280,6 +364,12 @@
 				padding:	0px;
 				margin:		0px;
 			}
+
+			.highlight {
+				background-color: #afc6db;
+				font-weight:  bold;
+			}
+
 			.slideButton{
 				height:		18px;
 				width:		18px;
@@ -288,6 +378,21 @@
 				position: 	absolute;
 				margin-top:	-9px;
 			}
+
+			.dragclass {
+				position: relative;
+				cursor: move;
+			}
+
+			.imageButton {
+				position: absolute;
+				width: 16px;
+				height: 16px;
+				margin: 0px;
+				padding: 0px;
+				position:  absolute;
+			}
+
 			.remButton{
 				right:		0px;
 			}
@@ -303,22 +408,17 @@
 			}
 			#maindiv {
 			}
-			#navigation {
-				width:		100%;
-				height:		30px;
-				background-color: yellow;
-			}
-			.navButton {
-
-			}
 		</style>
 
 	</head>
-	<body onfocus="getSel()">	
+	<body onfocus="getSel()">
 		<div id="status">
 			Loading...
 		</div>
 		<div id="maindiv">
+			<div id="commentdiv">
+				<input type="button" value="comment" onclick="gotoSlide(-1);" />
+			</div>
 			<div id="staydiv">
 				Stay:
 				<input type="text" id="stayInput" style="margin-left: 16px" align="right" value = "2" onblur="updateScript(true)" oninput="updateScript()" />
@@ -331,7 +431,11 @@
 				</div>
 				<ul id="slidesContainer">
 				</ul>
-
+			</div>
+			<div id="navigation">
+				<div id="currentSlideText">Current slide: 0</div>
+				<input type="button" onclick="prevSlide();" value="Previous slide" />
+				<input type="button" onclick="nextSlide();" value="Next slide" />
 			</div>
 		</div>
 		<script>

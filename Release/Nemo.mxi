@@ -1,6 +1,6 @@
 ﻿<macromedia-extension
 	 name="Nemo"
-	 version="0.1.0"
+	 version="0.2.1"
 	 type="command"
 	 locked="false"
 	 requires-restart="True"
@@ -12,7 +12,7 @@
 		<product name="Dreamweaver" version="12" primary="true" />
 	</products>
 
-	<update  />
+	<update  /> 
 
 	<description>
 	<![CDATA[
@@ -75,8 +75,7 @@
 	<configuration-changes>
 		<menu-insert appendTo="DWMenu_Edit" skipSeparator="true">
 			<menuitem name="Nemo-Slides" enabled="true" command="dw.toggleFloater('Nemo')" checked="dw.getFloaterVisibility('Nemo')" />
-			<menuitem name="Nemo-Animations" enabled="true" command="dw.toggleFloater('Animations')" checked="dw.getFloaterVisibility('Animations')" />      
-			<menuitem name="Extention" enabled="true" command="dw.toggleFloater('Extention')" checked="dw.getFloaterVisibility('Extention')" />	
+			<menuitem name="Nemo-Animations" enabled="true" command="dw.toggleFloater('Animations')" checked="dw.getFloaterVisibility('Animations')" />   
 		</menu-insert>
 	</configuration-changes>
 
