@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<csxs:CSExtension xmlns:fx="http://ns.adobe.com/mxml/2009"
+				  xmlns:s="library://ns.adobe.com/flex/spark"
+				  xmlns:csxs="com.adobe.csxs.core.*"
+				  width="200" height="400" applicationComplete="appComplete()"
+				  backgroundColor="#A23838" color="#000000" preloaderChromeColor="#8D1414"
+				  minWidth="200" maxWidth="200" minHeight="400" maxHeight="800"
+				  status="Starting">
+	<csxs:layout>
+		<s:VerticalLayout horizontalAlign="left" paddingBottom="4" paddingLeft="4" paddingRight="4"
+						  paddingTop="4"/>
+	</csxs:layout>
+	<fx:Style source="Nemo.css"/>
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.csxs.core.CSExtension;
+			
+			import mx.events.FlexNativeWindowBoundsEvent;
+			
+			public function appComplete():void{
+			 	//CSXSInterface.instance.autoThemeColorChange = true;
+				this.status = "Ready";
+				
+				this.addEventListener(mx.events.FlexNativeWindowBoundsEvent.WINDOW_RESIZE, onResize);
+				onResize(null); //initial resize
+				
+				nrSlides.value = 4;
+				slideContainer.dataProvider.addItem("ContentSlide");
+				slideContainer.dataProvider.addItem("Slide 1");
+				slideContainer.dataProvider.addItem("Slide 2");
+				slideContainer.dataProvider.addItem("Slide 3");
+				
+				this.addEventListener(MouseEvent.CLICK, onClick);
+			}
+			
+			private function onClick(e:MouseEvent = null):void {
+				trace("mouse: (" + e.stageX + "," + e.stageY + ")");
+			}
+			
+			private function onResize(e:FlexNativeWindowBoundsEvent = null):void {
+				var w:int;
+				var h:int;
+				if(e) {
+					w = e.afterBounds.width;
+					h = e.afterBounds.height;
+				}else{
+					w = 200;
+					h = 400;
+				}
+								
+				//resize content
+				mainVGroup.setActualSize(w-8, h-32);
+				//make list as big as possible
+				slideContainer.height = h-(slideContainer.y+119);
+			}
+						
+			
+		]]>
+	</fx:Script>
+	<s:VGroup id="mainVGroup" x="0" y="0" horizontalAlign="justify" verticalAlign="top">
+		<s:Button width="0" label="Run JSX code" click="NemoJSX.run()"/>
+		<s:HGroup height="25">
+			<s:Label width="70" height="25" text="Toal slides:" verticalAlign="middle"/>
+			<s:NumericStepper width="50" height="25"/>
+		</s:HGroup>
+		<s:HGroup height="25">
+			<s:Label width="70" height="25" text="Total slides:" verticalAlign="middle"/>
+			<s:NumericStepper id="nrSlides" width="50" height="25" maximum="256" minimum="1"/>
+			<s:Button width="52" height="25" label="Apply"/>
+		</s:HGroup>
+		<s:List id="slideContainer" height="196">
+			<s:dataProvider>
+				<s:ArrayCollection>
+					
+				</s:ArrayCollection>
+			</s:dataProvider>
+		</s:List>
+		<s:Button id="addASileButton" height="25" label="Add a Slide"/>
+		<s:HGroup width="200" height="50" gap="6">
+			<s:Button width="91" height="50" label="prev"/>
+			<s:Button width="91" height="50" label="next"/>
+		</s:HGroup>
+	</s:VGroup>
+		
+</csxs:CSExtension>
