@@ -78,16 +78,19 @@ html{
 }
 
 .slide{
-	position: absolute;
-	width: 1024px;
-	height: 641px;
-	border: 1px black solid;
-	z-index: 2;
-	text-align: center;
-	left:	0px;
-	display: none;
-	visibility: visible;
+	position: 			absolute;
+	width: 				1024px;
+	height: 			641px;
+	border: 			1px black solid;
+	z-index: 			2;
+	text-align:			center;
+	left:				0px;
+	display: 			none;
+	visibility: 		visible;
+}
 
+.activeSlide {
+	display:			block;
 }
 
 #commentslide {

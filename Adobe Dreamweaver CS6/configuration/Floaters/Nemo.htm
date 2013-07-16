@@ -81,6 +81,7 @@
 			// hightlight current slide menu item
 			function highlightSlideMenuItem() {
 				var nrSlides = getTotalSlides();
+				alert("highlightSlideMenuItem " + nrSlides);
 				for(var i=0; i<nrSlides; i++){
 					var currentElement = document.getElementById("slide"+i);
 					currentElement.className = "slide";
@@ -101,7 +102,7 @@
 				} else {
 					if (parseInt(document.getElementById("slidesInput").value) > currentSlides) {
 						for (var i = currentSlides; i < parseInt(document.getElementById("slidesInput").value); i++) {
-							dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + i + '" style="left: ' + (i * 1024) + 'px;"><div class="comment">'+(i+1)+ '</div></div>');
+							dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + i + '"><div class="comment">'+(i+1)+ '</div></div>');
 						}
 
 						document.getElementById("status").innerHTML = "adding slide";
@@ -213,6 +214,7 @@
 			}
 
 			function moveSlide(fromPos, toPos) {
+				alert("modeSlide from: " + fromPos + " to " + toPos);
 				// Store the two object slides that will be swapped
 				var fromSlide = dw.getDocumentDOM().getElementById("slide" + fromPos);
 				var toSlide = dw.getDocumentDOM().getElementById("slide" + toPos);
@@ -240,31 +242,36 @@
 			function addASlide() {
 				var j = getTotalSlides();
 				var c = currentSlide;
-				dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '" style="left: ' + (j * 1024) + 'px;"><div class="comment">'+(j+1)+ '</div></div>');
-				//j-1? no idea why that is needed.
-				
+				alert("addASlide: " + c + "/" + j)
+				if(j==0){
+					dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide slideActive" id="slide' + j + '"><div class="comment">'+(j+1)+ '</div></div>');
+					//j-1? no idea why that is needed.
+				}else{
+					dw.getDocumentDOM().getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '"><div class="comment">'+(j+1)+ '</div></div>');
+					//j-1? no idea why that is needed.
+				}
 				document.getElementById("slidesInput").value = getTotalSlides();
 				document.getElementById("slidesInput").value = "9001";
 				selectionChanged();
-				moveSlide(j, (c+1));
+				if(j>0)moveSlide(j, (c+1));
 				gotoSlide(c+1);
 			}
 
 			function getCurrentSlide() {
 				var nodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
 				for ( i = 0; i < nodes.length; i++) {
-					if (nodes[i].style.display == "block") {
+					if (nodes[i].className == "slide slideActive") {
 						return i;
 					}
 				}				
-				return -1;
+				return 0;
 			}
 
 			function getTotalSlides() {
 				var r = 0;
 				var nodes = dw.getDocumentDOM().getElementById("contentDiv").childNodes;
 				for ( i = 0; i < nodes.length; i++) {
-					if (nodes[i].class == "slide")
+					if (nodes[i].class == "slide" || nodes[i].class == "slide activeSlide")
 						r++;
 				}
 				return r;
@@ -277,8 +284,8 @@
 				if (theDOM != null && slideCount > 0) {
 					if(index >= 0 && index < slideCount) {
 						currentSlide = getCurrentSlide();
-						theDOM.getElementById("slide" + currentSlide).removeAttribute("style");
-						theDOM.getElementById("slide" + index).setAttribute("style", "display: block;");
+						theDOM.getElementById("slide" + currentSlide).className = "slide";
+						theDOM.getElementById("slide" + index).className = "slide activeSlide";
 						currentSlide = index;
 						document.getElementById("currentSlideText").innerHTML = "Current slide: " + currentSlide;
 						
