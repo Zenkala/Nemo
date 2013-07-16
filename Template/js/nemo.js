@@ -15,32 +15,73 @@ var scripts = [	'js/jquery.transit.min.js',
 				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css"
 			];
 var animations;
-			
+
+function log(msg) {
+	var logger = window.console;
+	if (logger && logger.markTimeline) {
+		logger.markTimeline(msg);
+	}
+	console.log(msg)
+}
+
+var totalProgress = 14;
+var currentProgress = 0;
+var enableProgressBar = false;
+function progress(msg) {
+	currentProgress++;
+	console.log(currentProgress + msg);
+	if(enableProgressBar) {
+		$("#loadingLogo").css("margin-left", -325 + currentProgress/totalProgress*600);
+	}
+}
+		
 function nemoInit(givenAnimations){
-	console.log("-----------NemoInit-----------");
+	log("-----------NemoInit-----------");
 	animations = givenAnimations;
 	
 	//first thing: load jquery
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
 		console.log("loaded: jquery-1.9.1.min.js");	
+		$(function() {
+			log("preloader");
+
+			//hide stuff
+			$("#contentDiv").hide();
+			$("#navigation").hide();
+			$("#title").hide();
+
+			//display logo
+			var img = document.createElement("img");
+			img.src = "css/logo.png";
+
+			var lineImg = $('<div id="loadingBar" style="position: absolute; background-image: url(\'css/animation-proxy.svg\'); background-repeat: repeat-x; width: 600px; height: 5px; left:512px; top:336px; margin-left: -300px; margin-top: -2px;" />');			 
+			var logoImg = $('<img src="css/logo.png" id="loadingLogo" style="position: absolute; with: 50px; height: 50px; left:512px; top:336px; margin-left: -25px; margin-top: -25px;" />');
+			$('body').append(lineImg);
+			$('body').append(logoImg);
+			enableProgressBar = true;
+			progress("enable ProgressBar");
+
+		});
+
 		loadAnims();
 	}, { charset: "utf-8" }, 5000);	
 }
 
 //load the EDGE animations
 function loadAnims(){
-	console.log("load " + animations.length + " animations");	
+	log("load " + animations.length + " animations");	
 	if(animations.length>0){
+		totalProgress+=animations.length; //animations mean loanger load time
 		animations.push("animations/starcrafts/edge_includes/edge.1.5.0.min.js");
 		animations.push("animations/starcrafts/starcrafts_edge.js");
 		animations.push("animations/starcrafts/starcrafts_edgeActions.js");
 		yepnope([{
 			load: animations,
 			callback: function (url, result, key) {
-				console.log("loaded: " + url);
+				progress("loaded: " + url);
 			},
 			complete: function(){
-				console.log("loading animations complete"); 
+				log("loading animations complete"); 
 				loadLibs();				
 			}
 		}]);
@@ -52,14 +93,14 @@ function loadAnims(){
 //load all the other library's we use
 function loadLibs(){	
 	$(function() {
-		console.log("loading libraries");
+		log("loading libraries");
 		yepnope([{
 			load: scripts,
 			callback: function (url, result, key) {
-				console.log("loaded: " + url);
+				progress("loaded: " + url);
 			},
 			complete: function(){
-				console.log("yepnope complete"); 
+				log("yepnope complete"); 
 				startNemoScript();				
 			}
 		}]);
@@ -68,10 +109,10 @@ function loadLibs(){
 
 function startNemoScript(){		
 	//apply MathJax
-	console.log("configure MathJax");
+	log("configure MathJax");
 	MathJax.Hub.Configured();
 	MathJax.Hub.Register.StartupHook("End", function () {
-		console.log("MathJax ended");			
+		progress("MathJax ended");			
 	
 		//set contentDiv width and innerHeight
 		$("#contentDiv").css("width", "1024px");
@@ -124,8 +165,16 @@ function startNemoScript(){
 		//make title
 		$("#title").html(document.title);
 		
-		//start
-		onLoad();
+		//done with all our preperation work
+		log("-----------Nemodone-----------");
+		progress("NemoDone");		
+		$("#loadingLogo").remove();
+		$("#loadingBar").remove();
+		$("#contentDiv").show();
+		$("#navigation").show();
+		$("#title").show();
+		
+		onLoad(); //notify the javascript of the module that we're done
 		
 	});		
 	
