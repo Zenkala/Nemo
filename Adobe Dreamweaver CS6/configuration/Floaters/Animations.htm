@@ -5,6 +5,9 @@
 		<script language="JavaScript">
 			//CS6 Version!
 
+			var pathpatt = /^(.*[\\\/])/
+			var folderpath;
+
 			//sigh, dreamweaver. get a proper javascript engine!
 			Array.prototype.contains = function(obj) {
 			    var i = this.length;
@@ -78,15 +81,16 @@
 			  */
 
 			function addAnimation(){
+				folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
 				//ask use to select a folder
-				var fileURL = dreamweaver.browseForFileURL("select", "Select a '_edgePreload.js' File", false, true, new Array("Javascript Files (*.js)|*.js"), dreamweaver.getSiteRoot());
+				var fileURL = dreamweaver.browseForFileURL("select", "Select a '_edgePreload.js' File", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath);
 
 				if(fileURL){
 					if(fileURL[0] == "f"){
 						//fixed. do nothing
 					}else{
 						//reletive. add our root
-						fileURL = dreamweaver.getSiteRoot() + fileURL;
+						fileURL = folderpath + fileURL;
 					}
 
 					//get name
@@ -94,7 +98,7 @@
 					document.getElementById("status").innerHTML = "Loading " + animationName;
 
 					//make a folder for the animation
-					var folderURL = dreamweaver.getSiteRoot() + "animations/" + animationName;
+					var folderURL = folderpath + "animations/" + animationName;
 					var sourceFolderURL = /.*(?=\/)/.exec(fileURL); //extract the path from the url
 					DWfile.createFolder(folderURL);
 
@@ -109,7 +113,7 @@
 					var list = DWfile.listFolder(sourceFolderURL + "/images");
 					if (list){
 						for(var j=0; j<list.length; j++){
-							DWfile.copy(sourceFolderURL + "/images/" + list[j], dreamweaver.getSiteRoot() + "/images/" + list[j]);
+							DWfile.copy(sourceFolderURL + "/images/" + list[j], folderpath + "/images/" + list[j]);
 						}
 					}
 					
@@ -151,12 +155,13 @@
 			function updateAnimationList(){
 				document.getElementById("animationsContainer").innerHTML = "";
 				for(var i=0; i<animations.length; i++) {
-					document.getElementById("animationsContainer").innerHTML += '<li id="animation'+i+'" class="aniamtionContent">' + animations[i] + '<input type="button" value="Assign" onclick="assignAnimation('+i+');"></li>';
+					document.getElementById("animationsContainer").innerHTML += '<li id="animation'+i+'" class="animationContent">' + animations[i] + '<input type="button" value="Assign" onclick="assignAnimation('+i+');"></li>';
 				}
-				document.getElementById("animationsContainer").innerHTML += '<li id="addButton" class="aniamtionContent"><input type="button" value="Add an animation" onclick="addAnimation()" /></li>';
+				document.getElementById("animationsContainer").innerHTML += '<li id="addButton" class="animationContent"><input type="button" value="Add an animation" onclick="addAnimation()" /></li>';
 			}
 
 			function assignAnimation(givenIndex) {
+				folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
 				var theDOM = dw.getDocumentDOM();
 				var widthPatt = /\.P\(w,[0-9]{3,4}\)/;
 				var heightPatt = /\.P\(h,[0-9]{3,4}\)/;
@@ -169,7 +174,7 @@
 							theNode.class = "" + animationName + " nm_Animation";
 							theNode.id = "" + animationName;
 							//open <name>_edge.js, extract the height and width of the stage and assign it to the animationContainer
-							var str = DWfile.read(dreamweaver.getSiteRoot() + "animations/" + animationName + "/" +animationName + "_edge.js"); 
+							var str = DWfile.read(folderpath + "animations/" + animationName + "/" +animationName + "_edge.js"); 
 							theNode.style.width = numPatt.exec(widthPatt.exec(str)) + "px";
 							theNode.style.height = numPatt.exec(heightPatt.exec(str)) + "px";
 						}else{
@@ -181,9 +186,14 @@
 			}
 
 			function checkForAnimations(){
-				if(DWfile.exists(dreamweaver.getSiteRoot() + "animations")){
-					var list = DWfile.listFolder(dreamweaver.getSiteRoot() + "animations", "directories");
+				folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+				alert("looking in: " + folderpath + "animations");
+				if(DWfile.exists(folderpath + "animations")){
+					//var list = DWfile.listFolder(dreamweaver.getDocumentPath("document") + "animations", "directories");					
+					
+					var list = DWfile.listFolder(folderpath + "animations", "directories");
 					//fill animations from named of the folders
+					alert("" + folderpath + " contains:\n" + list.join("\n"));
 					if (list){
 						animations = list;
 						updateAnimationList();
