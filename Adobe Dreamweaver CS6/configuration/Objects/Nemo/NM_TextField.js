@@ -12,6 +12,8 @@ function isAsset() {
 }
 
 function objectTag(assetArgs) {
-  return '<div class="nm_TextField" style="position: absolute; left: 100px; top:300px;">NM_TextField</div>';
+	var theDOM = dw.getDocumentDOM();
+	theDOM.wrapTag('<div class="nm_TextField" style="position: absolute; left: 100px; top:300px;">');
+	return;
 }
 
