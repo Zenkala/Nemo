@@ -24,6 +24,10 @@ html{
 	color:				purple;
 }
 
+.nm_begrip{
+	color:					blue;
+}
+
 .nm_TextField, .nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, input, .nm_Explanation{{
 	background-color: 		rgb(255, 255, 255);
 	border: 				12px solid black;

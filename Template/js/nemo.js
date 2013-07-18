@@ -5,16 +5,17 @@ var sliding = false;
 var scripts = [	'js/jquery.transit.min.js',
 				'js/jquery-ui-1.10.3.custom.min.js',
 				'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',
-				"http://uitlegapp.allyne.net/js-libs//jqplot/jquery.jqplot.min.js",
-				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.logAxisRenderer.min.js",
-				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.canvasTextRenderer.min.js",
-				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js",
-				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.canvasOverlay.min.js",
-				"http://uitlegapp.allyne.net/js-libs//jqplot/plugins/jqplot.pointLabels.min.js",
-				"http://uitlegapp.allyne.net/js-libs//jqplot/jquery.jqplot.min.css",
-				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css"
+				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.js",
+				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.logAxisRenderer.min.js",
+				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasTextRenderer.min.js",
+				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js",
+				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
+				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
+				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",
+				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css",
+				"animations/basic/edge_includes/edge.1.5.0.min.js"
 			];
-var animations;
+var animations;	
 
 function log(msg) {
 	var logger = window.console;
@@ -29,7 +30,7 @@ var currentProgress = 0;
 var enableProgressBar = false;
 function progress(msg) {
 	currentProgress++;
-	console.log(currentProgress + msg);
+	console.log(currentProgress + ": " + msg);
 	if(enableProgressBar) {
 		$("#loadingLogo").css("margin-left", -325 + currentProgress/totalProgress*600);
 	}
@@ -38,6 +39,7 @@ function progress(msg) {
 function nemoInit(givenAnimations){
 	log("-----------NemoInit-----------");
 	animations = givenAnimations;
+	totalProgress+=animations.length; //animations means loanger load time
 	
 	//first thing: load jquery
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
@@ -61,20 +63,22 @@ function nemoInit(givenAnimations){
 			enableProgressBar = true;
 			progress("enable ProgressBar");
 
+			loadLibs();
 		});
 
-		loadAnims();
+		
 	}, { charset: "utf-8" }, 5000);	
 }
 
 //load the EDGE animations
 function loadAnims(){
 	log("load " + animations.length + " animations");	
-	if(animations.length>0){
-		totalProgress+=animations.length; //animations mean loanger load time
-		animations.push("animations/starcrafts/edge_includes/edge.1.5.0.min.js");
-		animations.push("animations/starcrafts/starcrafts_edge.js");
-		animations.push("animations/starcrafts/starcrafts_edgeActions.js");
+	if(animations.length>0){		
+		/*
+		animations.push("animations/edge_walking_test/edge_includes/edge.1.5.0.min.js");
+		animations.push("animations/edge_walking_test/edge_walking_test_edge.js");
+		animations.push("animations/edge_walking_test/edge_walking_test_edgeActions.js");
+		*/
 		yepnope([{
 			load: animations,
 			callback: function (url, result, key) {
@@ -82,11 +86,11 @@ function loadAnims(){
 			},
 			complete: function(){
 				log("loading animations complete"); 
-				loadLibs();				
+				startNemoScript();
 			}
 		}]);
 	}else{
-		loadLibs();
+		startNemoScript();
 	}
 }
 
@@ -98,10 +102,11 @@ function loadLibs(){
 			load: scripts,
 			callback: function (url, result, key) {
 				progress("loaded: " + url);
+				log("loaded " + url)
 			},
 			complete: function(){
 				log("yepnope complete"); 
-				startNemoScript();				
+				loadAnims();		
 			}
 		}]);
 	});
@@ -109,6 +114,7 @@ function loadLibs(){
 
 function startNemoScript(){		
 	//apply MathJax
+
 	log("configure MathJax");
 	MathJax.Hub.Configured();
 	MathJax.Hub.Register.StartupHook("End", function () {
@@ -163,7 +169,7 @@ function startNemoScript(){
 		
 		//make sliders
 		console.log("do sliders");
-		$(".nm_slider").slider({ step: 5, value: 15, min: 0, max: 30 });
+		//$(".nm_slider").slider({ step: 5, value: 15, min: 0, max: 30 });
 
 		//make title
 		$("#title").html(document.title);
@@ -176,6 +182,14 @@ function startNemoScript(){
 		$("#contentDiv").show();
 		$("#navigation").show();
 		$("#title").show();
+
+		//hacking
+		console.log("hack");
+		$('div').each(function() {
+		    if($(this).css('display') == "none") {
+		        console.log('found element: ' + this.id);
+		    }
+		});
 		
 		onLoad(); //notify the javascript of the module that we're done
 		
