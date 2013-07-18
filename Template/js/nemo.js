@@ -167,6 +167,14 @@ function startNemoScript(){
 		});
 		console.log("content divs for bubbles made");
 		
+		$(".nm_Exclamation").append('<span class="close">x</span');
+		$(".nm_Exclamation .close").on({
+		  click: function(){
+		    $(this).closest(".nm_Exclamation").transition({ scale: 0 }, 200);
+		  }
+		});
+
+
 		//make sliders
 		console.log("do sliders");
 		//$(".nm_slider").slider({ step: 5, value: 15, min: 0, max: 30 });
