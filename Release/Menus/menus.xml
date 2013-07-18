@@ -701,6 +701,20 @@
             <menuitem mmstring:name="menus/DWContext_Layer_Vis_Hidden" command="dw.getDocumentDOM().setAttributeWithErrorChecking('VISIBILITY', 'hidden')" enabled="true" id="DWContext_Layer_Vis_Hidden" />
         </menu>
         <menuitem mmstring:name="menus/DWContext_Layer_LayersPalette" command="dw.toggleFloater('apElements')" enabled="true" id="DWContext_Layer_LayersPalette" />
+
+        
+
+        <separator />
+        <menu name="Nemo-Arrange" id="NM_Arrange">
+            <menuitem name="Bring to Front" file="Menus/Nemo/NM_BringToFront.htm" arguments="" id="NM_BTF" />
+            <menuitem name="Bring Forward" file="Menus/Nemo/NM_BringForward.htm" arguments="" id="NM_BF" />
+            <menuitem name="Send Backward" file="Menus/Nemo/NM_SendBackward.htm" arguments="" id="NM_SB" />
+            <menuitem name="Send to Back" file="Menus/Nemo/NM_SendToBack.htm" arguments="" id="NM_STB" />
+        </menu>
+
+
+
+
         <separator />
         <menu mmstring:name="menus/DWLayerContext_ElementView" id="DWLayerContext_ElementView">
             <menuitem mmstring:name="menus/DWLayerContext_ElementView_Full" command="dw.getDocumentDOM().setElementView('full')" enabled="dw.getDocumentDOM().getElementView() != 'normal'" checked="dw.getDocumentDOM().getElementView() == 'full'" id="DWLayerContext_ElementView_Full" />

@@ -1,0 +1,25 @@
+Changelog
+
+0.2.3
+  Added the images used in Nemo.htm floater
+
+0.2.2
+  Added the arrange features (bring to front, send to back)
+  Added comment Slide
+
+0.2.1
+  Fixed apply slide-amount button
+  Frame highlight
+  Insert frame
+  goto-this-frame option
+  Redesigned nemo.htm floater
+  Check already imported animations option in the animations floater
+  Single Slide View (SSV)
+  
+0.1.0
+  Initial release.
+  nemo.htm floater:
+    slide rearranging and deletion
+    apply slide-amount
+  animations floater
+    import animations

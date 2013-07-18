@@ -1,6 +1,6 @@
 ﻿<macromedia-extension
 	 name="Nemo"
-	 version="0.2.1"
+	 version="0.2.3"
 	 type="command"
 	 locked="false"
 	 requires-restart="True"
@@ -30,6 +30,9 @@
 	<files>
 		<file source="Floaters\Nemo.htm" destination="$dreamweaver\Configuration\Floaters\Nemo.htm" />
 		<file source="Floaters\Animations.htm" destination="$dreamweaver\Configuration\Floaters\Animations.htm" />
+		<file source="Floaters\Images\nemo_arrow_down.png" destination="$dreamweaver\Configuration\Floaters\Images\nemo_arrow_down.png" />
+		<file source="Floaters\Images\nemo_arrow_up.png" destination="$dreamweaver\Configuration\Floaters\Images\nemo_arrow_up.png" />
+		<file source="Floaters\Images\nemo_delete.png" destination="$dreamweaver\Configuration\Floaters\Images\nemo_delete.png" />
 
 		<file source="Inspectors\NM_Input.htm" destination="$dreamweaver\Configuration\Inspectors\NM_Input.htm" />
 		<file source="Inspectors\NM_Input.js" destination="$dreamweaver\Configuration\Inspectors\NM_Input.js" />
@@ -67,6 +70,15 @@
 		<file source="Objects\Nemo\NM_TextField.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextField.js" />
 		<file source="Objects\Nemo\NM_TextField.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextField.png" />
 		
+		<file source="Menus\Nemo\NM_BringForward.htm" destination="$dreamweaver\Configuration\Menus\Nemo\NM_BringForward.htm" />
+		<file source="Menus\Nemo\NM_BringForward.js" destination="$dreamweaver\Configuration\Menus\Nemo\NM_BringForward.js" />
+		<file source="Menus\Nemo\NM_BringToFront.htm" destination="$dreamweaver\Configuration\Menus\Nemo\NM_BringToFront.htm" />
+		<file source="Menus\Nemo\NM_BringToFront.js" destination="$dreamweaver\Configuration\Menus\Nemo\NM_BringToFront.js" />
+		<file source="Menus\Nemo\NM_SendBackward.htm" destination="$dreamweaver\Configuration\Menus\Nemo\NM_SendBackward.htm" />
+		<file source="Menus\Nemo\NM_SendBackward.js" destination="$dreamweaver\Configuration\Menus\Nemo\NM_SendBackward.js" />
+		<file source="Menus\Nemo\NM_SendToBack.htm" destination="$dreamweaver\Configuration\Menus\Nemo\NM_SendToBack.htm" />
+		<file source="Menus\Nemo\NM_SendToBack.js" destination="$dreamweaver\Configuration\Menus\Nemo\NM_SendToBack.js" />
+
 		<file source="Objects\insertbar.xml" destination="$dreamweaver\Configuration\Objects\insertbar.xml" />
 		<file source="Menus\menus.xml" destination="$dreamweaver\Configuration\Menus\menus.xml" />
 
