@@ -74,12 +74,29 @@ html{
 	border-image:			url("point-blue.svg") 10% 30% 50% 10% fill;	
 	padding:				0px;
 }
+
+.nm_Exclamation .close {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    line-height: 18px;
+    border: 2px solid #000;
+    border-radius: 18px;
+    font-weight: bold;
+    background: #fff;
+}
+
 .nm_TextBubbleContent, .nm_ExplanationContent{	
 	padding:				10px 10px 7px 1px;
 	margin:					-16px -77px -16px -15px;
 	text-align:				justify;
 	text-justify:			auto;
 }
+
+
 
 .nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
 	border-radius: 			50%;
