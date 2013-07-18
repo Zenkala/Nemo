@@ -87,6 +87,7 @@ html{
     border-radius: 18px;
     font-weight: bold;
     background: #fff;
+    cursor: pointer;
 }
 
 .nm_TextBubbleContent, .nm_ExplanationContent{	
