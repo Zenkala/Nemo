@@ -12,6 +12,8 @@ function isAsset() {
 }
 
 function objectTag(assetArgs) {
-  return '<div class="comment" style="position: absolute; left: 100px; top:300px;">Comment!</div>';
+	var theDOM = dw.getDocumentDOM();
+	theDOM.wrapTag('<div class="comment" style="position: absolute; left: 100px; top:300px;">');
+	return;
 }
 

@@ -1,7 +1,16 @@
 Changelog
 
+0.2.4
+  "check for improted aniamtions" now works
+  Automatic start typing after inserting object
+  Close button added for nm_Exclamation object
+  Added nm.begrip to stylesheets
+  Improved preloader
+  Added commentGreen
+
 0.2.3
   Added the images used in Nemo.htm floater
+  Added Version number to the <html> tag
 
 0.2.2
   Added the arrange features (bring to front, send to back)
@@ -15,6 +24,7 @@ Changelog
   Redesigned nemo.htm floater
   Check already imported animations option in the animations floater
   Single Slide View (SSV)
+  Use "slide activeSlide" class to determine which slide is active
   
 0.1.0
   Initial release.

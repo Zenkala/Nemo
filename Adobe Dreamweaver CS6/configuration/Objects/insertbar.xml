@@ -69,6 +69,7 @@
 		<button label="NM_TextBubble" name="NM_TextBubble" file="Nemo\NM_TextBubble.htm" id="NM_TextBubble" image="Nemo\NM_TextBubble.png" />
 		<button label="NM_Exclamation" name="NM_Exclamation" file="Nemo\NM_Exclamation.htm" id="NM_Exclamation" image="Nemo\NM_Exclamation.png" />
 		<button label="NM_Comment" name="NM_Comment" file="Nemo\NM_Comment.htm" id="NM_Comment" image="Nemo\NM_Comment.png" />
+		<button label="NM_Comment_Green" name="NM_Comment_Green" file="Nemo\NM_CommentGreen.htm" id="NM_CommentGreen" image="Nemo\NM_CommentGreen.png" />
 		<button label="NM_Input" name="NM_Input" file="Nemo\NM_Input.htm" id="NM_Input" image="Nemo\NM_Input.png" />
 		<button label="NM_Hatching" name="NM_Hatching" file="Nemo\NM_Hatching.htm" id="NM_Hatching" image="Nemo\NM_Hatching.png" />
 		<button label="NM_Ground" name="NM_Ground" file="Nemo\NM_Ground.htm" id="NM_Ground" image="Nemo\NM_Ground.png" />

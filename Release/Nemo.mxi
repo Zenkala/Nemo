@@ -1,12 +1,12 @@
 ﻿<macromedia-extension
 	 name="Nemo"
-	 version="0.2.3"
+	 version="0.2.4"
 	 type="command"
 	 locked="false"
 	 requires-restart="True"
 	 pkgtype="mxp">
 
-	<author name="Willem van Vliet" />
+	<author name="Willem van Vliet & Tjibbe van der Laan" />
 
 	<products>
 		<product name="Dreamweaver" version="12" primary="true" />
@@ -40,7 +40,11 @@
 
 		<file source="Objects\Nemo\NM_Comment.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Comment.htm" />
 		<file source="Objects\Nemo\NM_Comment.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Comment.js" />
-		<file source="Objects\Nemo\NM_Comment.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Comment.png" />
+		<file source="Objects\Nemo\NM_Comment.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Comment.png" />		
+
+		<file source="Objects\Nemo\NM_CommentGreen.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_CommentGreen.htm" />
+		<file source="Objects\Nemo\NM_CommentGreen.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_CommentGreen.js" />
+		<file source="Objects\Nemo\NM_CommentGreen.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_CommentGreen.png" />
 
 		<file source="Objects\Nemo\NM_Exclamation.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Exclamation.htm" />
 		<file source="Objects\Nemo\NM_Exclamation.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Exclamation.js" />
