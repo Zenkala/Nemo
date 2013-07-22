@@ -18,7 +18,8 @@
 			import mx.events.FlexNativeWindowBoundsEvent;
 			
 			public function appComplete():void{
-			 	//CSXSInterface.instance.autoThemeColorChange = true;
+				NemoJSX.initNemo(this);
+				
 				this.status = "Ready";
 				
 				this.addEventListener(mx.events.FlexNativeWindowBoundsEvent.WINDOW_RESIZE, onResize);
@@ -31,10 +32,11 @@
 				slideContainer.dataProvider.addItem("Slide 3");
 				
 				this.addEventListener(MouseEvent.CLICK, onClick);
+				
 			}
 			
 			private function onClick(e:MouseEvent = null):void {
-				trace("mouse: (" + e.stageX + "," + e.stageY + ")");
+				//trace("mouse: (" + e.stageX + "," + e.stageY + ")");
 			}
 			
 			private function onResize(e:FlexNativeWindowBoundsEvent = null):void {
@@ -47,18 +49,18 @@
 					w = 200;
 					h = 400;
 				}
-								
+				
 				//resize content
 				mainVGroup.setActualSize(w-8, h-32);
 				//make list as big as possible
 				slideContainer.height = h-(slideContainer.y+119);
 			}
-						
+			
 			
 		]]>
 	</fx:Script>
-	<s:VGroup id="mainVGroup" x="0" y="0" horizontalAlign="justify" verticalAlign="top">
-		<s:Button width="0" label="Run JSX code" click="NemoJSX.run()"/>
+	<s:VGroup id="mainVGroup" x="0" y="0" width="192" horizontalAlign="justify" verticalAlign="top">
+		<s:Button label="Run JSX code" click="NemoJSX.run()"/>
 		<s:HGroup height="25">
 			<s:Label width="70" height="25" text="Toal slides:" verticalAlign="middle"/>
 			<s:NumericStepper width="50" height="25"/>
@@ -81,5 +83,5 @@
 			<s:Button width="91" height="50" label="next"/>
 		</s:HGroup>
 	</s:VGroup>
-		
+	
 </csxs:CSExtension>

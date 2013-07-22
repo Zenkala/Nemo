@@ -1,4 +1,19 @@
-﻿
+﻿function getCurrentSlide() {
+    var theDOM = dw.getDocumentDOM();
+    if(theDOM != null) {
+        var allNodes = theDOM.getElementById("contentDiv").childNodes;
+        if(allNodes != null) {
+            for(i=0; i< allNodes.length; i++) {
+                if(allNodes[i].class == "slide activeSlide") {
+                    //found!
+                    return toXML([{'name':'currentSlide', 'val':i}]);
+                }
+            }
+        }
+    }
+
+}
+
 ﻿function jsxFunction()
 {
 	var appName;
