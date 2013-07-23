@@ -11,7 +11,68 @@
             }
         }
     }
+}
 
+function gotoSlide(newSlide, oldSlide) {
+	var theDOM = dw.getDocumentDOM();
+    if (theDOM != null) {
+    	var slideCount = getTotalSlides(true);    	
+    	if (slideCount > 0) {
+    		if(newSlide >= 0 && newSlide < slideCount) {
+    			if(oldSlide >= 0) {
+    				theDOM.getElementById("slide" + oldSlide).className = "slide";
+    				theDOM.getElementById("slide" + newSlide).className = "slide activeSlide";
+    			} else {
+    				theDOM.getElementById("commentslide").className = "slide";
+    				theDOM.getElementById("slide" + newSlide).className = "slide activeSlide";
+    			}
+    		} else {
+    			if(oldSlide >= 0) {
+    				theDOM.getElementById("slide" + oldSlide).className = "slide";
+    				theDOM.getElementById("commentslide").className = "slide activeSlide";
+    			}
+    		}
+    	}	
+    }
+}
+
+function getTotalSlides(internal) {
+	var r = 0;
+	var nodes = getSlideNodes(false);
+	for ( i = 0; i < nodes.length; i++) {
+		if (nodes[i].class == "slide" || nodes[i].class == "slide activeSlide")
+		r++;
+	}
+	if(internal == true){
+		return r;
+	} else {
+		return toXML([{'name':'totalSlides', 'val':r}]);
+	}
+}
+
+// return all valid slides insides contentDiv 
+function getSlideNodes(withComment){
+    var theDOM = dw.getDocumentDOM();
+    if(theDOM != null) {
+		var allNodes = theDOM.getElementById("contentDiv").childNodes;
+		var slideNodes = new Array();
+		if(withComment){
+			for(i=0; i< allNodes.length; i++) {
+				if(allNodes[i].class == "slide" || allNodes[i].class == "slide activeSlide") {
+					slideNodes.push(allNodes[i]);
+				}
+			}
+		}else{
+			for(i=0; i< allNodes.length; i++) {
+				if((allNodes[i].class == "slide" || allNodes[i].class == "slide activeSlide") && allNodes[i].id != "commentslide") {
+					slideNodes.push(allNodes[i]);
+				}
+			}
+		}
+		return slideNodes;
+	} else {
+		return -1;
+	}
 }
 
 ﻿function jsxFunction()

@@ -13,23 +13,16 @@
 	<fx:Style source="Nemo.css"/>
 	<fx:Script>
 		<![CDATA[
-			import com.adobe.csxs.core.CSExtension;
-			
-			import mx.events.FlexNativeWindowBoundsEvent;
+			import com.adobe.csxs.core.CSExtension;			
+			import mx.events.FlexNativeWindowBoundsEvent;	
 			
 			public function appComplete():void{
-				NemoJSX.initNemo(this);
+				NemoJSX.initNemo(this, nrSlides, slideContainer);
 				
 				this.status = "Ready";
 				
 				this.addEventListener(mx.events.FlexNativeWindowBoundsEvent.WINDOW_RESIZE, onResize);
 				onResize(null); //initial resize
-				
-				nrSlides.value = 4;
-				slideContainer.dataProvider.addItem("ContentSlide");
-				slideContainer.dataProvider.addItem("Slide 1");
-				slideContainer.dataProvider.addItem("Slide 2");
-				slideContainer.dataProvider.addItem("Slide 3");
 				
 				this.addEventListener(MouseEvent.CLICK, onClick);
 				
@@ -54,15 +47,14 @@
 				mainVGroup.setActualSize(w-8, h-32);
 				//make list as big as possible
 				slideContainer.height = h-(slideContainer.y+119);
-			}
-			
+			}			
 			
 		]]>
 	</fx:Script>
 	<s:VGroup id="mainVGroup" x="0" y="0" width="192" horizontalAlign="justify" verticalAlign="top">
 		<s:Button label="Run JSX code" click="NemoJSX.run()"/>
 		<s:HGroup height="25">
-			<s:Label width="70" height="25" text="Toal slides:" verticalAlign="middle"/>
+			<s:Label width="70" height="25" text="Stay:" verticalAlign="middle"/>
 			<s:NumericStepper width="50" height="25"/>
 		</s:HGroup>
 		<s:HGroup height="25">
@@ -70,7 +62,7 @@
 			<s:NumericStepper id="nrSlides" width="50" height="25" maximum="256" minimum="1"/>
 			<s:Button width="52" height="25" label="Apply"/>
 		</s:HGroup>
-		<s:List id="slideContainer" height="196">
+		<s:List id="slideContainer" height="196" change="NemoJSX.selectSlide(event)">
 			<s:dataProvider>
 				<s:ArrayCollection>
 					
@@ -79,8 +71,8 @@
 		</s:List>
 		<s:Button id="addASileButton" height="25" label="Add a Slide"/>
 		<s:HGroup width="200" height="50" gap="6">
-			<s:Button width="91" height="50" label="prev"/>
-			<s:Button width="91" height="50" label="next"/>
+			<s:Button width="91" height="50" label="prev" click="NemoJSX.prevSlide(event)"/>
+			<s:Button width="91" height="50" label="next" click="NemoJSX.nextSlide(event)"/>
 		</s:HGroup>
 	</s:VGroup>
 	
