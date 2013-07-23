@@ -2,9 +2,9 @@
 <csxs:CSExtension xmlns:fx="http://ns.adobe.com/mxml/2009"
 				  xmlns:s="library://ns.adobe.com/flex/spark"
 				  xmlns:csxs="com.adobe.csxs.core.*"
-				  width="200" height="400" applicationComplete="appComplete()"
-				  backgroundColor="#A23838" color="#000000" preloaderChromeColor="#8D1414"
-				  minWidth="200" maxWidth="200" minHeight="400" maxHeight="800"
+				  width="232" height="400" applicationComplete="appComplete()"
+				  backgroundColor="#bdbdbd" color="#000000" preloaderChromeColor="#d6d6d6"
+				  minWidth="232" maxWidth="300" minHeight="400" maxHeight="800"
 				  status="Starting">
 	<csxs:layout>
 		<s:VerticalLayout horizontalAlign="left" paddingBottom="4" paddingLeft="4" paddingRight="4"
@@ -13,11 +13,16 @@
 	<fx:Style source="Nemo.css"/>
 	<fx:Script>
 		<![CDATA[
-			import com.adobe.csxs.core.CSExtension;			
-			import mx.events.FlexNativeWindowBoundsEvent;	
+			import com.adobe.csxs.core.CSExtension;
+			
+			import flash.display.InteractiveObject;
+			
+			import mx.events.FlexNativeWindowBoundsEvent;
+			
+			import spark.events.IndexChangeEvent;	
 			
 			public function appComplete():void{
-				NemoJSX.initNemo(this, nrSlides, slideContainer);
+				NemoJSX.initNemo(this, nrSlides, staySt, slideContainer);
 				
 				this.status = "Ready";
 				
@@ -26,7 +31,33 @@
 				
 				this.addEventListener(MouseEvent.CLICK, onClick);
 				
+				
+				var myContextMenu:ContextMenu = new ContextMenu();
+				
+				var item:ContextMenuItem = new ContextMenuItem("delete");
+				myContextMenu.customItems.push(item);
+				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler2);
+				
+				slideContainer.contextMenu = myContextMenu;
+				
+				//this.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, handleRightClick);
+				
 			}
+			
+			private function handleRightClick(e:MouseEvent):void
+			{
+				trace("Right Click Success!");
+				var event:MouseEvent = new MouseEvent(
+					MouseEvent.MOUSE_DOWN,true,false,mouseX,mouseY,
+					e.target as InteractiveObject);
+				slideContainer.dispatchEvent(event);
+			}
+			
+			
+			private function menuItemSelectHandler2(event:ContextMenuEvent):void {
+				trace("menuItemSelectHandler: " + slideContainer.selectedIndex);
+				NemoJSX.removeSlide(slideContainer.selectedIndex);				
+			}			
 			
 			private function onClick(e:MouseEvent = null):void {
 				//trace("mouse: (" + e.stageX + "," + e.stageY + ")");
@@ -39,40 +70,56 @@
 					w = e.afterBounds.width;
 					h = e.afterBounds.height;
 				}else{
-					w = 200;
+					w = 232;
 					h = 400;
 				}
+				
+				trace("reize: " + w + ", " + h);
 				
 				//resize content
 				mainVGroup.setActualSize(w-8, h-32);
 				//make list as big as possible
-				slideContainer.height = h-(slideContainer.y+119);
+				slideContainerH.height = h-(slideContainer.y+126+60);
+				slideContainer.height = h-(slideContainer.y+126+60);
+				slideContainer.width = w-8;
+				//resize prev and next buttons
+				next.width = w/2-9;
+				prev.width = w/2-9
+				addASileButton.width = w-8;
+				
 			}			
 			
 		]]>
 	</fx:Script>
-	<s:VGroup id="mainVGroup" x="0" y="0" width="192" horizontalAlign="justify" verticalAlign="top">
-		<s:Button label="Run JSX code" click="NemoJSX.run()"/>
+	<s:VGroup id="mainVGroup" x="0" y="0" width="224" horizontalAlign="justify" verticalAlign="top">
 		<s:HGroup height="25">
 			<s:Label width="70" height="25" text="Stay:" verticalAlign="middle"/>
-			<s:NumericStepper width="50" height="25"/>
+			<s:NumericStepper id="staySt" width="50" height="25" change="NemoJSX.changeStay(event)"
+							  maximum="9001" minimum="0" stepSize="1"/>
 		</s:HGroup>
 		<s:HGroup height="25">
 			<s:Label width="70" height="25" text="Total slides:" verticalAlign="middle"/>
 			<s:NumericStepper id="nrSlides" width="50" height="25" maximum="256" minimum="1"/>
-			<s:Button width="52" height="25" label="Apply"/>
+			<s:Button width="52" height="25" label="Apply" click="NemoJSX.applySlideTotal(event)"/>
 		</s:HGroup>
-		<s:List id="slideContainer" height="196" change="NemoJSX.selectSlide(event)">
-			<s:dataProvider>
-				<s:ArrayCollection>
-					
-				</s:ArrayCollection>
-			</s:dataProvider>
-		</s:List>
-		<s:Button id="addASileButton" height="25" label="Add a Slide"/>
-		<s:HGroup width="200" height="50" gap="6">
-			<s:Button width="91" height="50" label="prev" click="NemoJSX.prevSlide(event)"/>
-			<s:Button width="91" height="50" label="next" click="NemoJSX.nextSlide(event)"/>
+		<s:HGroup id="slideContainerH" height="196" requestedColumnCount="1">
+			<s:List id="slideContainer" height="196" change="NemoJSX.selectSlide(event)"
+					dragComplete="NemoJSX.listDragComplete(event)" dragEnabled="true"
+					dragMoveEnabled="true" dropEnabled="true">
+				<s:dataProvider>
+					<s:ArrayCollection>
+						
+					</s:ArrayCollection>
+				</s:dataProvider>
+			</s:List>
+		</s:HGroup>
+		<s:HGroup height="25" requestedColumnCount="1">
+			<s:Button id="addASileButton" height="25" label="Add a Slide"
+					  click="NemoJSX.addASlide(event)"/>
+		</s:HGroup>
+		<s:HGroup height="50" gap="6">
+			<s:Button id="prev" width="91" height="50" label="prev" click="NemoJSX.prevSlide(event)"/>
+			<s:Button id="next" width="91" height="50" label="next" click="NemoJSX.nextSlide(event)"/>
 		</s:HGroup>
 	</s:VGroup>
 	

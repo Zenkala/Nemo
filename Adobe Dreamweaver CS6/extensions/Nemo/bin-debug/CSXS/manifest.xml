@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.example.Nemo" ExtensionBundleName="Nemo" ExtensionBundleVersion="1.0.0" Version="3.0">
 	<ExtensionList>
-		<Extension Id="com.example.Nemo.extension1" Version="1.0"/>
+		<Extension Id="com.example.Nemo.extension1" Version="0.3.0"/>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
@@ -28,8 +28,8 @@
 					<Menu>Nemo</Menu>
 					<Geometry>
 						<Size>
-							<Height>200</Height>
-							<Width>200</Width>
+							<Height>400</Height>
+							<Width>232</Width>
 						</Size>
 					</Geometry>
 				</UI>

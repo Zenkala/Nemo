@@ -40,7 +40,7 @@
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
-  <theme themeIsDefault="false" themeIsSDK="true" themeLocation="${SDK_THEMES_DIR}/samples/themes/zen"/>
+  <theme themeIsDefault="false" themeIsSDK="true" themeLocation="${SDK_THEMES_DIR}/samples/themes/arcade"/>
   <applications>
     <application path="Nemo.mxml"/>
   </applications>

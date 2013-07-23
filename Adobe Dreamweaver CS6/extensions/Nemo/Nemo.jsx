@@ -1,4 +1,25 @@
-﻿function getCurrentSlide() {
+﻿function getCurrentStay() {
+    var theDOM = dw.getDocumentDOM();
+    if (theDOM != null) {
+        var theNode = theDOM.getSelectedNode();
+        //theNode.stay = document.getElementById("stayInput").value;
+        if(theNode != null && theNode.stay != null) {
+            return toXML([{'name':'stay', 'val':theNode.stay}]);
+        } else {
+            return toXML([{'name':'stay', 'val':0}]);
+        }
+    }
+}
+
+function setStay(givenStay) {
+ var theDOM = dw.getDocumentDOM();
+    if (theDOM != null) {
+        var theNode = theDOM.getSelectedNode();
+        if(theNode != null) theNode.stay = givenStay;
+    }
+}
+
+function getCurrentSlide() {
     var theDOM = dw.getDocumentDOM();
     if(theDOM != null) {
         var allNodes = theDOM.getElementById("contentDiv").childNodes;
@@ -33,6 +54,23 @@ function gotoSlide(newSlide, oldSlide) {
     			}
     		}
     	}	
+    }
+}
+
+function forceGotoSlide(newSlide) {
+var theDOM = dw.getDocumentDOM();
+    if (theDOM != null) {
+        var nodes = getSlideNodes(true);
+        if(nodes != null) {
+            for(i=0; i< nodes.length; i++) {
+                if(nodes[i].class == "slide activeSlide") {
+                    nodes[i].class = "slide";
+                }
+                if(i-1 == newSlide) { //this index is shifted by 1 becouse of commentslide
+                    nodes[i].class = "slide activeSlide";
+                }
+            }
+        }
     }
 }
 
@@ -75,28 +113,112 @@ function getSlideNodes(withComment){
 	}
 }
 
-﻿function jsxFunction()
-{
-	var appName;
-	if(app.name == undefined)
-	{
-		// JavaScript only apps
-		appName = app.appName;
-	}
-	else
-	{	
-		// ExtendScript enabled apps
-		appName = app.name;
-	}
-	
-	//your JSX code here
+function moveSlide(fromPos, toPos) {
+    var theDOM = dw.getDocumentDOM();
+    if(theDOM != null) {    
+        // Store the two object slides that will be swapped
+        var fromSlide = theDOM.getElementById("slide" + fromPos);
+        var toSlide = theDOM.getElementById("slide" + toPos);
 
-    alert("test3 " + dw.getConfigurationPath());
-  var path = dw.getConfigurationPath();
- 	return toXML([{'name':'path', 'val':path}]);
+        // Store content of slides that will be swapped
+        var contentOfFromSlide = theDOM.getElementById("slide" + fromPos).innerHTML;
+        var contentOfToSlide = theDOM.getElementById("slide" + toPos).innerHTML;
+
+        // Swap content of the two selected slides
+        toSlide.innerHTML = contentOfFromSlide;
+        fromSlide.innerHTML = contentOfToSlide;
+        
+        // Total reset of all comments inside all slides
+        // The ContentDiv should only contain slide-divs 
+        var nodes = getSlideNodes(false);
+        var j = 0;
+        for(i = 0; i < nodes.length; i++) {
+            var childrenOfNode = nodes[i].childNodes;
+            for(k = 0; k < childrenOfNode.length; k++) {
+                if(childrenOfNode[k].class == "comment slideNumber") childrenOfNode[k].innerHTML = i+1;
+            }
+        }
+    }
 }
 
-// Give the user an alert message. Data in this function comes from the swf panel, via the csxs library.
+function addASlide(givenCurrentSlide) {
+    var theDOM = dw.getDocumentDOM();
+    if(theDOM != null) {
+        var j = getTotalSlides(true);
+        var c = parseInt(givenCurrentSlide);
+        theDOM.getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '"><div class="comment slideNumber">'+(j+1)+ '</div></div>');
+        if(j>0 && (c+1)<(j+1))moveSlide(j, (c+1));
+    }
+}
+
+function updateSlides(givenAmount, moanAboutContent) {
+    var theDOM = dw.getDocumentDOM();
+    if(theDOM != null) {    
+        var currentSlides = getTotalSlides(true);
+        var targetAmount = givenAmount;
+
+        if (targetAmount > currentSlides) {
+            //Add slides
+            for (var i = currentSlides; i < targetAmount; i++) {
+                addASlide(i-1);
+            }
+        } else { //remove slides. Do targetAmount+1 because of the commentSlide
+            //check if content
+            var hasContent = false;
+            for (var i = currentSlides; i > targetAmount; i--) {
+                //if (dw.getDocumentDOM().getElementById("contentDiv").childNodes[(i - 1)].innerHTML.length > 36) {
+                if (theDOM.getElementById("contentDiv").childNodes[(i-1)].childNodes.length > 1) {
+                    hasContent = true;
+                    break;
+                }
+            }
+
+            //confirm
+            if (hasContent && moanAboutContent) {
+                if (!confirm("Some of the slides have content. Are you sure you wish to remove the " + (currentSlides-targetAmount) + " slides?")) {
+                    return;
+                }
+            }
+
+            //rem
+            for (var i = currentSlides; i > targetAmount; i--) {
+                theDOM.getElementById("contentDiv").innerHTML = theDOM.getElementById("contentDiv").innerHTML.substring(0, theDOM.getElementById("contentDiv").innerHTML.lastIndexOf('<div class="slide'));
+
+            }
+        }
+    }
+    
+}
+
+function remSlide(givenIndex){
+    var index = parseInt(givenIndex);
+    var theDOM = dw.getDocumentDOM();
+    if(theDOM != null) { 
+        //move the selected slide to the end
+        var slideToBeRemoved = theDOM.getElementById("slide" + index).innerHTML;
+        var lastSlide = getTotalSlides(true)-1;
+
+        //confirm
+        if((getSlideNodes(false)[index].childNodes.length > 1) && !confirm("The slide has content. Are you sure you wish to remove it?")) {
+            return; //do nothing.
+        }
+
+        //swap to bottom
+        for(var i=index; i<lastSlide; i++){
+            theDOM.getElementById("slide" + i).innerHTML = theDOM.getElementById("slide" + (i+1)).innerHTML;
+            //fix comment slide number
+            var nodes = theDOM.getElementById("slide" + (i)).childNodes;
+            for (var j = 0; j < nodes.length; j++) {
+                if (nodes[j].class == "comment slidenumber")
+                    nodes[j].innerHTML = (i);
+            }
+        }
+        //then do the usual removing thing.
+        updateSlides(lastSlide, false);
+    }
+}
+
+﻿// Give the user an alert message. Data in this function comes from the swf panel, via the csxs library.
 //
 // Returns void
 function fnAlert(p) {
