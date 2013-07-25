@@ -19,6 +19,41 @@ function setStay(givenStay) {
     }
 }
 
+function getAllStays() {
+    var stays = new Array();
+    var theDOM = dw.getDocumentDOM();
+    if (theDOM != null) {
+        var nodes = getSlideNodes(false);
+        if(nodes != null) {
+            var i;
+            var j;
+            for(i=0; i< nodes.length; i++) {
+                //for each slide
+                for(j=0; j<nodes[i].childNodes.length; j++) {
+                    //for each node in a slide
+                    if(nodes[i].childNodes[j].stay) { //node has a stay!
+                        stays.push(nodes[i].childNodes[j].outerHTML);
+                    }
+                }
+            }
+        }
+    }
+
+    if(stays.length>0) {
+        alert("stays: " + stays);
+        var ff = stays.join("-=-");
+        alert("stays2: " + ff);
+        alert(stays.length);
+        return toXML([{'name':'stays', 'val':stays.join("-=-")}]);
+    } else{
+        return toXML([{'name':'stays', 'val':"empty"}]);
+    }
+}
+
+function getDocumentPath() {    
+    return toXML([{'name':'path', 'val':dreamweaver.getDocumentPath("document")}]);
+}
+
 function getCurrentSlide() {
     var theDOM = dw.getDocumentDOM();
     if(theDOM != null) {

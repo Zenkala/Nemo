@@ -13,8 +13,7 @@ var scripts = [	'js/jquery.transit.min.js',
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",
-				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css",
-				"animations/basic/edge_includes/edge.1.5.0.min.js"
+				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css"
 			];
 var animations;	
 

@@ -22,6 +22,7 @@ package
 		private static var totalSlides:int = -1;
 		private static var currentStay:int = 0;
 		
+		private static var oldDocumentPath: String = "";
 		private static var nrSlides: NumericStepper;
 		private static var stay: NumericStepper;
 		private static var slideContainer: List;
@@ -46,6 +47,10 @@ package
             var myTimer:Timer = new Timer(33, 0);
             myTimer.addEventListener("timer", timerHandler);
             myTimer.start();
+
+            var myTimerPath:Timer = new Timer(1000, 0);
+            myTimerPath.addEventListener("timer", timerHandlerPath);
+            myTimerPath.start();
 		}
 		
 		private static function updateGUI(): void {
@@ -146,6 +151,21 @@ package
 			
 		}		
 
+		private static function getNewStays():void
+		{
+			trace("Parsing document to build an internal stay storage");
+			var r:* = requestDW("getAllStays");
+			if (r){
+				var staystring:String = r.stays;			
+				if(staystring) {
+					trace("stays:");
+					trace(staystring);
+				}
+			}else {
+				trace("fuck");
+			}
+		}
+
 		//this function is called 30 times a second. to see if we changed slide.
 		public static function timerHandler(event:TimerEvent):void {
 		    var result:SyncRequestResult = CSXSInterface.getInstance().evalScript("getCurrentStay");
@@ -159,8 +179,20 @@ package
 		    }
 		}
 
+		//this function is called each second. to check if we have a document or if it changed.
+		public static function timerHandlerPath(event:TimerEvent):void {
+			var path:String = requestDW("getDocumentPath").path;
+			if(!path) path = ""; //set empty
+			if(path != oldDocumentPath) { //document changed!
+				trace("Documetn changed to: " + path + "!");
+				oldDocumentPath = path;
+				updateGUI(); //update gui to reflect new slide amount etc.
+				getNewStays(); //update internal stay storage.
+			}
+		}
+
 		private static function requestDW (givenFunctionName: String, param1: String = null, param2: String= null): * {
-			trace("requestDW: " + givenFunctionName);
+			//trace("requestDW: " + givenFunctionName);
 			if(param2){
 				var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2);
 			}else{ 
@@ -174,12 +206,13 @@ package
 			{
 				return result.data;	    	
 			} else {
-				return null;
+				trace("ERROR: requestDW(" + givenFunctionName +") resturns null!");
+				return "";
 			}
 		}
 
 		private static function callDW (givenFunctionName: String, param1: String = null, param2: String= null): * {
-			trace("callDW: " + givenFunctionName);
+			//trace("callDW: " + givenFunctionName);
 			if(param2){
 				CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2);
 			}else{ 

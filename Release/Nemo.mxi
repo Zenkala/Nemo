@@ -1,6 +1,6 @@
 ﻿<macromedia-extension
 	 name="Nemo"
-	 version="0.2.4"
+	 version="0.3.0"
 	 type="command"
 	 locked="false"
 	 requires-restart="True"
@@ -28,6 +28,10 @@
 	</license-agreement>
 
 	<files>
+		<file source="Extensions\com.OLO.Nemo\Nemo.swf" destination="$userroamingfolder\CS6ServiceManager\extensions\com.OLO.Nemo\Nemo.swf" />
+		<file source="Extensions\com.OLO.Nemo\Nemo.jsx" destination="$userroamingfolder\CS6ServiceManager\extensions\com.OLO.Nemo\Nemo.jsx" />
+		<file source="Extensions\com.OLO.Nemo\CSXS\manifest.xml" destination="$userroamingfolder\CS6ServiceManager\extensions\com.OLO.Nemo\CSXS\manifest.xml" />
+
 		<file source="Floaters\Nemo.htm" destination="$dreamweaver\Configuration\Floaters\Nemo.htm" />
 		<file source="Floaters\Animations.htm" destination="$dreamweaver\Configuration\Floaters\Animations.htm" />
 		<file source="Floaters\Images\nemo_arrow_down.png" destination="$dreamweaver\Configuration\Floaters\Images\nemo_arrow_down.png" />
