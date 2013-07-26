@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.3.0" Version="3.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.3.1" Version="3.0">
 	<Author>
-		<![CDATA[Willem van Vliet &amp; Tjibbe van der Laan]]>
+		<![CDATA[Willem van Vliet &amp;amp; Tjibbe van der Laan]]>
 	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
 		<![CDATA[Or shout over the table]]>
 	</Contact>	<Legal>
@@ -8,7 +8,7 @@
 	</Legal>	<Abstract>
 		<![CDATA[The new extension panel. replaces the old floater that... was a bit dissapointing.]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.3.0"/>
+		<Extension Id="com.OLO.Nemo.extension" Version="0.3.1"/>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>

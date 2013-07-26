@@ -1,4 +1,9 @@
 Changelog
+0.3.1
+  Going from comment slide backwards to the last slide now works again :)
+  
+0.3.0
+  Release CSExtension version.
 
 0.2.4
   "check for improted aniamtions" now works

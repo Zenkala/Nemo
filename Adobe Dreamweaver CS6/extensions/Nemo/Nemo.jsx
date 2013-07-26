@@ -40,11 +40,8 @@ function getAllStays() {
     }
 
     if(stays.length>0) {
-        alert("stays: " + stays);
         var ff = stays.join("-=-");
-        alert("stays2: " + ff);
-        alert(stays.length);
-        return toXML([{'name':'stays', 'val':stays.join("-=-")}]);
+        return toXML([{'name':'stays', 'val':"<![CDATA[" + ff + "]]>"}]); //encapsule the result. or else it brakes the xml rather
     } else{
         return toXML([{'name':'stays', 'val':"empty"}]);
     }

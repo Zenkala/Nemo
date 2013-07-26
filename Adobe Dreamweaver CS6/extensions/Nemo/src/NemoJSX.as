@@ -26,6 +26,7 @@ package
 		private static var nrSlides: NumericStepper;
 		private static var stay: NumericStepper;
 		private static var slideContainer: List;
+		private static var stays: Array;
 		
 		public static function initNemo(givenExtension: CSExtension, _nrSlides: NumericStepper, _stay: NumericStepper, _slideContainer: List): void {
 			if(givenExtension) extension = givenExtension;
@@ -83,9 +84,10 @@ package
 		public static function prevSlide(event:MouseEvent): void {
 			var oldSlide: int = currentSlide;
 			currentSlide--;		
-			if(currentSlide<-1) currentSlide = totalSlides;
+			if(currentSlide<-1) currentSlide = totalSlides-1;
 			trace("change slide selection from " + oldSlide + " to " + currentSlide);
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
+			//callDW("forceGotoSlide", String(currentSlide)); 
 			if(extension) slideContainer.selectedIndex = currentSlide;			
 		}
 
@@ -95,6 +97,7 @@ package
 			if(currentSlide>=totalSlides) currentSlide = -1;		
 			trace("change slide selection from " + oldSlide + " to " + currentSlide);	
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
+			//callDW("forceGotoSlide", String(currentSlide)); 
 			if(extension) slideContainer.selectedIndex = currentSlide;
 		}	
 
@@ -160,6 +163,12 @@ package
 				if(staystring) {
 					trace("stays:");
 					trace(staystring);
+
+					var staystringArray: Array = staystring.split("-=-");
+					for (var index in staystringArray) {
+
+						trace(index + ": " + staystringArray[index]);
+					}
 				}
 			}else {
 				trace("fuck");
@@ -181,6 +190,7 @@ package
 
 		//this function is called each second. to check if we have a document or if it changed.
 		public static function timerHandlerPath(event:TimerEvent):void {
+			
 			var path:String = requestDW("getDocumentPath").path;
 			if(!path) path = ""; //set empty
 			if(path != oldDocumentPath) { //document changed!
@@ -189,6 +199,7 @@ package
 				updateGUI(); //update gui to reflect new slide amount etc.
 				getNewStays(); //update internal stay storage.
 			}
+			
 		}
 
 		private static function requestDW (givenFunctionName: String, param1: String = null, param2: String= null): * {
