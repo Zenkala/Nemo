@@ -4,15 +4,16 @@ package
 	import com.adobe.csxs.core.CSXSInterface;
 	import com.adobe.csxs.types.SyncRequestResult;
 	
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+	
+	import mx.events.DragEvent;
 	
 	import spark.components.List;
 	import spark.components.NumericStepper;
 	import spark.events.IndexChangeEvent;
-	import flash.events.MouseEvent;
-	import flash.events.Event;
-	import mx.events.DragEvent;
 	
 	public class NemoJSX
 	{	
@@ -79,6 +80,8 @@ package
 			trace("change slide selection from " + event.oldIndex + " to " + event.newIndex);
 			currentSlide = event.newIndex;
 			callDW("gotoSlide", String(currentSlide), String(event.oldIndex)); 
+			//setGhosts();
+			callDW("createGhosts", String(currentSlide));
 		}
 
 		public static function prevSlide(event:MouseEvent): void {
@@ -88,7 +91,9 @@ package
 			trace("change slide selection from " + oldSlide + " to " + currentSlide);
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
 			//callDW("forceGotoSlide", String(currentSlide)); 
-			if(extension) slideContainer.selectedIndex = currentSlide;			
+			if(extension) slideContainer.selectedIndex = currentSlide;		
+			//setGhosts();
+			callDW("createGhosts", String(currentSlide));	
 		}
 
 		public static function nextSlide(event:MouseEvent): void {
@@ -99,7 +104,18 @@ package
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
 			//callDW("forceGotoSlide", String(currentSlide)); 
 			if(extension) slideContainer.selectedIndex = currentSlide;
+			//setGhosts();
+			callDW("createGhosts", String(currentSlide));
 		}	
+
+		public static function selectCommentSlide(event:MouseEvent): void {			
+			trace("to commentSlide from " + currentSlide);
+			callDW("gotoSlide", String(-1), String(currentSlide));
+			currentSlide = -1;
+			slideContainer.selectedIndex = -1;
+			//setGhosts();
+			callDW("createGhosts", String(currentSlide));
+		}
 
 		public static function listDragComplete(event:DragEvent): void {
 			if(extension) extension.status = "completed : " + slideContainer.selectedIndex;
@@ -115,14 +131,12 @@ package
 			//select proper slide now
 			currentSlide--;
 			callDW("forceGotoSlide", String(currentSlide));
-
 			updateGUI();
 		}
 		
 		public static function addASlide(event:MouseEvent):void
 		{
-			CSXSInterface.instance.evalScript("addASlide", String(currentSlide)); 	
-			
+			CSXSInterface.instance.evalScript("addASlide", String(currentSlide)); 
 			trace("change slide selection from " + currentSlide + " to " + (currentSlide+1));
 			callDW("gotoSlide", String(currentSlide+1), String(currentSlide)); 
 			currentSlide++;
@@ -151,29 +165,7 @@ package
 			trace("changing stay to: " + stay.value);
 			currentStay = stay.value;
 			callDW("setStay", String(currentStay));
-			
 		}		
-
-		private static function getNewStays():void
-		{
-			trace("Parsing document to build an internal stay storage");
-			var r:* = requestDW("getAllStays");
-			if (r){
-				var staystring:String = r.stays;			
-				if(staystring) {
-					trace("stays:");
-					trace(staystring);
-
-					var staystringArray: Array = staystring.split("-=-");
-					for (var index in staystringArray) {
-
-						trace(index + ": " + staystringArray[index]);
-					}
-				}
-			}else {
-				trace("fuck");
-			}
-		}
 
 		//this function is called 30 times a second. to see if we changed slide.
 		public static function timerHandler(event:TimerEvent):void {
@@ -197,7 +189,7 @@ package
 				trace("Documetn changed to: " + path + "!");
 				oldDocumentPath = path;
 				updateGUI(); //update gui to reflect new slide amount etc.
-				getNewStays(); //update internal stay storage.
+				//getNewStays(); //update internal stay storage.
 			}
 			
 		}

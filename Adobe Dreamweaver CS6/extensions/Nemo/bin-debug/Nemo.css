@@ -1,0 +1,13 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+
+
+global
+{
+	text-align: left;
+	chrome-color: #d6d6d6;
+	font-style: normal;
+	font-family: Arial;
+	font-weight: normal;
+}
+	

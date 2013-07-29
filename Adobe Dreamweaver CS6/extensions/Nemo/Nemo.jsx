@@ -1,4 +1,4 @@
-﻿function getCurrentStay() {
+function getCurrentStay() {
     var theDOM = dw.getDocumentDOM();
     if (theDOM != null) {
         var theNode = theDOM.getSelectedNode();
@@ -19,8 +19,11 @@ function setStay(givenStay) {
     }
 }
 
+//Old system. report stays to extension. and recieve the ghosts from it on slide change.
+/*
 function getAllStays() {
     var stays = new Array();
+    var staysIndex = new Array();
     var theDOM = dw.getDocumentDOM();
     if (theDOM != null) {
         var nodes = getSlideNodes(false);
@@ -33,6 +36,7 @@ function getAllStays() {
                     //for each node in a slide
                     if(nodes[i].childNodes[j].stay) { //node has a stay!
                         stays.push(nodes[i].childNodes[j].outerHTML);
+                        staysIndex.push(i);
                     }
                 }
             }
@@ -41,11 +45,86 @@ function getAllStays() {
 
     if(stays.length>0) {
         var ff = stays.join("-=-");
-        return toXML([{'name':'stays', 'val':"<![CDATA[" + ff + "]]>"}]); //encapsule the result. or else it brakes the xml rather
+        return toXML([ {'name':'stays', 'val':"<![CDATA[" + ff + "]]>"}, {'name':'indexes', 'val':staysIndex.join(",")} ]); //encapsule the result. or else it rather breaks the xml
     } else{
-        return toXML([{'name':'stays', 'val':"empty"}]);
+        return toXML([{'name':'stays', 'val':"empty"},  {'name':'indexes', 'val':"0"}]);
     }
 }
+
+function setGhosts (givenGhosts) {
+    var theDOM = dw.getDocumentDOM();
+    if (theDOM != null) {
+        //split recieved parameter
+        var ghosts = new Array;
+        ghosts = givenGhosts.split("-=-");
+
+        //empty ghostDiv
+        var ghostDiv = theDOM.getElementById("ghostDiv");
+        if(ghostDiv != undefined) { 
+            ghostDiv.innerHTML = ""; //flusg
+        } else {
+            //add the ghostDiv, since it's not already here
+            theDOM.getElementById("contentDiv").outerHTML = '<div id="ghostDiv"> </div>' + theDOM.getElementById("contentDiv").outerHTML; //sneaky way to append an element below some other element.
+            ghostDiv = theDOM.getElementById("ghostDiv");
+        }
+
+        //fill ghost with emelents. set alpha of elelemts.
+        var i;
+        for(i=0; i<ghosts.length; i++) {
+            ghostDiv.innerHTML += ghosts[i];
+        }
+        ghostDiv.innerHTML += '<div id="ghostDivCover"> </div>'
+    }
+
+}
+*/
+
+//new system. all local on slide change
+function createGhosts(givenIndex) {
+    var theDOM = dw.getDocumentDOM();
+    if (theDOM != null) {
+
+        //empty ghostDiv
+        var ghostDiv = theDOM.getElementById("ghostDiv");
+        if(ghostDiv != undefined) { 
+            ghostDiv.innerHTML = ""; //flush
+        } else {
+            //add the ghostDiv, since it's not already here
+            theDOM.getElementById("contentDiv").outerHTML = '<div id="ghostDiv"> </div>' + theDOM.getElementById("contentDiv").outerHTML; //sneaky way to append/prepend an element below some other element.
+            ghostDiv = theDOM.getElementById("ghostDiv");
+        }
+
+        var nodes = getSlideNodes(false);
+        if(nodes != null) {
+            var i;
+            var j;
+            for(i=0; i< nodes.length; i++) {
+                //for each slide
+                for(j=0; j<nodes[i].childNodes.length; j++) {
+                    //for each node in a slide
+                    if(nodes[i].childNodes[j].stay) { //node has a stay!
+                        //check if the node should be ghosted
+                        if(nodes[i].childNodes[j].stay > 0) { //node has a stay that is actually useful
+                            if(givenIndex > i && givenIndex <= i + parseInt(nodes[i].childNodes[j].stay)) {
+                                //add to ghosts
+                               ghostDiv.innerHTML += nodes[i].childNodes[j].outerHTML;
+                            }
+                        }   
+                    }
+                }
+            }
+        }
+        ghostDiv.innerHTML += '<div id="ghostDivCover"> </div>'
+    }
+
+    if(stays.length>0) {
+        var ff = stays.join("-=-");
+        return toXML([ {'name':'stays', 'val':"<![CDATA[" + ff + "]]>"}, {'name':'indexes', 'val':staysIndex.join(",")} ]); //encapsule the result. or else it rather breaks the xml
+    } else{
+        return toXML([{'name':'stays', 'val':"empty"},  {'name':'indexes', 'val':"0"}]);
+    }
+}
+
 
 function getDocumentPath() {    
     return toXML([{'name':'path', 'val':dreamweaver.getDocumentPath("document")}]);

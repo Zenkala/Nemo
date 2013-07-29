@@ -79,16 +79,15 @@
 				//resize content
 				mainVGroup.setActualSize(w-8, h-32);
 				//make list as big as possible
-				slideContainerH.height = h-(slideContainer.y+126+60);
-				slideContainer.height = h-(slideContainer.y+126+60);
+				slideContainerH.height = h-(slideContainer.y+126+90);
+				slideContainer.height = h-(slideContainer.y+126+90);
 				slideContainer.width = w-8;
 				//resize prev and next buttons
 				next.width = w/2-9;
 				prev.width = w/2-9
 				addASileButton.width = w-8;
-				
-			}			
-			
+				commentSlideButton.width = w-8;
+			}
 		]]>
 	</fx:Script>
 	<s:VGroup id="mainVGroup" x="0" y="0" width="224" horizontalAlign="justify" verticalAlign="top">
@@ -101,6 +100,10 @@
 			<s:Label width="70" height="25" text="Total slides:" verticalAlign="middle"/>
 			<s:NumericStepper id="nrSlides" width="50" height="25" maximum="256" minimum="1"/>
 			<s:Button width="52" height="25" label="Apply" click="NemoJSX.applySlideTotal(event)"/>
+		</s:HGroup>
+		<s:HGroup height="25">
+			<s:Button id="commentSlideButton" height="25" label="Go to Comment Slide"
+					  click="NemoJSX.selectCommentSlide(event)"/>
 		</s:HGroup>
 		<s:HGroup id="slideContainerH" height="196" requestedColumnCount="1">
 			<s:List id="slideContainer" height="196" change="NemoJSX.selectSlide(event)"

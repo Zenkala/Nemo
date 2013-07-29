@@ -48,12 +48,13 @@ function nemoInit(givenAnimations){
 		$(function() {
 			log("preloader");
 
-			//hide stuff
+			//hide and delete comment/ghosting stuff
 			$("#contentDiv").hide();
 			$("#navigation").hide();
 			$("#title").hide();
 			$(".comment").remove();
 			$("#commentslide").remove();
+			$("#ghostDiv").remove();
 
 			//display logo
 			var img = document.createElement("img");
