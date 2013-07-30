@@ -23,9 +23,9 @@ Changelog
 
 0.2.2
   Added the arrange features (bring to front, send to back)
-  Added comment Slide
 
 0.2.1
+  Added comment Slide
   Fixed apply slide-amount button
   Frame highlight
   Insert frame
