@@ -5,7 +5,7 @@ var quick = false;
 
 var scripts = [	'js/jquery.transit.min.js',
 				'js/jquery-ui-1.10.3.custom.min.js',
-				'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',
+				'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured'/*,
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.logAxisRenderer.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasTextRenderer.min.js",
@@ -13,8 +13,7 @@ var scripts = [	'js/jquery.transit.min.js',
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",
-				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css",
-				"animations/basic/edge_includes/edge.1.5.0.min.js"
+				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css",*/
 			];
 var animations;	
 
@@ -44,6 +43,7 @@ function nemoInit(givenAnimations){
 	
 	//first thing: load jquery
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
+	//yepnope.injectJs("edge_includes/jquery-1.7.1.min.js", function () {
 		console.log("loaded: jquery-1.9.1.min.js");	
 		$(function() {
 			log("preloader");
@@ -77,12 +77,19 @@ function nemoInit(givenAnimations){
 //load the EDGE animations
 function loadAnims(){
 	log("load " + animations.length + " animations");	
-	if(animations.length>0){		
+	if(animations.length>0){	
+
+		//yepnope.injectJs("starcrafts2_edgePreload.js");	
+		//yepnope.injectJs("edge_includes/edge.1.5.0.min.js");
+		//yepnope.injectJs("starcrafts2_edge.js");
+		//yepnope.injectJs("starcrafts2_edgeActions.js");		
+
 		/*
 		animations.push("animations/edge_walking_test/edge_includes/edge.1.5.0.min.js");
 		animations.push("animations/edge_walking_test/edge_walking_test_edge.js");
 		animations.push("animations/edge_walking_test/edge_walking_test_edgeActions.js");
 		*/
+		
 		yepnope([{
 			load: animations,
 			callback: function (url, result, key) {
@@ -121,6 +128,13 @@ function startNemoScript(){
 	//apply MathJax
 
 	log("configure MathJax");
+	//jax initializes slow. So there is a change it's not yet done when we get here.
+	if(typeof MathJax == 'undefined') {
+		console.log("jax undefined! trying again over 200 ms");		
+		window.setTimeout("startNemoScript()",200);//try again
+		return null; //quick this function for now.
+	}//else: jax is defined. we can continue!
+
 	MathJax.Hub.Configured();
 	MathJax.Hub.Register.StartupHook("End", function () {
 		progress("MathJax ended");			
@@ -205,13 +219,18 @@ function startNemoScript(){
 		        console.log('found element: ' + this.id);
 		    }
 		});
-		
+
 		onLoad(); //notify the javascript of the module that we're done
 
 		//goto slide last viewed in Dreamweaver
 		for(i=0; i<gotoSlide; i++) {
 			quick = true;
 			next();
+		}
+
+		if(gotoSlide == 0) { //if we don't do a quick next, no enterframe handles are called. So call them manually.
+			newSlideHdl(0, false);
+			newSlideStopHdl(0, false);
 		}
 		
 		quick = false;
