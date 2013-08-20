@@ -4,11 +4,17 @@
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path="">
-        <excludedEntries>
+        <modifiedEntries>
           <libraryPathEntry applicationDomain="default" forceLoad="false" index="9" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/advancedgrids.swc" useDefaultLinkType="true">
             <crossDomainRsls>
               <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.5.0.20967/advancedgrids_4.5.0.20967.swz"/>
               <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="advancedgrids_4.5.0.20967.swz"/>
+            </crossDomainRsls>
+          </libraryPathEntry>
+          <libraryPathEntry applicationDomain="default" forceLoad="false" index="10" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/osmf.swc" useDefaultLinkType="true">
+            <crossDomainRsls>
+              <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.5.0.20967/osmf_1.0.0.16316.swz"/>
+              <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="osmf_1.0.0.16316.swz"/>
             </crossDomainRsls>
           </libraryPathEntry>
           <libraryPathEntry applicationDomain="default" forceLoad="false" index="8" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/mx/mx.swc" useDefaultLinkType="true">
@@ -17,13 +23,7 @@
               <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="mx_4.5.0.21746.swz"/>
             </crossDomainRsls>
           </libraryPathEntry>
-          <libraryPathEntry applicationDomain="default" forceLoad="false" index="7" kind="3" linkType="4" path="${PROJECT_FRAMEWORKS}/libs/spark_dmv.swc" useDefaultLinkType="true">
-            <crossDomainRsls>
-              <crossDomainRslEntry autoExtract="true" policyFileUrl="http://fpdownload.adobe.com/pub/swz/crossdomain.xml" rslUrl="http://fpdownload.adobe.com/pub/swz/flex/4.5.0.20967/spark_dmv_4.5.0.20967.swz"/>
-              <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="spark_dmv_4.5.0.20967.swz"/>
-            </crossDomainRsls>
-          </libraryPathEntry>
-        </excludedEntries>
+        </modifiedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="2" path="${CSLIBS}/2.0/4.5/release/apedelta.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${CSAR}/release/CSXSLibrary-3.0-sdk-4.5-public.swc" useDefaultLinkType="false"/>
@@ -32,7 +32,6 @@
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
-  <theme themeIsDefault="false" themeIsSDK="true" themeLocation="${SDK_THEMES_DIR}/samples/themes/arcade"/>
   <applications>
     <application path="Nemo.mxml"/>
   </applications>

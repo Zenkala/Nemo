@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <csxs:CSExtension xmlns:fx="http://ns.adobe.com/mxml/2009"
 				  xmlns:s="library://ns.adobe.com/flex/spark"
+				  xmlns:mx="library://ns.adobe.com/flex/mx"
 				  xmlns:csxs="com.adobe.csxs.core.*"
 				  width="232" height="400" applicationComplete="appComplete()"
 				  backgroundColor="#bdbdbd" color="#000000" preloaderChromeColor="#d6d6d6"
@@ -79,8 +80,8 @@
 				//resize content
 				mainVGroup.setActualSize(w-8, h-32);
 				//make list as big as possible
-				slideContainerH.height = h-(slideContainer.y+126+90);
-				slideContainer.height = h-(slideContainer.y+126+90);
+				slideContainerH.height = h-(slideContainer.y+126+90+25);
+				slideContainer.height = h-(slideContainer.y+126+90+25);
 				slideContainer.width = w-8;
 				//resize prev and next buttons
 				next.width = w/2-9;
@@ -90,40 +91,54 @@
 			}
 		]]>
 	</fx:Script>
-	<s:VGroup id="mainVGroup" x="0" y="0" width="224" horizontalAlign="justify" verticalAlign="top">
-		<s:HGroup height="25">
-			<s:Label width="70" height="25" text="Stay:" verticalAlign="middle"/>
-			<s:NumericStepper id="staySt" width="50" height="25" change="NemoJSX.changeStay(event)"
-							  maximum="9001" minimum="0" stepSize="1"/>
-		</s:HGroup>
-		<s:HGroup height="25">
-			<s:Label width="70" height="25" text="Total slides:" verticalAlign="middle"/>
-			<s:NumericStepper id="nrSlides" width="50" height="25" maximum="256" minimum="1"/>
-			<s:Button width="52" height="25" label="Apply" click="NemoJSX.applySlideTotal(event)"/>
-		</s:HGroup>
-		<s:HGroup height="25">
-			<s:Button id="commentSlideButton" height="25" label="Go to Comment Slide"
-					  click="NemoJSX.selectCommentSlide(event)"/>
-		</s:HGroup>
-		<s:HGroup id="slideContainerH" height="196" requestedColumnCount="1">
-			<s:List id="slideContainer" height="196" change="NemoJSX.selectSlide(event)"
-					dragComplete="NemoJSX.listDragComplete(event)" dragEnabled="true"
-					dragMoveEnabled="true" dropEnabled="true">
-				<s:dataProvider>
-					<s:ArrayCollection>
-						
-					</s:ArrayCollection>
-				</s:dataProvider>
-			</s:List>
-		</s:HGroup>
-		<s:HGroup height="25" requestedColumnCount="1">
-			<s:Button id="addASileButton" height="25" label="Add a Slide"
-					  click="NemoJSX.addASlide(event)"/>
-		</s:HGroup>
-		<s:HGroup height="50" gap="6">
-			<s:Button id="prev" width="91" height="50" label="prev" click="NemoJSX.prevSlide(event)"/>
-			<s:Button id="next" width="91" height="50" label="next" click="NemoJSX.nextSlide(event)"/>
-		</s:HGroup>
-	</s:VGroup>
+	<!-- Create a Spark ButtonBar control to navigate the ViewStack container. -->
+	<s:ButtonBar width="100%" height="20" dataProvider="{myViewStack}"/>
 	
+	<!-- Define the ViewStack and the two child containers. -->
+	<mx:ViewStack id="myViewStack" width="100%" height="100" borderStyle="solid">		
+		
+		<!-- nemo tab -->
+		<s:NavigatorContent id="nemo" label="Nemo">
+			<s:VGroup id="mainVGroup" x="0" y="0" width="224" horizontalAlign="justify" verticalAlign="top">
+				<s:HGroup height="25">
+					<s:Label width="70" height="25" text="Stay:" verticalAlign="middle"/>
+					<s:NumericStepper id="staySt" width="50" height="25" change="NemoJSX.changeStay(event)"
+									  maximum="9001" minimum="0" stepSize="1"/>
+				</s:HGroup>
+				<s:HGroup height="25">
+					<s:Label width="70" height="25" text="Total slides:" verticalAlign="middle"/>
+					<s:NumericStepper id="nrSlides" width="50" height="25" maximum="256" minimum="1"/>
+					<s:Button width="52" height="25" label="Apply" click="NemoJSX.applySlideTotal(event)"/>
+				</s:HGroup>
+				<s:HGroup height="25">
+					<s:Button id="commentSlideButton" height="25" label="Go to Comment Slide"
+							  click="NemoJSX.selectCommentSlide(event)"/>
+				</s:HGroup>
+				<s:HGroup id="slideContainerH" height="196" requestedColumnCount="1">
+					<s:List id="slideContainer" height="196" change="NemoJSX.selectSlide(event)"
+							dragComplete="NemoJSX.listDragComplete(event)" dragEnabled="true"
+							dragMoveEnabled="true" dropEnabled="true">
+						<s:dataProvider>
+							<s:ArrayCollection>
+								
+							</s:ArrayCollection>
+						</s:dataProvider>
+					</s:List>
+				</s:HGroup>
+				<s:HGroup height="25" requestedColumnCount="1">
+					<s:Button id="addASileButton" height="25" label="Add a Slide"
+							  click="NemoJSX.addASlide(event)"/>
+				</s:HGroup>
+				<s:HGroup height="50" gap="6">
+					<s:Button id="prev" width="91" height="50" label="prev" click="NemoJSX.prevSlide(event)"/>
+					<s:Button id="next" width="91" height="50" label="next" click="NemoJSX.nextSlide(event)"/>
+				</s:HGroup>
+			</s:VGroup>
+		</s:NavigatorContent>
+		
+		<!-- aniamtion tab -->
+		<s:NavigatorContent id="animation" label="Animation">
+			<s:Label text="Customer Info"/>
+		</s:NavigatorContent>
+	</mx:ViewStack>
 </csxs:CSExtension>
