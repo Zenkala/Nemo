@@ -19,6 +19,7 @@
 			import flash.display.InteractiveObject;
 			
 			import mx.events.FlexNativeWindowBoundsEvent;
+			import mx.events.IndexChangedEvent;
 			
 			import spark.events.IndexChangeEvent;	
 			
@@ -28,6 +29,8 @@
 				this.status = "Ready";
 				
 				this.addEventListener(mx.events.FlexNativeWindowBoundsEvent.WINDOW_RESIZE, onResize);
+				//mainTabs.addEventListener(mx.events.change, onResizeHack);
+				myViewStack.addEventListener(mx.events.IndexChangedEvent.CHANGE, onResizeHack);
 				onResize(null); //initial resize
 				
 				this.addEventListener(MouseEvent.CLICK, onClick);
@@ -64,6 +67,10 @@
 				//trace("mouse: (" + e.stageX + "," + e.stageY + ")");
 			}
 			
+			private function onResizeHack(e:Event): void {
+				onResize();
+			}
+			
 			private function onResize(e:FlexNativeWindowBoundsEvent = null):void {
 				var w:int;
 				var h:int;
@@ -75,27 +82,33 @@
 					h = 400;
 				}
 				
-				trace("reize: " + w + ", " + h);
+				trace("reize: " + w + ", " + h + " tab: " + mainTabs.selectedIndex);
 				
 				//resize content
-				mainVGroup.setActualSize(w-8, h-32);
-				//make list as big as possible
-				slideContainerH.height = h-(slideContainer.y+126+90+25);
-				slideContainer.height = h-(slideContainer.y+126+90+25);
-				slideContainer.width = w-8;
-				//resize prev and next buttons
-				next.width = w/2-9;
-				prev.width = w/2-9
-				addASileButton.width = w-8;
-				commentSlideButton.width = w-8;
+				if(mainTabs.selectedIndex == 0) {
+					mainVGroup.setActualSize(w-8, h-32);
+					//make list as big as possible
+					slideContainerH.height = h-(slideContainer.y+126+90+25);
+					slideContainer.height = h-(slideContainer.y+126+90+25);
+					slideContainer.width = w-8;
+					//resize prev and next buttons
+					next.width = w/2-9;
+					prev.width = w/2-9
+					addASileButton.width = w-8;
+					commentSlideButton.width = w-8;
+				} else
+				if(mainTabs.selectedIndex == 1) {
+					animationContainer.height = h-25-67;
+				}
+				
 			}
 		]]>
 	</fx:Script>
 	<!-- Create a Spark ButtonBar control to navigate the ViewStack container. -->
-	<s:ButtonBar width="100%" height="20" dataProvider="{myViewStack}"/>
-	
+	<s:ButtonBar id="mainTabs" width="100%" height="20" dataProvider="{myViewStack}"/>
+
 	<!-- Define the ViewStack and the two child containers. -->
-	<mx:ViewStack id="myViewStack" width="100%" height="100" borderStyle="solid">		
+	<mx:ViewStack id="myViewStack" width="100%" height="380" borderStyle="solid">		
 		
 		<!-- nemo tab -->
 		<s:NavigatorContent id="nemo" label="Nemo">
@@ -138,7 +151,23 @@
 		
 		<!-- aniamtion tab -->
 		<s:NavigatorContent id="animation" label="Animation">
-			<s:Label text="Customer Info"/>
+			<s:VGroup id="aniamtionVGroup" x="0" y="0" width="100%" horizontalAlign="justify"
+					  verticalAlign="top">
+				<s:List id="animationContainer" width="100%" height="485"
+						change="NemoJSX.selectSlide(event)"
+						dragComplete="NemoJSX.listDragComplete(event)" dragEnabled="true"
+						dragMoveEnabled="true" dropEnabled="true">
+					<s:dataProvider>
+						<s:ArrayCollection>
+							
+						</s:ArrayCollection>
+					</s:dataProvider>
+				</s:List>
+				<s:Button id="assignButton" width="100%" height="25" label="Assign animation"
+						  click="NemoJSX.addASlide(event)"/>
+			</s:VGroup>
 		</s:NavigatorContent>
+		
 	</mx:ViewStack>
+	
 </csxs:CSExtension>
