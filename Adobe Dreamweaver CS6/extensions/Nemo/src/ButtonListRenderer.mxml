@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.ItemClickEvent;
+			
+			private function requestForm():void {
+				var event:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK);
+				event.index = itemIndex;
+				event.item = data;
+				owner.dispatchEvent(event);
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Label id="labelDisplay" verticalCenter="0" />
+	<s:Button right="0" label="update" verticalCenter="0" click="requestForm()" />
+	
+</s:ItemRenderer>

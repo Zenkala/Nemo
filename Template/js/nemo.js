@@ -36,14 +36,10 @@ function progress(msg) {
 	}
 }
 		
-function nemoInit(givenAnimations){
-	log("-----------NemoInit-----------");
-	animations = givenAnimations;
-	totalProgress+=animations.length; //animations means loanger load time
-	
+function nemoInit(){
+	log("-----------NemoInit-----------");	
 	//first thing: load jquery
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
-	//yepnope.injectJs("edge_includes/jquery-1.7.1.min.js", function () {
 		console.log("loaded: jquery-1.9.1.min.js");	
 		$(function() {
 			log("preloader");
@@ -64,6 +60,15 @@ function nemoInit(givenAnimations){
 			var logoImg = $('<img src="css/logo.png" id="loadingLogo" style="position: absolute; with: 50px; height: 50px; left:512px; top:336px; margin-left: -25px; margin-top: -25px;" />');
 			$('body').append(lineImg);
 			$('body').append(logoImg);
+
+			//check for animations we have to load 
+			animations = new Array();
+			$(".nm_Animation").each(function(){
+				console.log("found animation: " + $(this).attr("id"));
+				animations.push("animations/" + $(this).attr("id") + "/" + $(this).attr("id") + "_edgePreload.js");
+				totalProgress++;
+			});
+
 			enableProgressBar = true;
 			progress("enable ProgressBar");
 
@@ -78,18 +83,6 @@ function nemoInit(givenAnimations){
 function loadAnims(){
 	log("load " + animations.length + " animations");	
 	if(animations.length>0){	
-
-		//yepnope.injectJs("starcrafts2_edgePreload.js");	
-		//yepnope.injectJs("edge_includes/edge.1.5.0.min.js");
-		//yepnope.injectJs("starcrafts2_edge.js");
-		//yepnope.injectJs("starcrafts2_edgeActions.js");		
-
-		/*
-		animations.push("animations/edge_walking_test/edge_includes/edge.1.5.0.min.js");
-		animations.push("animations/edge_walking_test/edge_walking_test_edge.js");
-		animations.push("animations/edge_walking_test/edge_walking_test_edgeActions.js");
-		*/
-		
 		yepnope([{
 			load: animations,
 			callback: function (url, result, key) {

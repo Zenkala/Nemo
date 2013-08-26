@@ -20,21 +20,21 @@
 			
 			import mx.events.FlexNativeWindowBoundsEvent;
 			import mx.events.IndexChangedEvent;
+			import mx.events.ItemClickEvent;
 			
 			import spark.events.IndexChangeEvent;	
 			
+			var animationInited:Boolean = false;
+			
 			public function appComplete():void{
-				NemoJSX.initNemo(this, nrSlides, staySt, slideContainer);
+				NemoJSX.initNemo(this, nrSlides, staySt, slideContainer, animationContainer);
 				
 				this.status = "Ready";
 				
 				this.addEventListener(mx.events.FlexNativeWindowBoundsEvent.WINDOW_RESIZE, onResize);
 				//mainTabs.addEventListener(mx.events.change, onResizeHack);
 				myViewStack.addEventListener(mx.events.IndexChangedEvent.CHANGE, onResizeHack);
-				onResize(null); //initial resize
-				
-				this.addEventListener(MouseEvent.CLICK, onClick);
-				
+				onResize(null); //initial resize				
 				
 				var myContextMenu:ContextMenu = new ContextMenu();
 				
@@ -46,6 +46,14 @@
 				
 				//this.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, handleRightClick);
 				
+			}
+			
+			private function animationInit():void
+			{
+				if(animationInited) return;
+				animationInited = true;
+				NemoJSX.setAnimationContainer(animationContainer);
+				animationContainer.addEventListener(ItemClickEvent.ITEM_CLICK, NemoJSX.updateAnimation);
 			}
 			
 			private function handleRightClick(e:MouseEvent):void
@@ -63,12 +71,9 @@
 				NemoJSX.removeSlide(slideContainer.selectedIndex);				
 			}			
 			
-			private function onClick(e:MouseEvent = null):void {
-				//trace("mouse: (" + e.stageX + "," + e.stageY + ")");
-			}
-			
-			private function onResizeHack(e:Event): void {
+			private function onResizeHack(e:Event): void {				
 				onResize();
+				animationInit();
 			}
 			
 			private function onResize(e:FlexNativeWindowBoundsEvent = null):void {
@@ -92,15 +97,14 @@
 					slideContainer.height = h-(slideContainer.y+126+90+25);
 					slideContainer.width = w-8;
 					//resize prev and next buttons
-					next.width = w/2-9;
-					prev.width = w/2-9
+					next.width = w/2-7;
+					prev.width = w/2-7;
 					addASileButton.width = w-8;
 					commentSlideButton.width = w-8;
 				} else
 				if(mainTabs.selectedIndex == 1) {
-					animationContainer.height = h-25-67;
+					animationContainer.height = h-50-67;
 				}
-				
 			}
 		]]>
 	</fx:Script>
@@ -143,8 +147,8 @@
 							  click="NemoJSX.addASlide(event)"/>
 				</s:HGroup>
 				<s:HGroup height="50" gap="6">
-					<s:Button id="prev" width="91" height="50" label="prev" click="NemoJSX.prevSlide(event)"/>
-					<s:Button id="next" width="91" height="50" label="next" click="NemoJSX.nextSlide(event)"/>
+					<s:Button id="prev" width="100" height="50" label="prev" click="NemoJSX.prevSlide(event)"/>
+					<s:Button id="next" width="100" height="50" label="next" click="NemoJSX.nextSlide(event)"/>
 				</s:HGroup>
 			</s:VGroup>
 		</s:NavigatorContent>
@@ -153,18 +157,15 @@
 		<s:NavigatorContent id="animation" label="Animation">
 			<s:VGroup id="aniamtionVGroup" x="0" y="0" width="100%" horizontalAlign="justify"
 					  verticalAlign="top">
-				<s:List id="animationContainer" width="100%" height="485"
-						change="NemoJSX.selectSlide(event)"
-						dragComplete="NemoJSX.listDragComplete(event)" dragEnabled="true"
-						dragMoveEnabled="true" dropEnabled="true">
+				<s:List id="animationContainer" width="100%" height="485" itemRenderer="ButtonListRenderer">
 					<s:dataProvider>
 						<s:ArrayCollection>
 							
 						</s:ArrayCollection>
 					</s:dataProvider>
 				</s:List>
-				<s:Button id="assignButton" width="100%" height="25" label="Assign animation"
-						  click="NemoJSX.addASlide(event)"/>
+				<s:Button id="assignAniamtionButton" width="100%" height="25" label="Assign animation" click="NemoJSX.assignAnimation(event)"/>
+				<s:Button id="addAniamtionButton" width="100%" height="25" label="Add animation" click="NemoJSX.addAnimation(event)"/>
 			</s:VGroup>
 		</s:NavigatorContent>
 		

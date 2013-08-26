@@ -10,6 +10,7 @@ package
 	import flash.utils.Timer;
 	
 	import mx.events.DragEvent;
+	import mx.events.ItemClickEvent;
 	
 	import spark.components.List;
 	import spark.components.NumericStepper;
@@ -27,9 +28,12 @@ package
 		private static var nrSlides: NumericStepper;
 		private static var stay: NumericStepper;
 		private static var slideContainer: List;
+		private static var animationContainer: List;
 		private static var stays: Array;
+		private static var animations: Array = new Array();
+		private static var animationPaths: Array = new Array();
 		
-		public static function initNemo(givenExtension: CSExtension, _nrSlides: NumericStepper, _stay: NumericStepper, _slideContainer: List): void {
+		public static function initNemo(givenExtension: CSExtension, _nrSlides: NumericStepper, _stay: NumericStepper, _slideContainer: List, _animationContainer: List): void {
 			if(givenExtension) extension = givenExtension;
 			state = "Initializing"
 			if(extension) extension.status = state;
@@ -37,6 +41,8 @@ package
 			nrSlides = _nrSlides;
 			stay = _stay;
 			slideContainer = _slideContainer;
+			animationContainer = _animationContainer;
+			trace(_animationContainer);
 
 			//reset to slider 1
 			callDW("forceGotoSlide", String(0));
@@ -55,6 +61,11 @@ package
             myTimerPath.start();
 		}
 		
+		public static function setAnimationContainer(_animationContainer: List): void {
+			animationContainer = _animationContainer;
+			updateGUI();
+		}
+		
 		private static function updateGUI(): void {
 			if(extension){
 				//get total number of slides
@@ -66,12 +77,21 @@ package
 				trace("updateGUi ran with: " + currentSlide + "/" + totalSlides);
 				//update contents of slideContainer
 				slideContainer.dataProvider.removeAll();
-				for(var i:int; i<totalSlides; i++) {
+				for(var i:int = 0; i<totalSlides; i++) {
 					slideContainer.dataProvider.addItem("Slide " + (i+1));
 				}
 
 				//currentSlide = requestDW("getCurrentSlide");
 				slideContainer.selectedIndex = currentSlide;
+				
+				//fill animationsContainer
+				if(animationContainer) {
+					trace("updating animation");
+					animationContainer.dataProvider.removeAll();
+					for(i = 0; i<animations.length; i++) {
+						animationContainer.dataProvider.addItem("" + animations[i]);
+					}
+				}
 			}
 		}
 		
@@ -143,6 +163,45 @@ package
 			updateGUI();
 		}
 		
+		public static function addAnimation(event:MouseEvent):void
+		{			
+			var rdata:* = requestDW("addAnimation", "", "none"); //no name, new animation
+			if(animations.indexOf(rdata.animation) == -1){ //add animation if not already in list.
+				animations.push(rdata.animation); 
+				animationPaths.push(rdata.path);
+			}
+			
+			updateGUI();
+			trace("Added animation: " + rdata.animation + " path: " + rdata.path);
+		}
+		
+		public static function updateAnimation(event:ItemClickEvent):void {
+			trace("update " + event.item.toString());
+			
+			var rdata:* = requestDW(
+				"addAnimation", //call add, even for update
+				event.item.toString(), //aniamtion name
+				animationPaths[animations.indexOf(event.item.toString())] //path, got by getting the index from the name
+			);
+			animationPaths[animations.indexOf(event.item.toString())] = rdata.path; //there is a change that tere is a now path selected. so override the old one.
+			trace("" + rdata.animation + " updated to " + rdata.path);
+		}
+		
+		public static function assignAnimation(event:MouseEvent):void
+		{
+			if(animationContainer.selectedIndex >= 0) {
+				trace("assign animation: " + animations[animationContainer.selectedIndex] + " - " + animationContainer.selectedIndex);
+				var rstr:String = requestDW("assignAnimation", animations[animationContainer.selectedIndex]).success;
+				if(rstr == "true") {
+					//
+				} else { 
+					trace("meh");
+				}
+			}
+			
+			//; 
+		}
+		
 		public static function applySlideTotal(event:MouseEvent):void
 		{
 			if(nrSlides.value == totalSlides) return;
@@ -186,8 +245,18 @@ package
 			var path:String = requestDW("getDocumentPath").path;
 			if(!path) path = ""; //set empty
 			if(path != oldDocumentPath) { //document changed!
-				trace("Documetn changed to: " + path + "!");
+				trace("Document changed to: " + path + "!");
 				oldDocumentPath = path;
+				
+				//request new aniamtion list
+				
+				trace("checkForAnimations");
+				var rdata:* = requestDW("checkForAnimations");
+				animations = rdata.animations.split(",");
+				animationPaths = rdata.paths.split(",");
+				//callDW("checkForAnimations");
+				trace("animations: " + animations + "\npaths: " + rdata.paths.split(","));
+				
 				updateGUI(); //update gui to reflect new slide amount etc.
 				//getNewStays(); //update internal stay storage.
 			}

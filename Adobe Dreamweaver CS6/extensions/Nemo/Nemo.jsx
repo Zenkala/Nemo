@@ -329,6 +329,173 @@ function remSlide(givenIndex){
     }
 }
 
+//////======== Animation functions ==========================//////////
+var pathpatt = /^(.*[\\\/])/
+
+function checkForAnimations(){
+    var localPathPatt = /\/\/updatePath:.*(?=\*)/;
+    folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+    var fileURL;
+
+    if(DWfile.exists(folderpath + "animations")){
+        //var list = DWfile.listFolder(dreamweaver.getDocumentPath("document") + "animations", "directories");                  
+        
+        var list = DWfile.listFolder(folderpath + "animations", "directories");
+        var pathList = new Array();
+        //fill animations from named of the folders
+        if (list){
+            for(var i=0; i<list.length; i++){
+                fileURL    = folderpath + "animations/" + list[i] + "/" + list[i] + "_edgePreload.js";
+                var str    = DWfile.read(fileURL);
+                var result = localPathPatt.exec(str);
+                if(result != null){
+                    pathList.push(result[0].substring(13));
+                }else {
+                    pathList.push(""); //add an empty, to keep the order aligned.
+                }
+            }
+            return toXML([ {'name':'animations', 'val':list.join(",")}, {'name':'paths', 'val':pathList.join(",")} ]);
+            //return toXML([ {'name':'animations', 'val':list.join(",")} ]);
+        }
+    }else{
+        alert("no animations folder exists!");
+    }
+}
+
+/*
+user selects the path to the web export
+floater copies the image folder content to the image folder in the site root
+floater copies the js files to the aniamtionJS folder in the site root
+floater copies content of the edgePreload.js file to memory
+floater edits the urls to the js files.
+floater writes the edited content back to the edgeProload.js file.
+
+display a list of animations and their name.
+Ability to add and remove aniamtiosn
+abiliy to update them
+ability to fill the current selected animation-object with the selected animation
+  -loads the container div with the prober id and class
+  -adds the right call to the OLO loader
+  */
+
+function addAnimation(givenName, givenPath){
+    folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+    var fileURL;
+    var updateUrlStore;
+    if(givenPath == "none") { //new animation
+        //ask use to select a folder
+        fileURL = dreamweaver.browseForFileURL("select", "Select a '_edgePreload.js' File", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath);
+    } else { //updating an existing animation
+        if (DWfile.exists(givenPath)){ //lets do this!
+            fileURL = givenPath;
+        }else{ //aniamtion not found. request user to locate it
+            fileURL = dreamweaver.browseForFileURL("select", "Select new location of '" + givenName + "_edgePreload.js'", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath);
+        }
+        
+    }
+    if(fileURL){
+        if(fileURL[0] == "f"){
+            //fixed. do nothing
+        }else{
+            //reletive. add our root
+            fileURL = folderpath + fileURL;
+        }
+        updateUrlStore = fileURL; //safe path, for later use.
+
+        //get name
+        var animationName = /[\w\_]*(?=_edgePreload.js)/.exec(fileURL); //extract the name from the url
+
+        //make a folder for the animation
+        var folderURL = folderpath + "animations/" + animationName;
+        var sourceFolderURL = /.*(?=\/)/.exec(fileURL); //extract the path from the url
+        DWfile.createFolder(folderURL);
+
+        //copy all the Js files to that place
+        DWfile.copy(sourceFolderURL + "/" + animationName + "_edge.js", folderURL + "/" + animationName + "_edge.js");
+        DWfile.copy(sourceFolderURL + "/" + animationName + "_edgeActions.js", folderURL + "/" + animationName + "_edgeActions.js");
+        DWfile.copy(sourceFolderURL + "/" + animationName + "_edgePreload.js", folderURL + "/" + animationName + "_edgePreload.js");
+        DWfile.createFolder(folderURL + "/edge_includes");
+        DWfile.copy(sourceFolderURL + "/edge_includes/edge.1.5.0.min.js", folderURL + "/edge_includes/edge.1.5.0.min.js");
+
+        //copy all the images to root/images
+        var list = DWfile.listFolder(sourceFolderURL + "/images");
+        if (list){
+            for(var j=0; j<list.length; j++){
+                DWfile.copy(sourceFolderURL + "/images/" + list[j], folderpath + "/images/" + list[j]);
+            }
+        }
+
+        //switch fileURL to the preLoad one we've copied
+        fileURL = folderURL + "/" + animationName + "_edgePreload.js";
+
+        //open a file
+        var str       = DWfile.read(fileURL); 
+        //var patt    = /[\w\.\-\/]*\.js/g; //match any js file. (not handy, since there are more then we need to change)
+        var patt      = /[\w\_\/]*\.\d\.\d\.\d\.min\.js|[\w\_]*_edge\.js|[\w\_]*_edgeActions\.js/g; //match the three js files we want
+        var pattRem   = /\{load:\"http:\/\/(.|\n)*edge\.1\.5\.0\.min\.js\"\},/; //part where it loads edge
+        var pattRem2  = /\{load\:\"edge_includes\/jquery-\d\.\d\.\d\.min\.js\"\},/; //part where it loads jquery
+        var pattLoad  = /preContent={dom:/; //after the loading statement
+
+        
+        var result    = patt.exec(str)
+        var results   = new Array();
+        var oldresult = "";
+        while( result && result!=oldresult){
+            oldresult = result;
+            results.push(result);
+            result    = patt.exec(str);
+        }
+
+        for(var i=0; i<results.length; i++){
+            str = str.replace(results[i], "animations/" + animationName + "/" + results[i]);
+        }
+        //str = str.replace("Do Not Edit this file", "Do Not Edit this file. (Oh, we did! --Nemo)");
+        
+        //str = str.replace(pattRem, ""); //remove edge loading
+        str = str.replace(pattRem2, ""); //remove jquery loading
+        str = str.replace(pattLoad, "onDocLoaded();preContent={dom:"); //add onDocLoaded event that would otherwise never be called
+        str = str + "\/\/updatePath:" + updateUrlStore + "*";//end with the updatePath
+        //write the altered preloader   
+        if (DWfile.write(fileURL, ("/* Edited by Nemo */" + str))){ // start by announching it is edited.
+            //document.getElementById("status").innerHTML = "Loaded " + animationName;
+            //all is succesful. notify the extension
+            return toXML([{'name':'animation', 'val':animationName},{'name':'path', 'val':fileURL}]);
+        };
+    }//no file selected. (or dialog canceled) do nothing.
+}
+
+function assignAnimation(givenAnimation) {
+    folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+    var theDOM = dw.getDocumentDOM();
+    var widthPatt = /\.P\(w,[0-9]{3,4}\)/;
+    var heightPatt = /\.P\(h,[0-9]{3,4}\)/;
+    var numPatt = /[0-9]{3,4}/;
+    if (theDOM != null) {
+        var theNode = theDOM.getSelectedNode();
+        var oldAssign = theNode.id;
+        var classList = theNode.class.split(" ");
+            if(classList.contains("nm_Animation")){ //select an animation container
+                theNode.class = "" + givenAnimation + " nm_Animation";
+                theNode.id = "" + givenAnimation;
+                //open <givenAnimation>_edge.js, extract the height and width of the stage and assign it to the animationContainer
+                var str = DWfile.read(folderpath + "animations/" + givenAnimation + "/" +givenAnimation + "_edge.js"); 
+                theNode.style.width = numPatt.exec(widthPatt.exec(str)) + "px";
+                theNode.style.height = numPatt.exec(heightPatt.exec(str)) + "px";
+
+                //done
+                return toXML([{'name':'success', 'val':"true"}]);
+            }else{
+                alert("no animationContainer selected. Select/Add one first!");
+                return toXML([{'name':'success', 'val':"false"}]);
+            }
+    }else{
+        alert("open a file first!");
+        return toXML([{'name':'success', 'val':"false"}]);
+    }
+}
+
+//////======== XML functions, used for communication back and forth jsx <-> extension ==========================//////////
+
 ﻿// Give the user an alert message. Data in this function comes from the swf panel, via the csxs library.
 //
 // Returns void
@@ -369,20 +536,7 @@ function objectify(s) {
   return obj
 } // end objectify()
  
- 
-// Get the current version of Photoshop. This is called from the panel.
-// The data is sent back to the panel as xml.
-//
-//   version - version of Photoshop
-//
-// Returns an xml formatted string
-function checkVersion() {
 
-  var version = parseInt(12)
-  return toXML([{'name':'version','val':version}])
-} // end checkVersion()
- 
- 
 // Create an XML object from a series of inputs
 //
 //   _a - an array of values to be parsed into XML
