@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fxpProperties abbreviated="false" authoringTool="Flex Builder" compiles="true" parentProject="b9cf2c7d-9b32-4ad9-979b-a81a3261856f" projectUUID="b9cf2c7d-9b32-4ad9-979b-a81a3261856f" pureCatalystProject="false" sdkVersion="4.5.0" uuid="7f473d1f-c53b-4f1a-87e1-c460774dc32d" version="15">
+  <projects/>
+  <src/>
+  <swc>
+    <linked location="sdkPlaceHolder" path="sdkPlaceHolder" position="0" uuid="7f473d1f-c53b-4f1a-87e1-c460774dc32d"/>
+    <linked location="${CSLIBS}/2.0/4.5/release/apedelta.swc" path="${CSLIBS}/2.0/4.5/release/apedelta.swc" position="1" uuid="7f473d1f-c53b-4f1a-87e1-c460774dc32d"/>
+    <linked location="${CSAR}/release/CSXSLibrary-3.0-sdk-4.5-public.swc" path="${CSAR}/release/CSXSLibrary-3.0-sdk-4.5-public.swc" position="2" uuid="7f473d1f-c53b-4f1a-87e1-c460774dc32d"/>
+    <linked location="${CSAR}/release/MXThemeSync.swc" path="${CSAR}/release/MXThemeSync.swc" position="3" uuid="7f473d1f-c53b-4f1a-87e1-c460774dc32d"/>
+    <linked location="${CSLIBS}/2.0/4.5/release/csawlib.swc" path="${CSLIBS}/2.0/4.5/release/csawlib.swc" position="4" uuid="7f473d1f-c53b-4f1a-87e1-c460774dc32d"/>
+  </swc>
+  <misc/>
+  <theme/>
+  <mxmlFormattingPrefs groupAttributesByState="true" maxLineWidth="100" mxmlAlignAttributes="true" mxmlAttributeOrder="id,userLabel,includeIn,excludeFrom,visible,x,y,z,left,right,top,bottom,width,height,minWidth,minHeight,maxWidth,maxHeight,label" mxmlKeepAttributeValuesOrganized="true"/>
+</fxpProperties>

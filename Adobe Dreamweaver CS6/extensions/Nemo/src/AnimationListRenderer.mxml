@@ -7,16 +7,24 @@
 		<![CDATA[
 			import mx.events.ItemClickEvent;
 			
-			private function requestForm():void {
+			private function updateButton():void {
 				var event:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK);
 				event.index = itemIndex;
 				event.item = data;
-				owner.dispatchEvent(event);
+				NemoJSX.updateAnimation(event);
+			}
+			
+			private function deleteButton():void {
+				var event:ItemClickEvent = new ItemClickEvent(ItemClickEvent.ITEM_CLICK);
+				event.index = itemIndex;
+				event.item = data;
+				NemoJSX.removeAnimation(event);
 			}
 		]]>
 	</fx:Script>
 	
 	<s:Label id="labelDisplay" verticalCenter="0" />
-	<s:Button right="0" label="update" verticalCenter="0" click="requestForm()" />
+	<s:Button right="0"  width="25" icon="@Embed('assets/update.png')" click="updateButton()" />
+	<s:Button right="27" width="25" icon="@Embed('assets/delete.png')" click="deleteButton()" />
 	
 </s:ItemRenderer>

@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.3.2"
+<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.3.3"
 		ExtensionBundleName="Nemo-Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
-		<![CDATA[Willem van Vliet &amp;amp;amp; Tjibbe van der Laan]]>
+		<![CDATA[Willem van Vliet &amp;amp;amp;amp; Tjibbe van der Laan]]>
 	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
 		<![CDATA[Or shout over the table]]>
 	</Contact>	<Legal>
-		<![CDATA[Made by the OLO 2013]]>
+		<![CDATA[Made by the OLO 2013.
+For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[The new extension panel. replaces the old floater that... was a bit dissapointing.
+		<![CDATA[The Animation update! importing and assigning animations is now possible.
+There was an old animation floater menu that sort-off did the job. But it was very clunky and buggy.
+
+Changelog delta since 0.3.2:
+	Added the Animation tab to the exension.
+		User can add, update and delete animations.
+	Renamed the "Nemo" tab to "Slides"
+ 	 Assigning aniamtions now actually works. Dynamically loading them when viewing in the browser as well!
 
 Changelog delta since 0.3.1:
-  Added Stay-Ghosting
-  Added go to Comment Slide button to extension]]>
+	Added Stay-Ghosting
+	Added go to Comment Slide button to extension]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.3.2" />
+		<Extension Id="com.OLO.Nemo.extension" Version="0.3.3" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>

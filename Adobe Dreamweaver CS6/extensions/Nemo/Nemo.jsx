@@ -354,8 +354,13 @@ function checkForAnimations(){
                     pathList.push(""); //add an empty, to keep the order aligned.
                 }
             }
-            return toXML([ {'name':'animations', 'val':list.join(",")}, {'name':'paths', 'val':pathList.join(",")} ]);
-            //return toXML([ {'name':'animations', 'val':list.join(",")} ]);
+            if(list.length <= 0) {
+                return toXML([ {'name':'animations', 'val':"none"}, {'name':'paths', 'val':"none"} ]);
+            } else {
+                return toXML([ {'name':'animations', 'val':list.join(",")}, {'name':'paths', 'val':pathList.join(",")} ]);
+            }
+        } else {
+            return toXML([ {'name':'animations', 'val':"none"}, {'name':'paths', 'val':"none"} ]);
         }
     }else{
         alert("no animations folder exists!");
@@ -389,7 +394,9 @@ function addAnimation(givenName, givenPath){
         if (DWfile.exists(givenPath)){ //lets do this!
             fileURL = givenPath;
         }else{ //aniamtion not found. request user to locate it
+            //fileURL = dreamweaver.browseForFileURL("select", "Select new location of '" + givenName + "_edgePreload.js'", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath);
             fileURL = dreamweaver.browseForFileURL("select", "Select new location of '" + givenName + "_edgePreload.js'", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath);
+            givenPath = "none"; //flag we do use selected mode.
         }
         
     }
@@ -402,14 +409,29 @@ function addAnimation(givenName, givenPath){
         }
         updateUrlStore = fileURL; //safe path, for later use.
 
-        //get name
-        var animationName = /[\w\_]*(?=_edgePreload.js)/.exec(fileURL); //extract the name from the url
+        //get name & source folder
+        //Assumed is that, when a user selects a file, you get the path including the filename.
+        //If you get a path from the extension, this is a folder, without the _preload.js file in it.
+        var animationName;
+        var sourceFolderURL
+        if(givenPath == "none"){
+            animationName = /[\w\_]*(?=_edgePreload.js)/.exec(fileURL); //extract the name from the url
+            sourceFolderURL = /.*(?=\/)/.exec(fileURL); //extract the path from the url
+        } else {
+            animationName = givenName; //else, get name from givenName
+            sourceFolderURL = givenPath; //else, get path from givenPath
+        }
 
-        //make a folder for the animation
+        //on to the target folder     
         var folderURL = folderpath + "animations/" + animationName;
-        var sourceFolderURL = /.*(?=\/)/.exec(fileURL); //extract the path from the url
-        DWfile.createFolder(folderURL);
 
+        //check if preload exists. if it does, remove it and notify the user that we're updating an older animation
+        if(DWfile.exists(folderURL + "/" + animationName + "_edgePreload.js")){
+            alert("updating an older version of " + animationName + "!");
+            DWfile.remove(folderURL + "/" + animationName + "_edgePreload.js");
+        } else { //not updating, create the folder
+            DWfile.createFolder(folderURL);
+        }
         //copy all the Js files to that place
         DWfile.copy(sourceFolderURL + "/" + animationName + "_edge.js", folderURL + "/" + animationName + "_edge.js");
         DWfile.copy(sourceFolderURL + "/" + animationName + "_edgeActions.js", folderURL + "/" + animationName + "_edgeActions.js");
@@ -429,21 +451,22 @@ function addAnimation(givenName, givenPath){
         fileURL = folderURL + "/" + animationName + "_edgePreload.js";
 
         //open a file
-        var str       = DWfile.read(fileURL); 
+        var str         = DWfile.read(fileURL); 
         //var patt    = /[\w\.\-\/]*\.js/g; //match any js file. (not handy, since there are more then we need to change)
-        var patt      = /[\w\_\/]*\.\d\.\d\.\d\.min\.js|[\w\_]*_edge\.js|[\w\_]*_edgeActions\.js/g; //match the three js files we want
-        var pattRem   = /\{load:\"http:\/\/(.|\n)*edge\.1\.5\.0\.min\.js\"\},/; //part where it loads edge
-        var pattRem2  = /\{load\:\"edge_includes\/jquery-\d\.\d\.\d\.min\.js\"\},/; //part where it loads jquery
-        var pattLoad  = /preContent={dom:/; //after the loading statement
+        var pattAction  = /[\w\_\/]*\.\d\.\d\.\d\.min\.js|[\w\_]*_edge\.js|[\w\_]*_edgeActions\.js/g; //match the three js files we want
+        var pattEdge    = /\{load:\"http:\/\/(.|\n)*edge\.1\.5\.0\.min\.js\"\},/; //part where it loads edge
+        var pattJquery  = /http:\/\/ajax\.googleapis\.com\/ajax\/libs\/jquery\/\d\.\d\.\d\/jquery\.min\.js/; //part where it loads edge
+        var pattJquery2 = /edge_includes\/jquery-\d\.\d\.\d\.min\.js/; //part where it loads edge
+        var pattJquery3 = /\{load:\"http.*true;}\},/; //part where it loads jquery
+        var pattLoad    = /preContent={dom:/; //after the loading statement
 
-        
-        var result    = patt.exec(str)
-        var results   = new Array();
-        var oldresult = "";
+        var result      = pattAction.exec(str)
+        var results     = new Array();
+        var oldresult   = "";
         while( result && result!=oldresult){
-            oldresult = result;
+            oldresult   = result;
             results.push(result);
-            result    = patt.exec(str);
+            result      = pattAction.exec(str);
         }
 
         for(var i=0; i<results.length; i++){
@@ -451,17 +474,26 @@ function addAnimation(givenName, givenPath){
         }
         //str = str.replace("Do Not Edit this file", "Do Not Edit this file. (Oh, we did! --Nemo)");
         
-        //str = str.replace(pattRem, ""); //remove edge loading
-        str = str.replace(pattRem2, ""); //remove jquery loading
+        //str = str.replace(pattEdge, ""); //remove edge loading
+        //str = str.replace(pattJquery, ""); //remove jquery loading
+        //str = str.replace(pattJquery2, ""); //remove jquery loading
+        str = str.replace(pattJquery3, ""); //remove jquery loading
         str = str.replace(pattLoad, "onDocLoaded();preContent={dom:"); //add onDocLoaded event that would otherwise never be called
         str = str + "\/\/updatePath:" + updateUrlStore + "*";//end with the updatePath
         //write the altered preloader   
+
         if (DWfile.write(fileURL, ("/* Edited by Nemo */" + str))){ // start by announching it is edited.
             //document.getElementById("status").innerHTML = "Loaded " + animationName;
             //all is succesful. notify the extension
-            return toXML([{'name':'animation', 'val':animationName},{'name':'path', 'val':fileURL}]);
-        };
-    }//no file selected. (or dialog canceled) do nothing.
+            return toXML([{'name':'animation', 'val':animationName},{'name':'path', 'val':sourceFolderURL}]);
+        } else {
+            //weird stuff happened
+            return toXML([{'name':'animation', 'val':"none"},{'name':'path', 'val':"none"}]);
+        }
+    }else{
+        //no file selected. (or dialog canceled) do nothing.
+        return toXML([{'name':'animation', 'val':"none"},{'name':'path', 'val':"none"}]);
+    }
 }
 
 function assignAnimation(givenAnimation) {
@@ -491,6 +523,19 @@ function assignAnimation(givenAnimation) {
     }else{
         alert("open a file first!");
         return toXML([{'name':'success', 'val':"false"}]);
+    }
+}
+
+
+function removeAnimation(givenName) {
+    //on to the target folder     
+    var folderURL = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0] + "animations/" + givenName;
+
+    //check if preload exists. if it does, remove it and notify the user that we're updating an older animation
+    if(DWfile.exists(folderURL)){
+        if (confirm("Are you sure you want to remove " + givenName + "?\n(" + folderURL + ")") ) {
+            DWfile.remove(folderURL);
+        }
     }
 }
 

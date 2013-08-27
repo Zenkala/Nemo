@@ -1,4 +1,10 @@
 Changelog
+0.3.3
+  Added the Animation tab to the exension.
+    User can add, update and delete animations.
+  Renamed the "Nemo" tab to "Slides"
+  Assigning aniamtions now actually works. Dynamically loading them when viewing in the browser as well!
+  
 0.3.2
   Added Stay-Ghosting
   Added go to Comment Slide button to extension

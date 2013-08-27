@@ -36,6 +36,8 @@
 				myViewStack.addEventListener(mx.events.IndexChangedEvent.CHANGE, onResizeHack);
 				onResize(null); //initial resize				
 				
+				
+				
 				var myContextMenu:ContextMenu = new ContextMenu();
 				
 				var item:ContextMenuItem = new ContextMenuItem("delete");
@@ -53,7 +55,7 @@
 				if(animationInited) return;
 				animationInited = true;
 				NemoJSX.setAnimationContainer(animationContainer);
-				animationContainer.addEventListener(ItemClickEvent.ITEM_CLICK, NemoJSX.updateAnimation);
+				//animationContainer.addEventListener(ItemClickEvent.ITEM_CLICK, NemoJSX.updateAnimation);
 			}
 			
 			private function handleRightClick(e:MouseEvent):void
@@ -115,7 +117,7 @@
 	<mx:ViewStack id="myViewStack" width="100%" height="380" borderStyle="solid">		
 		
 		<!-- nemo tab -->
-		<s:NavigatorContent id="nemo" label="Nemo">
+		<s:NavigatorContent id="nemo" label="Slides">
 			<s:VGroup id="mainVGroup" x="0" y="0" width="224" horizontalAlign="justify" verticalAlign="top">
 				<s:HGroup height="25">
 					<s:Label width="70" height="25" text="Stay:" verticalAlign="middle"/>
@@ -148,7 +150,8 @@
 				</s:HGroup>
 				<s:HGroup height="50" gap="6">
 					<s:Button id="prev" width="100" height="50" label="prev" click="NemoJSX.prevSlide(event)"/>
-					<s:Button id="next" width="100" height="50" label="next" click="NemoJSX.nextSlide(event)"/>
+					<s:Button id="next" width="100" height="50" label="next"
+							  click="NemoJSX.nextSlide(event)" />
 				</s:HGroup>
 			</s:VGroup>
 		</s:NavigatorContent>
@@ -157,7 +160,8 @@
 		<s:NavigatorContent id="animation" label="Animation">
 			<s:VGroup id="aniamtionVGroup" x="0" y="0" width="100%" horizontalAlign="justify"
 					  verticalAlign="top">
-				<s:List id="animationContainer" width="100%" height="485" itemRenderer="ButtonListRenderer">
+				<s:List id="animationContainer" width="100%" height="485" borderVisible="true"
+						itemRenderer="AnimationListRenderer">
 					<s:dataProvider>
 						<s:ArrayCollection>
 							
