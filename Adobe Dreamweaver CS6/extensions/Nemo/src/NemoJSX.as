@@ -93,6 +93,7 @@ package
 						animationContainer.dataProvider.addItem("" + animations[i]);
 					}
 				}
+				trace("done updateGUI. Slides: " + currentSlide + "/" + totalSlides + " and " + animations.length + " aniamtions.");
 			}
 		}
 		

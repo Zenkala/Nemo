@@ -136,7 +136,8 @@
 				<s:HGroup id="slideContainerH" height="196" requestedColumnCount="1">
 					<s:List id="slideContainer" height="196" change="NemoJSX.selectSlide(event)"
 							dragComplete="NemoJSX.listDragComplete(event)" dragEnabled="true"
-							dragMoveEnabled="true" dropEnabled="true">
+							dragMoveEnabled="true" dropEnabled="true"
+							itemRenderer="SlidesListRenderer">
 						<s:dataProvider>
 							<s:ArrayCollection>
 								
