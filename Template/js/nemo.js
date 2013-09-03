@@ -216,7 +216,10 @@ function endNemoScript(){
 	$("#navigation").show();
 	$("#title").show();
 
-	onLoad(); //notify the javascript of the module that we're done
+	setTimeout(function() {
+	    onLoad(); //notify the javascript of the module that we're done
+	}, 100); //wait 100ms to give initizing scripts within Edge Animations a change to do their stuff.
+	
 
 	//goto slide last viewed in Dreamweaver
 	for(i=0; i<gotoSlide; i++) {
