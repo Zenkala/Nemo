@@ -1,9 +1,18 @@
 Changelog
+0.3.5
+  Fixed some bugs with the slide-number-comment
+
+0.3.4
+  Delete button in the slideContainer instead of a context-menu
+  Added NM_Text
+  Changed the css a bit. (no more rounded cornors in textfield, and ragged_right)
+  Improved the preloader (to not bug with Edge)
+
 0.3.3
   Added the Animation tab to the exension.
     User can add, update and delete animations.
   Renamed the "Nemo" tab to "Slides"
-  Assigning aniamtions now actually works. Dynamically loading them when viewing in the browser as well!
+  Assigning animations now actually works. Dynamically loading them when viewing in the browser as well!
   
 0.3.2
   Added Stay-Ghosting

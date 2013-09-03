@@ -65,6 +65,7 @@
 	
 	<category name="Nemo" folder="Nemo" id="DW_Insertbar_Nemo">
 		<button label="NM_Image" name="NM_Image" file="Nemo\NM_Image.htm" id="NM_Image" image="Nemo\NM_Image.png" />
+		<button label="NM_Text" name="NM_Text" file="Nemo\NM_Text.htm" id="NM_Text" image="Nemo\NM_Text.png" />
 		<button label="NM_TextField" name="NM_TextField" file="Nemo\NM_TextField.htm" id="NM_TextField" image="Nemo\NM_TextField.png" />
 		<button label="NM_TextBubble" name="NM_TextBubble" file="Nemo\NM_TextBubble.htm" id="NM_TextBubble" image="Nemo\NM_TextBubble.png" />
 		<button label="NM_Exclamation" name="NM_Exclamation" file="Nemo\NM_Exclamation.htm" id="NM_Exclamation" image="Nemo\NM_Exclamation.png" />

@@ -1,6 +1,6 @@
 ﻿<macromedia-extension
 	 name="Nemo"
-	 version="0.3.0"
+	 version="0.3.4"
 	 type="command"
 	 locked="false"
 	 requires-restart="True"
@@ -18,6 +18,12 @@
 	<![CDATA[
 	Installs the OLO development enviorment for Dreamweaver and HTML5: Nemo.
 	Less Jesus praising; more fish.
+
+	Changelog delta since 0.2.4:
+		Added NM_Text
+  		Changed the css a bit. (no more rounded cornors in textfield, and ragged_right)
+  		Improved the preloader (to not bug with Edge)
+  		Removed the old Nemo and Animation floaters
 	]]>
 	</description>
 
@@ -28,16 +34,6 @@
 	</license-agreement>
 
 	<files>
-		<file source="Extensions\com.OLO.Nemo\Nemo.swf" destination="$userroamingfolder\CS6ServiceManager\extensions\com.OLO.Nemo\Nemo.swf" />
-		<file source="Extensions\com.OLO.Nemo\Nemo.jsx" destination="$userroamingfolder\CS6ServiceManager\extensions\com.OLO.Nemo\Nemo.jsx" />
-		<file source="Extensions\com.OLO.Nemo\CSXS\manifest.xml" destination="$userroamingfolder\CS6ServiceManager\extensions\com.OLO.Nemo\CSXS\manifest.xml" />
-
-		<file source="Floaters\Nemo.htm" destination="$dreamweaver\Configuration\Floaters\Nemo.htm" />
-		<file source="Floaters\Animations.htm" destination="$dreamweaver\Configuration\Floaters\Animations.htm" />
-		<file source="Floaters\Images\nemo_arrow_down.png" destination="$dreamweaver\Configuration\Floaters\Images\nemo_arrow_down.png" />
-		<file source="Floaters\Images\nemo_arrow_up.png" destination="$dreamweaver\Configuration\Floaters\Images\nemo_arrow_up.png" />
-		<file source="Floaters\Images\nemo_delete.png" destination="$dreamweaver\Configuration\Floaters\Images\nemo_delete.png" />
-
 		<file source="Inspectors\NM_Input.htm" destination="$dreamweaver\Configuration\Inspectors\NM_Input.htm" />
 		<file source="Inspectors\NM_Input.js" destination="$dreamweaver\Configuration\Inspectors\NM_Input.js" />
 		<file source="Inspectors\NM_Input_2x.png" destination="$dreamweaver\Configuration\Inspectors\NM_Input_2x.png" />
@@ -78,6 +74,14 @@
 		<file source="Objects\Nemo\NM_TextField.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextField.js" />
 		<file source="Objects\Nemo\NM_TextField.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_TextField.png" />
 		
+		<file source="Objects\Nemo\NM_Text.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Text.htm" />
+		<file source="Objects\Nemo\NM_Text.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Text.js" />
+		<file source="Objects\Nemo\NM_Text.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Text.png" />
+
+		<file source="Objects\Nemo\NM_Animation.htm" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Animation.htm" />
+		<file source="Objects\Nemo\NM_Animation.js" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Animation.js" />
+		<file source="Objects\Nemo\NM_Animation.png" destination="$dreamweaver\Configuration\Objects\Nemo\NM_Animation.png" />		
+
 		<file source="Menus\Nemo\NM_BringForward.htm" destination="$dreamweaver\Configuration\Menus\Nemo\NM_BringForward.htm" />
 		<file source="Menus\Nemo\NM_BringForward.js" destination="$dreamweaver\Configuration\Menus\Nemo\NM_BringForward.js" />
 		<file source="Menus\Nemo\NM_BringToFront.htm" destination="$dreamweaver\Configuration\Menus\Nemo\NM_BringToFront.htm" />
@@ -91,13 +95,6 @@
 		<file source="Menus\menus.xml" destination="$dreamweaver\Configuration\Menus\menus.xml" />
 
 	</files>
-
-	<configuration-changes>
-		<menu-insert appendTo="DWMenu_Edit" skipSeparator="true">
-			<menuitem name="Nemo-Slides" enabled="true" command="dw.toggleFloater('Nemo')" checked="dw.getFloaterVisibility('Nemo')" />
-			<menuitem name="Nemo-Animations" enabled="true" command="dw.toggleFloater('Animations')" checked="dw.getFloaterVisibility('Animations')" />   
-		</menu-insert>
-	</configuration-changes>
 
 	<signatures />
 
