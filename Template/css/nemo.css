@@ -4,10 +4,11 @@
 	blue: #009ec2;
 */
 
-html{
-	font-family:			Arial;
-	font-size:				12px;
-	width: 					1024px;
+html, body {
+	font-family:	'Arial Narrow', Arial, sans-serif;
+	font-size:		14px;
+	line-height:	18px;
+	width:	1024px;
 }
 
 .comment, .commentGreen{
@@ -36,7 +37,8 @@ html{
 	padding:				8px 10px 15px 10px;
 }
 
-.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Explanation{
+.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Explanation {
+	font-family: 'PT Sans Narrow', Arial, sans-serif;
 	border-radius:			15px;
 	background-color: 		rgb(255, 255, 255);
 	border: 				2px solid black;
