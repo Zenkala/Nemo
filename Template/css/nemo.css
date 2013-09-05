@@ -37,12 +37,12 @@ html, body {
 	padding:				8px 10px 15px 10px;
 }
 
-.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Explanation {
+.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Explanation, .nm_InfoBlock {
 	font-family: 'PT Sans Narrow', Arial, sans-serif;
 	border-radius:			15px;
 	background-color: 		rgb(255, 255, 255);
 	border: 				2px solid black;
-	padding:				12px 15px 15px 15px;
+	padding:				7px;
 	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
 	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
 }
@@ -95,6 +95,51 @@ html, body {
 	padding:				12px 15px 15px 15px;
 	margin:					-14px -77px -16px -22px;
 }
+
+.nm_InfoBlock {
+	padding-left: 25px;
+	width: 200px;  
+	background-color: #F8FBFE;
+}
+
+	.nm_InfoBlock .title {
+		font-weight: bold;
+	    cursor: pointer;
+	    padding-right: 15px;
+	}
+
+	.nm_InfoBlock .paragraph {
+		display: none;
+	}
+
+	.nm_InfoBlock .circle {
+		position: absolute;
+		left: -13px;
+		top: -2px;
+	    width: 28px;
+	    height: 28px;
+	    border: 4px solid #000;
+	    border-radius: 28px;
+	    line-height: 28px;
+	    text-align: center;
+	    font-weight: bold;
+	    background-color: #F8FBFE;
+	}
+
+	.nm_InfoBlock .opencloseLid {
+		position: absolute;
+		right: 12px;
+		top: 7px;
+		transform: rotate(90deg);
+		-ms-transform: rotate(90deg);
+		-webkit-transform: rotate(90deg);
+	}
+
+	.nm_InfoBlock .open {
+		transform: rotate(-90deg);
+		-ms-transform: rotate(-90deg);
+		-webkit-transform: rotate(-90deg);
+	}
 
 .nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
 	border-radius: 			50%;

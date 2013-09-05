@@ -167,6 +167,19 @@ function startNemoScript(){
 		});
 		console.log("element origins set");
 		
+
+		// Add open/close functionality to InfoBlock
+		$(".nm_InfoBlock").on({
+			click: function() {
+				var opencloseLid = $(this).find(".opencloseLid");
+				$(this).find(".paragraph").slideToggle(function() {
+					opencloseLid.toggleClass("open");
+				});
+			}
+		});
+		$(".nm_InfoBlock").width('200px');
+		$(".nm_InfoBlock").height('auto');
+
 		//make nm_TextBubbleContent & nm_Explanation divs.
 		var divBuffer;		
 		$(".nm_TextBubble").each(function(){

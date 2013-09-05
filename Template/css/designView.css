@@ -72,6 +72,10 @@ html{
 	background-color: 		#5bb8e8;
 }
 
+.nm_InfoBlock .circle, .nm_InfoBlock .opencloseLid {
+	display: none;
+}
+
 .nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
 	border-radius: 			50%;	
 	background-repeat:		no-repeat;
