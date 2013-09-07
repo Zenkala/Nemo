@@ -186,6 +186,7 @@ function startNemoScript(){
 			divBuffer = $("<div>").html($(this).html()).addClass("nm_TextBubbleContent");
 			$(this).empty(); 
 			$(this).append(divBuffer);
+			$(this).append('<div class="nm_TextBubblePointer"></div>');
 		});
 		$(".nm_Explanation").each(function(){
 			divBuffer = $("<div>").html($(this).html()).addClass("nm_ExplanationContent");
@@ -194,7 +195,7 @@ function startNemoScript(){
 		});
 		console.log("content divs for bubbles made");
 		
-		$(".nm_Exclamation").append('<span class="close">x</span');
+		$(".nm_Exclamation").append('<span class="close">x</span>');
 		$(".nm_Exclamation .close").on({
 		  click: function(){
 		    $(this).closest(".nm_Exclamation").transition({ scale: 0 }, 200);

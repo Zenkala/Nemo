@@ -1,6 +1,7 @@
-html{
-	font-family:			Arial;
-	font-size:				12px;
+html {
+	font-family: 'PT Sans Narrow', Arial, sans-serif;
+	font-size:				14px;
+	line-height: 18px;
 	font-weight: 			normal;
 	font-variant: 			normal;
 }
@@ -33,10 +34,10 @@ html{
 	color:					blue;
 }
 
-.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, input, .nm_Explanation{{
+.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, input, .nm_Explanation, .nm_InfoBlock{
 	background-color: 		rgb(255, 255, 255);
-	border: 				12px solid black;
-	padding:				12px 15px 15px 15px;
+	border: 				1px solid black;
+	padding:				10px;
 	text-align:				left;
 }
 
@@ -51,13 +52,59 @@ html{
 	padding:				8px 10px 15px 10px;
 }
 
-.nm_TextBubble{	
-	background-image: 		url("point-design.png");
+.nm_TextBubble {
 	background-repeat: 		no-repeat;
-	background-position: 	right bottom;
 	background-attachment: 	fixed;
-	padding:				10px 10px 45px 10px;
 }
+
+.nm_TextBubble.bottom-left{	
+	background-image: 		url("designView/point-design-bottom-left.png");
+	background-position: 	left bottom;
+	padding-bottom: 		59px;
+}
+
+.nm_TextBubble.bottom-middle{	
+	background-image: 		url("designView/point-design-bottom-middle.png");
+	background-position: 	50% bottom;
+	padding-bottom: 		59px;
+}
+
+.nm_TextBubble.bottom-right{	
+	background-image: 		url("designView/point-design-bottom-right.png");
+	background-position: 	right bottom;
+	padding-bottom: 		59px;
+}
+
+.nm_TextBubble.top-left{	
+	background-image: 		url("designView/point-design-top-left.png");
+	background-position: 	left top;
+	padding-top: 		59px;
+}
+
+.nm_TextBubble.top-middle{	
+	background-image: 		url("designView/point-design-top-middle.png");
+	background-position: 	50% top;
+	padding-top: 		59px;
+}
+
+.nm_TextBubble.top-right{	
+	background-image: 		url("designView/point-design-top-right.png");
+	background-position: 	right top;
+	padding-top: 		59px;
+}
+
+.nm_TextBubble.middle-left{	
+	background-image: 		url("designView/point-design-middle-left.png");
+	background-position: 	left 50%;
+	padding-left: 		59px;
+}
+
+.nm_TextBubble.middle-right{	
+	background-image: 		url("designView/point-design-middle-right.png");
+	background-position: 	right 50%;
+	padding-right: 		59px;
+}
+
 
  .nm_Explanation{
 	background-image: 		url("point-design.png");
