@@ -415,7 +415,7 @@ function addAnimation(givenName, givenPath){
         var animationName;
         var sourceFolderURL
         if(givenPath == "none"){
-            animationName = /[\w\_]*(?=_edgePreload.js)/.exec(fileURL); //extract the name from the url
+            animationName = /[\w\_ ]*(?=_edgePreload.js)/.exec(fileURL); //extract the name from the url
             sourceFolderURL = /.*(?=\/)/.exec(fileURL); //extract the path from the url
         } else {
             animationName = givenName; //else, get name from givenName
@@ -453,7 +453,7 @@ function addAnimation(givenName, givenPath){
         //open a file
         var str         = DWfile.read(fileURL); 
         //var patt    = /[\w\.\-\/]*\.js/g; //match any js file. (not handy, since there are more then we need to change)
-        var pattAction  = /[\w\_\/]*\.\d\.\d\.\d\.min\.js|[\w\_]*_edge\.js|[\w\_]*_edgeActions\.js/g; //match the three js files we want
+        var pattAction  = /[\w\_%\/]*\.\d\.\d\.\d\.min\.js|[\w\_%]*_edge\.js|[\w\_%]*_edgeActions\.js/g; //match the three js files we want
         var pattEdge    = /\{load:\"http:\/\/(.|\n)*edge\.1\.5\.0\.min\.js\"\},/; //part where it loads edge
         var pattJquery  = /http:\/\/ajax\.googleapis\.com\/ajax\/libs\/jquery\/\d\.\d\.\d\/jquery\.min\.js/; //part where it loads edge
         var pattJquery2 = /edge_includes\/jquery-\d\.\d\.\d\.min\.js/; //part where it loads edge
@@ -507,8 +507,9 @@ function assignAnimation(givenAnimation) {
         var oldAssign = theNode.id;
         var classList = theNode.class.split(" ");
             if(classList.contains("nm_Animation")){ //select an animation container
-                theNode.class = "" + givenAnimation + " nm_Animation";
-                theNode.id = "" + givenAnimation;
+                theNode.setAttribute("url",encodeURIComponent(givenAnimation) );
+                theNode.class = "" + givenAnimation.replace(/^[_\d]*| /g, "") + " nm_Animation";
+                theNode.id = "" + givenAnimation.replace(/^[_\d]*| /g, ""); //remove any digits and underscores in front of the first proper character. And any spaces.
                 //open <givenAnimation>_edge.js, extract the height and width of the stage and assign it to the animationContainer
                 var str = DWfile.read(folderpath + "animations/" + givenAnimation + "/" +givenAnimation + "_edge.js"); 
                 theNode.style.width = numPatt.exec(widthPatt.exec(str)) + "px";

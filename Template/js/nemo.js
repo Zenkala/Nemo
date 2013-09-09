@@ -1,4 +1,5 @@
 var currentPage = 0;
+var totalPages = 1;
 var slideBuffer = [];
 var sliding = false;
 var quick = false;
@@ -64,9 +65,11 @@ function nemoInit(){
 
 			//check for animations we have to load 
 			animations = new Array();
+			var animUrl = "";
 			$(".nm_Animation").each(function(){
+				animUrl = $(this).attr("url").replace(/%20/g, " ");
 				console.log("found animation: " + $(this).attr("id"));
-				animations.push("animations/" + $(this).attr("id") + "/" + $(this).attr("id") + "_edgePreload.js");
+				animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js");
 				totalProgress++;
 			});
 
@@ -210,6 +213,13 @@ function startNemoScript(){
 		//make title
 		$("#title").html(document.title);
 
+		//set total slides
+		totalPages = 0;
+		$(".slide").each(function(){
+			totalPages++;
+		});
+		$("#slideIndex").html("1/"+totalPages);
+
 		//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
 		yepnope([{
 			load: ["js/finished.js"],
@@ -281,7 +291,7 @@ function doSlide(){
 		var elementbuffer = [];		
 		currentPage++;
 		console.log("next to " + currentPage);	
-		$("#slideIndex").html(""+currentPage+"/?");
+		$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
 		newSlideHdl(currentPage, false);
 		//put back children that are here to stay
 		$("#slide"+(currentPage-1)).children().each(function(){
@@ -309,7 +319,7 @@ function doSlide(){
 			var elementbuffer = [];
 			currentPage--;
 			console.log("prev to " + currentPage);	
-			$("#slideIndex").html(""+currentPage+"/?");
+			$("#slideIndex").html(""+(currentPage+1)+"/"+totalPages);
 			newSlideHdl(currentPage, true);
 		
 			//put back children that are here to stay
