@@ -180,8 +180,14 @@ function startNemoScript(){
 				});
 			}
 		});
-		$(".nm_InfoBlock").width('200px');
+		//$(".nm_InfoBlock").width('200px');
 		$(".nm_InfoBlock").height('auto');
+		//remove position absolute and attempt to place on the right position for it's children.
+		$(".nm_InfoBlock .paragraph").children().each(function(){
+			$(this).css("position", ""); 
+			$(this).css("margin-left", $(this).css("left"));
+			$(this).css("margin-top", $(this).css("top"));
+		});
 
 		//make nm_TextBubbleContent & nm_Explanation divs.
 		var divBuffer;		
