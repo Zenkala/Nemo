@@ -1,0 +1,187 @@
+html {
+	font-family: 'PT Sans Narrow', Arial, sans-serif;
+	font-size:				14px;
+	line-height: 18px;
+	font-weight: 			normal;
+	font-variant: 			normal;
+}
+
+#contentDiv{
+	top:					0px;
+	height:					auto;
+	width:					auto;
+	visibility: 			hidden;
+}
+#title{
+	display:				none;
+	visibility: 			hidden;
+}
+#navigation{
+	display:				none;
+}
+
+.comment{
+	display:				block;
+	color:					purple;
+}
+
+.commentGreen{
+	display:				block;
+	color:					green;
+}
+
+.nm_begrip{
+	color:					blue;
+}
+
+.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, input, .nm_Explanation, .nm_InfoBlock, .nm_Box{
+	background-color: 		rgb(255, 255, 255);
+	border: 				1px solid black;
+	padding:				10px;
+	text-align:				left;
+}
+
+.nm_TextField{
+	background-color: 		rgb(255, 255, 255);
+	border: 				12px solid black;
+	padding:				8px 10px 15px 10px;
+	text-align:				left;
+}
+
+.nm_Text{
+	padding:				8px 10px 15px 10px;
+}
+
+.nm_TextBubble {
+	background-repeat: 		no-repeat;
+	background-attachment: 	fixed;
+}
+
+.nm_TextBubble.bottom-left{	
+	background-image: 		url("designView/point-design-bottom-left.png");
+	background-position: 	left bottom;
+	padding-bottom: 		59px;
+}
+
+.nm_TextBubble.bottom-middle{	
+	background-image: 		url("designView/point-design-bottom-middle.png");
+	background-position: 	50% bottom;
+	padding-bottom: 		59px;
+}
+
+.nm_TextBubble.bottom-right{	
+	background-image: 		url("designView/point-design-bottom-right.png");
+	background-position: 	right bottom;
+	padding-bottom: 		59px;
+}
+
+.nm_TextBubble.top-left{	
+	background-image: 		url("designView/point-design-top-left.png");
+	background-position: 	left top;
+	padding-top: 		59px;
+}
+
+.nm_TextBubble.top-middle{	
+	background-image: 		url("designView/point-design-top-middle.png");
+	background-position: 	50% top;
+	padding-top: 		59px;
+}
+
+.nm_TextBubble.top-right{	
+	background-image: 		url("designView/point-design-top-right.png");
+	background-position: 	right top;
+	padding-top: 		59px;
+}
+
+.nm_TextBubble.middle-left{	
+	background-image: 		url("designView/point-design-middle-left.png");
+	background-position: 	left 50%;
+	padding-left: 		59px;
+}
+
+.nm_TextBubble.middle-right{	
+	background-image: 		url("designView/point-design-middle-right.png");
+	background-position: 	right 50%;
+	padding-right: 		59px;
+}
+
+
+ .nm_Explanation{
+	background-image: 		url("point-design.png");
+	background-color: 		#5bb8e8;
+	background-repeat: 		no-repeat;
+	background-position: 	right bottom;
+	background-attachment: 	fixed;
+	padding:				10px 10px 45px 10px;
+ }
+
+ .nm_Exclamation{
+	background-color: 		#5bb8e8;
+}
+
+.nm_InfoBlock .circle, .nm_InfoBlock .opencloseLid {
+	display: none;
+}
+
+.nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
+	border-radius: 			50%;	
+	background-repeat:		no-repeat;
+	background-attachment:	fixed;
+}
+.nm_Hatching_blue{background-image: url("hatching-blue.png");}
+.nm_Hatching_red{background-image: url("hatching-red.png");}
+.nm_Hatching_green{background-image: url("hatching-green.png");}
+
+.nm_Input{
+
+}
+
+.nm_Animation{
+	background-image:		url("animation-proxy.png");
+	background-repeat:		repeat;
+}
+
+.nm_Ground{
+	background-image:		url("ground.png");
+	background-repeat:		no-repeat;
+	width:					786px;
+	height:					75px;
+}
+
+.slide{
+	position: 				absolute;
+	width: 					1024px;
+	height: 				641px;
+	border: 				1px black solid;
+	z-index: 				2;
+	left:					0px;
+	display: 				none;
+	visibility: 			visible;
+}
+
+.activeSlide {
+	display:				block;
+}
+
+#commentslide {
+	background: 			#F1F2F2	url("commentslide.png") 356px 288px no-repeat;
+}
+
+.slideNumber {
+	text-align:				center;
+}
+
+#ghostDiv {
+	position:				absolute;
+	top:					0px;
+	left:					0px;
+}
+
+#ghostDivCover {
+	width:					1024px;
+	height:					641px;
+	position:				absolute;
+	top:					0px;
+	left:					0px;
+	background-color: 		rgba(255, 255, 255, 0.5);
+}

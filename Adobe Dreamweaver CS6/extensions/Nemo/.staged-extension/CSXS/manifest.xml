@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.3.4"
+<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.3.5"
 		ExtensionBundleName="Nemo-Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
-		<![CDATA[Willem van Vliet &amp;amp;amp;amp;amp; Tjibbe van der Laan]]>
+		<![CDATA[Willem van Vliet &amp;amp;amp;amp;amp;amp; Tjibbe van der Laan]]>
 	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
 		<![CDATA[Or shout over the table]]>
 	</Contact>	<Legal>
@@ -26,7 +26,7 @@ Changelog delta since 0.3.1:
 	Added Stay-Ghosting
 	Added go to Comment Slide button to extension]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.3.4" />
+		<Extension Id="com.OLO.Nemo.extension" Version="0.3.5" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
