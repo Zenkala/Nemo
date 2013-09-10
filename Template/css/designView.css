@@ -34,7 +34,7 @@ html {
 	color:					blue;
 }
 
-.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, input, .nm_Explanation, .nm_InfoBlock{
+.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, input, .nm_Explanation, .nm_InfoBlock, .nm_Box{
 	background-color: 		rgb(255, 255, 255);
 	border: 				1px solid black;
 	padding:				10px;

@@ -25,7 +25,7 @@ html, body {
 	overflow:				hidden;
 }
 
-.nm_TextField {
+.nm_TextField, .nm_Box {
 	background-color: 		rgb(255, 255, 255);
 	border: 				2px solid black;
 	padding:				8px 10px 15px 10px;
@@ -38,7 +38,7 @@ html, body {
 }
 
 .nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Explanation, .nm_InfoBlock {
-	font-family: 'PT Sans Narrow', Arial, sans-serif;
+	font-family: 			'PT Sans Narrow', Arial, sans-serif;
 	border-radius:			15px;
 	background-color: 		rgb(255, 255, 255);
 	border: 				2px solid black;
