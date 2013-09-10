@@ -1,4 +1,10 @@
 Changelog
+0.3.6
+  Added NM_Box
+  New and improved components icons.
+  SlideIndex now displayed the total number of slides as well insead of: "?"
+  Fixed bug when adding and assigning an animation that had a space in the name. Old aniamtions will have to be re-imported and reassigned.
+
 0.3.5
   Fixed some bugs with the slide-number-comment
 
