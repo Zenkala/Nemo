@@ -76,6 +76,7 @@ html, body {
 .nm_TextBubble.middle-left .nm_TextBubblePointer, .nm_TextBubble.middle-right .nm_TextBubblePointer {
 	width: 59px;
 	height: 42px;
+	background-size: 59px 100%;
 }
 
 .nm_TextBubble.bottom-left .nm_TextBubblePointer { left:20px; bottom:-58px; background-image:url("point-bottom-left.png"); }
