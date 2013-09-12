@@ -196,7 +196,6 @@ function startNemoScript(){
 			divBuffer = $("<div>").html($(this).html()).addClass("nm_TextBubbleContent");
 			$(this).empty(); 
 			$(this).append(divBuffer);
-			$(this).append('<div class="nm_TextBubblePointer"></div>');
 		});
 		$(".nm_Explanation").each(function(){
 			divBuffer = $("<div>").html($(this).html()).addClass("nm_ExplanationContent");
@@ -214,6 +213,14 @@ function startNemoScript(){
 		});
 		$("#dummyRender").remove();
 
+		$(".nm_TextBubble").each(function(){
+			var h = $(this).attr("rHeight");
+			if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h < 42)) {
+				$(this).append('<div class="nm_TextBubblePointer" style="height: ' + h + 'px; margin-top: -' + 0.5*h + 'px"></div>');
+			} else {
+				$(this).append('<div class="nm_TextBubblePointer"></div>');
+			}
+		});
 
 		//attach bubbels to their targets if any
 		$(".nm_TextBubble[target]").each(function(){
