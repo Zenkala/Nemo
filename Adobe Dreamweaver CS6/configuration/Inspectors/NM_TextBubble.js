@@ -35,13 +35,9 @@ function inspectSelection() {
 	setGUI();
 }
 
-function setGUI(){
-	
+function setGUI(){	
 	var dom = dw.getDocumentDOM();
-
-	var theObj = dom.getSelectedNode(); 
-	
-	
+	var theObj = dom.getSelectedNode(); 	
 
 	if (theObj.getAttribute("id")) {
 		ID = theObj.getAttribute("id");
@@ -64,7 +60,9 @@ function setGUI(){
 
 	if(theObj.getAttribute("target")) {
 		TARGET = theObj.getAttribute("target");
-		HE_TARGET = TARGET;
+		HE_TARGET.value = TARGET;
+	} else {
+		HE_TARGET.value = "";
 	}
 
 }

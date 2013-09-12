@@ -208,8 +208,8 @@ function startNemoScript(){
 		$("body").append('<div id="dummyRender"></div>');
 		$(".nm_TextBubble").each(function(){
 			var tempBubble = $(this).clone().appendTo($('#dummyRender')).css("visibility", "hidden");
-			$(this).attr("rHeight", tempBubble.height());
-			$(this).attr("rWidth", tempBubble.width());
+			$(this).attr("rHeight", tempBubble.outerHeight());
+			$(this).attr("rWidth", tempBubble.outerWidth());
 
 		});
 		$("#dummyRender").remove();
@@ -219,17 +219,17 @@ function startNemoScript(){
 		$(".nm_TextBubble[target]").each(function(){
 			var target = $("#" + $(this).attr("target"));
 			console.log(target)
-			console.log(target.css("left"));
+			console.log(target.css("left"), $(this).attr("rHeight"), $(this).attr("rWidth"));
 			var leftOffset = 0;
 			var topOffset = 0;
-			if($(this).hasClass("bottom-left")){		topOffset = -parseInt($(this).css("height")); }
-			if($(this).hasClass("bottom-middle")){		topOffset = -parseInt($(this).css("height")); }
-			if($(this).hasClass("bottom-right")){		topOffset = -parseInt($(this).css("height")); }
-			if($(this).hasClass("middle-left")){	topOffset = (parseInt(target.css("height")) + parseInt($(this).css("height")))/2; }
-			if($(this).hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) + parseInt($(this).css("height")))/2; }
-			if($(this).hasClass("top-left")){	topOffset = parseInt(target.css("height")) + parseInt($(this).css("height")); }
-			if($(this).hasClass("top-middle")){	topOffset = parseInt(target.css("height")) + parseInt($(this).css("height")); }
-			if($(this).hasClass("top-right")){	topOffset = parseInt(target.css("height")) + parseInt($(this).css("height")); }	
+			if($(this).hasClass("bottom-left")){	topOffset = -parseInt($(this).attr("rHeight")) - 58; }
+			if($(this).hasClass("bottom-middle")){	topOffset = -parseInt($(this).attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt($(this).attr("rWidth")))/2;}
+			if($(this).hasClass("bottom-right")){	topOffset = -parseInt($(this).attr("rHeight")) - 58;								leftOffset = parseInt(target.css("width"))-parseInt($(this).attr("rWidth"));}
+			if($(this).hasClass("middle-left")){	topOffset = (parseInt(target.css("height")) - parseInt($(this).attr("rHeight")))/2; leftOffset = parseInt(target.css("width")); }
+			if($(this).hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt($(this).attr("rHeight")))/2; leftOffset -= parseInt($(this).attr("rWidth")); }
+			if($(this).hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
+			if($(this).hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt($(this).attr("rWidth")))/2;}
+			if($(this).hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt($(this).attr("rWidth"));}	
 			$(this).css("left", (parseInt(target.css("left")) + leftOffset) + "px");
 			$(this).css("top", (parseInt(target.css("top")) + topOffset) + "px");
 		});
