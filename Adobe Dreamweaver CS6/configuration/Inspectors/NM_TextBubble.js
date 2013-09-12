@@ -5,9 +5,11 @@ var helpDoc = MM.HELP_inspDate;
 
 var HE_ID;
 var HE_POINTER;
+var HE_TARGET;
 
 var ID;
 var POINTER;
+var TARGET;
 // ******************** API ****************************
 
 function canInspectSelection() {
@@ -24,6 +26,7 @@ function canInspectSelection() {
 function initializeUI() {
 	HE_ID = dwscripts.findDOMObject("theID");
 	HE_POINTER = dwscripts.findDOMObject("thePointer");
+	HE_TARGET = dwscripts.findDOMObject("theTarget");
 }
 
 
@@ -54,9 +57,14 @@ function setGUI(){
 		if(POINTER == "nm_TextBubble middle-right")HE_POINTER.selectedIndex = 4;
 		if(POINTER == "nm_TextBubble bottom-left")HE_POINTER.selectedIndex = 5;
 		if(POINTER == "nm_TextBubble bottom-middle")HE_POINTER.selectedIndex = 6;
-		if(POINTER == "bottom-right")HE_POINTER.selectedIndex = 7;
+		if(POINTER == "nm_TextBubble bottom-right")HE_POINTER.selectedIndex = 7;
 	} else {
 		HE_POINTER.selectedIndex = 7;
+	}
+
+	if(theObj.getAttribute("target")) {
+		TARGET = theObj.getAttribute("target");
+		HE_TARGET = TARGET;
 	}
 
 }
@@ -79,6 +87,12 @@ function updateTag(attrib) {
 				ID = HE_ID.value;
 				if (theObj.getAttribute("id") != ID && ID != "") {
 					theObj.setAttribute("id", ID);
+				} 
+				break;
+			case "target":
+				TARGET = HE_TARGET.value;
+				if (theObj.getAttribute("target") != TARGET && TARGET != "") {
+					theObj.setAttribute("target", TARGET);
 				} 
 				break;
 		}
