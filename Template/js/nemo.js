@@ -204,6 +204,35 @@ function startNemoScript(){
 			$(this).append(divBuffer);
 		});
 		console.log("content divs for bubbles made");
+
+		$("body").append('<div id="dummyRender"></div>');
+		$(".nm_TextBubble").each(function(){
+			var tempBubble = $(this).clone().appendTo($('#dummyRender')).css("visibility", "hidden");
+			$(this).attr("rHeight", tempBubble.height());
+			$(this).attr("rWidth", tempBubble.width());
+
+		});
+		$("#dummyRender").remove();
+
+
+		//attach bubbels to their targets if any
+		$(".nm_TextBubble[target]").each(function(){
+			var target = $("#" + $(this).attr("target"));
+			console.log(target)
+			console.log(target.css("left"));
+			var leftOffset = 0;
+			var topOffset = 0;
+			if($(this).hasClass("bottom-left")){		topOffset = -parseInt($(this).css("height")); }
+			if($(this).hasClass("bottom-middle")){		topOffset = -parseInt($(this).css("height")); }
+			if($(this).hasClass("bottom-right")){		topOffset = -parseInt($(this).css("height")); }
+			if($(this).hasClass("middle-left")){	topOffset = (parseInt(target.css("height")) + parseInt($(this).css("height")))/2; }
+			if($(this).hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) + parseInt($(this).css("height")))/2; }
+			if($(this).hasClass("top-left")){	topOffset = parseInt(target.css("height")) + parseInt($(this).css("height")); }
+			if($(this).hasClass("top-middle")){	topOffset = parseInt(target.css("height")) + parseInt($(this).css("height")); }
+			if($(this).hasClass("top-right")){	topOffset = parseInt(target.css("height")) + parseInt($(this).css("height")); }	
+			$(this).css("left", (parseInt(target.css("left")) + leftOffset) + "px");
+			$(this).css("top", (parseInt(target.css("top")) + topOffset) + "px");
+		});
 		
 		$(".nm_Exclamation").append('<span class="close">x</span>');
 		$(".nm_Exclamation .close").on({

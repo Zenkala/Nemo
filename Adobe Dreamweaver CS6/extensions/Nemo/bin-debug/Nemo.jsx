@@ -334,7 +334,7 @@ var pathpatt = /^(.*[\\\/])/
 
 function checkForAnimations(){
     var localPathPatt = /\/\/updatePath:.*(?=\*)/;
-    folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+    var folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
     var fileURL;
 
     if(DWfile.exists(folderpath + "animations")){
@@ -363,7 +363,7 @@ function checkForAnimations(){
             return toXML([ {'name':'animations', 'val':"none"}, {'name':'paths', 'val':"none"} ]);
         }
     }else{
-        alert("no animations folder exists!");
+        return toXML([ {'name':'animations', 'val':"none"}, {'name':'paths', 'val':"none"} ]);
     }
 }
 
@@ -384,7 +384,7 @@ ability to fill the current selected animation-object with the selected animatio
   */
 
 function addAnimation(givenName, givenPath){
-    folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+    var folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
     var fileURL;
     var updateUrlStore;
     if(givenPath == "none") { //new animation
@@ -422,7 +422,12 @@ function addAnimation(givenName, givenPath){
             sourceFolderURL = givenPath; //else, get path from givenPath
         }
 
-        //on to the target folder     
+        //make animations and images folders
+        if (!DWfile.exists(folderpath + "animations")) DWfile.createFolder(folderpath + "animations");
+        if (!DWfile.exists(folderpath + "images")) DWfile.createFolder(folderpath + "images");
+
+        //on to the target folder    
+
         var folderURL = folderpath + "animations/" + animationName;
 
         //check if preload exists. if it does, remove it and notify the user that we're updating an older animation
@@ -497,30 +502,29 @@ function addAnimation(givenName, givenPath){
 }
 
 function assignAnimation(givenAnimation) {
-    folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+    var folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
     var theDOM = dw.getDocumentDOM();
     var widthPatt = /\.P\(w,[0-9]{3,4}\)/;
     var heightPatt = /\.P\(h,[0-9]{3,4}\)/;
     var numPatt = /[0-9]{3,4}/;
     if (theDOM != null) {
-        var theNode = theDOM.getSelectedNode();
+        var theNode   = theDOM.getSelectedNode();
         var oldAssign = theNode.id;
         var classList = theNode.class.split(" ");
-            if(classList.contains("nm_Animation")){ //select an animation container
-                theNode.setAttribute("url",encodeURIComponent(givenAnimation) );
-                theNode.class = "" + givenAnimation.replace(/^[_\d]*| /g, "") + " nm_Animation";
-                theNode.id = "" + givenAnimation.replace(/^[_\d]*| /g, ""); //remove any digits and underscores in front of the first proper character. And any spaces.
-                //open <givenAnimation>_edge.js, extract the height and width of the stage and assign it to the animationContainer
-                var str = DWfile.read(folderpath + "animations/" + givenAnimation + "/" +givenAnimation + "_edge.js"); 
-                theNode.style.width = numPatt.exec(widthPatt.exec(str)) + "px";
-                theNode.style.height = numPatt.exec(heightPatt.exec(str)) + "px";
-
-                //done
-                return toXML([{'name':'success', 'val':"true"}]);
-            }else{
-                alert("no animationContainer selected. Select/Add one first!");
-                return toXML([{'name':'success', 'val':"false"}]);
-            }
+        if(contains(classList, "nm_Animation")){ //select an animation container
+            theNode.setAttribute("url",encodeURIComponent(givenAnimation) );
+            theNode.class = "" + givenAnimation.replace(/^[_\d]*| /g, "") + " nm_Animation";
+            theNode.id = "" + givenAnimation.replace(/^[_\d]*| /g, ""); //remove any digits and underscores in front of the first proper character. And any spaces.
+            //open <givenAnimation>_edge.js, extract the height and width of the stage and assign it to the animationContainer
+            var str = DWfile.read(folderpath + "animations/" + givenAnimation + "/" +givenAnimation + "_edge.js"); 
+            theNode.style.width = numPatt.exec(widthPatt.exec(str)) + "px";
+            theNode.style.height = numPatt.exec(heightPatt.exec(str)) + "px";
+            //done
+            return toXML([{'name':'success', 'val':"true"}]);
+        }else{
+            alert("no animationContainer selected. Select/Add one first!");
+            return toXML([{'name':'success', 'val':"false"}]);
+        }
     }else{
         alert("open a file first!");
         return toXML([{'name':'success', 'val':"false"}]);
@@ -640,3 +644,14 @@ function convertToXML(property, identifier){
   xml += '</property>';
   return xml;
 } // end convertToXML()
+
+//because Array.contains is somtimes not supported?
+function contains(a, obj) {
+    var i = a.length;
+    while (i--) {
+       if (a[i] === obj) {
+           return true;
+       }
+    }
+    return false;
+}
