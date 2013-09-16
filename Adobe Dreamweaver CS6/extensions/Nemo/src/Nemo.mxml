@@ -25,11 +25,16 @@
 			import spark.events.IndexChangeEvent;	
 			
 			var animationInited:Boolean = false;
+			var statusIsOpen:Boolean = false;
 			
 			public function appComplete():void{
 				NemoJSX.initNemo(this, nrSlides, staySt, slideContainer, animationContainer);
 				
-				this.status = "Ready";
+				//this.status = "Ready";
+				NemoJSX.addToLog("Ready");
+				this.statusText.maxDisplayedLines = 1;
+				
+				this.statusText.addEventListener(MouseEvent.CLICK, toggleLog);
 				
 				this.addEventListener(mx.events.FlexNativeWindowBoundsEvent.WINDOW_RESIZE, onResize);
 				//mainTabs.addEventListener(mx.events.change, onResizeHack);
@@ -50,6 +55,21 @@
 				
 			}
 			
+			public function toggleLog(e:Event): void 
+			{
+				if(statusIsOpen) {
+					this.statusText.height = 5;
+					this.statusText.maxDisplayedLines = 1;
+					statusIsOpen = false;
+				} else {
+					this.statusText.percentHeight = 100;
+					this.statusText.maxDisplayedLines = 30;
+					statusIsOpen = true;
+				}
+				NemoJSX.updateStatus(statusIsOpen);
+				
+			}
+			
 			private function animationInit():void
 			{
 				if(animationInited) return;
@@ -60,7 +80,7 @@
 			
 			private function handleRightClick(e:MouseEvent):void
 			{
-				trace("Right Click Success!");
+				NemoJSX.addToLog("Right Click Success!");
 				var event:MouseEvent = new MouseEvent(
 					MouseEvent.MOUSE_DOWN,true,false,mouseX,mouseY,
 					e.target as InteractiveObject);
@@ -69,7 +89,7 @@
 			
 			
 			private function menuItemSelectHandler2(event:ContextMenuEvent):void {
-				trace("menuItemSelectHandler: " + slideContainer.selectedIndex);
+				NemoJSX.addToLog("menuItemSelectHandler: " + slideContainer.selectedIndex);
 				NemoJSX.removeSlide(slideContainer.selectedIndex);				
 			}			
 			
@@ -89,7 +109,7 @@
 					h = 400;
 				}
 				
-				trace("reize: " + w + ", " + h + " tab: " + mainTabs.selectedIndex);
+				NemoJSX.addToLog("resize: " + w + ", " + h + " tab: " + mainTabs.selectedIndex);
 				
 				//resize content
 				if(mainTabs.selectedIndex == 0) {
