@@ -13,7 +13,8 @@ function isAsset() {
 
 function objectTag(assetArgs) {
 	var theDOM = dw.getDocumentDOM();
-	theDOM.wrapTag('<div class="nm_Exclamation" style="position: absolute; left: 100px; top:300px;">');
+	var uniqueId = dwscripts.getUniqueId("exclamation");
+	theDOM.wrapTag('<div class="nm_Exclamation" id="' + uniqueId + '" style="position: absolute; left: 100px; top:300px;">');
 	return;
 }
 

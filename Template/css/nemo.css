@@ -5,10 +5,10 @@
 */
 
 html, body {
-	font-family:	'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
-	font-size:		16px;
-	line-height:	20px;
-	width:	1024px;
+	font-family:			'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
+	font-size:				16px;
+	line-height:			20px;
+	width:					1024px;
 }
 
 .comment, .commentGreen{
@@ -92,12 +92,12 @@ html, body {
 .nm_TextBubble.middle-left { margin-left:57px; }
 
 
-.nm_Exclamation{
+.nm_Explanation, .nm_Exclamation{
 	background-color: 		#5bb8e8;
 }
 
 
-.nm_Exclamation .close {
+.nm_Explanation .close {
     position: absolute;
     top: -10px;
     right: -10px;
@@ -170,6 +170,10 @@ html, body {
 .nm_Hatching_blue{background-image: url("hatching-blue.svg");}
 .nm_Hatching_red{background-image: url("hatching-red.svg");}
 .nm_Hatching_green{background-image: url("hatching-green.svg");}
+.nm_Hatching_blue.hoverable:hover { border:	2px solid #009ec2; }
+.nm_Hatching_red.hoverable:hover { border:	2px solid #eb1f3a; }
+.nm_Hatching_green.hoverable:hover { border: 2px solid #20af4b; }
+
 
 /*Animation proxy's */
 .myAnimationName{

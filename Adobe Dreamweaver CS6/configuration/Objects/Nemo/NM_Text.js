@@ -13,7 +13,8 @@ function isAsset() {
 
 function objectTag(assetArgs) {
 	var theDOM = dw.getDocumentDOM();
-	theDOM.wrapTag('<div class="nm_Text" style="position: absolute; left: 100px; top:300px;">');
+	var uniqueId = dwscripts.getUniqueId("text");	
+	theDOM.wrapTag('<div class="nm_Text" id="' + uniqueId + '" style="position: absolute; left: 100px; top:300px;">');
 	return;
 }
 
