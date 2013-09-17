@@ -13,8 +13,7 @@ function isAsset() {
 
 function objectTag(assetArgs) {
 	var theDOM = dw.getDocumentDOM();
-	var uniqueId = dwscripts.getUniqueId("textField");	
-	theDOM.wrapTag('<div class="nm_TextField" id="' + uniqueId + '" style="position: absolute; left: 100px; top:300px;">');
-	return;
+	var uniqueId = dwscripts.getUniqueId("highlight");
+	return '<span class="nm_Highlight_blue" id="' + uniqueId + '" style="position: absolute; left: 200px; top: 300px; width: 192px; height: 128px;"></span>';
 }
 

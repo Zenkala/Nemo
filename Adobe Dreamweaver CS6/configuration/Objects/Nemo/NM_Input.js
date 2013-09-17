@@ -12,6 +12,8 @@ function isAsset() {
 }
 
 function objectTag(assetArgs) {
-  return '<input class="nm_Input" style="position: absolute;" />';
+	var theDOM = dw.getDocumentDOM();
+	var uniqueId = dwscripts.getUniqueId("input");
+  return '<input class="nm_Input" id="' + uniqueId + '" style="position: absolute;" />';
 }
 

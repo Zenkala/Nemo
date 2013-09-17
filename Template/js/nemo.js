@@ -135,6 +135,31 @@ function startNemoScript(){
 	MathJax.Hub.Configured();
 	MathJax.Hub.Register.StartupHook("End", function () {
 		progress("MathJax ended");			
+
+		//parse all text to set Items (eindtermen, begrippen, terms, units)
+		$(".nm_Text, .nm_TextField, .nm_TextBubble, .nm_Exclamation, .nm_InfoBlock").each(function() {
+			//replace with: #[\w\d ]*?# ?[\d]*
+			var patt = /#[^#]*?# ?[\d]*/g;
+			var strPatt = /[^#][^#]*(?=#)/; //weirdness
+			var targetPatt = /\d*$/;
+			var str = $(this).html();
+
+			//get all matches
+			var result      = patt.exec(str)
+			var results     = new Array();
+			var oldresult   = "";
+			while( result && result!=oldresult){
+			    oldresult   = result;
+			    results.push(result);
+			    result      = patt.exec(str);
+			}
+
+			for(var i=0; i<results.length; i++){
+				console.log("replacing: " + results[i] + " with : " + strPatt.exec(results[i]));
+			    str = str.replace(results[i], '<output class="nm_Begrip" target="' + targetPatt.exec(results[i]) + '">' + strPatt.exec(results[i]) + "</output>"); //get string ending with # and skipping any #'s along the way
+			}
+			$(this).html(str);
+		});
 	
 		//set contentDiv width and innerHeight
 		$("#contentDiv").css("width", "1024px");
@@ -212,29 +237,51 @@ function startNemoScript(){
 		});
 		$("#dummyRender").remove();
 
+<<<<<<< HEAD
 		//attach bubbels to their targets if any
+=======
+		$(".nm_TextBubble").each(function(){
+			var h = $(this).attr("rHeight");
+			if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h < 42)) {
+				$(this).append('<div class="nm_TextBubblePointer" style="height: ' + h + 'px; margin-top: -' + 0.5*h + 'px"></div>');
+			} else {
+				$(this).append('<div class="nm_TextBubblePointer"></div>');
+			}
+		});
+
+		//attach bubbels to their targets if any And change them to explanations
+>>>>>>> c7106330884c4d8c2290fda10f8e2edce56e7809
 		$(".nm_TextBubble[target]").each(function(){
+			$(this).addClass("nm_Explanation");
 			var target = $("#" + $(this).attr("target"));
+			var bubble = $(this);
 			console.log(target)
 			console.log(target.css("left"), $(this).attr("rHeight"), $(this).attr("rWidth"));
 			var leftOffset = 0;
 			var topOffset = 0;
-			if($(this).hasClass("bottom-left")){	topOffset = -parseInt($(this).attr("rHeight")) - 58; }
-			if($(this).hasClass("bottom-middle")){	topOffset = -parseInt($(this).attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt($(this).attr("rWidth")))/2;}
-			if($(this).hasClass("bottom-right")){	topOffset = -parseInt($(this).attr("rHeight")) - 58;								leftOffset = parseInt(target.css("width"))-parseInt($(this).attr("rWidth"));}
-			if($(this).hasClass("middle-left")){	topOffset = (parseInt(target.css("height")) - parseInt($(this).attr("rHeight")))/2; leftOffset = parseInt(target.css("width")); }
-			if($(this).hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt($(this).attr("rHeight")))/2; leftOffset -= parseInt($(this).attr("rWidth")); }
-			if($(this).hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
-			if($(this).hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt($(this).attr("rWidth")))/2;}
-			if($(this).hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt($(this).attr("rWidth"));}	
-			$(this).css("left", (parseInt(target.css("left")) + leftOffset) + "px");
-			$(this).css("top", (parseInt(target.css("top")) + topOffset) + "px");
+			if(bubble.hasClass("bottom-left")){		topOffset = -parseInt(bubble.attr("rHeight")) - 58; }
+			if(bubble.hasClass("bottom-middle")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
+			if(bubble.hasClass("bottom-right")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58;									leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}
+			if(bubble.hasClass("middle-left")){		topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset = parseInt(target.css("width")); }
+			if(bubble.hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset -= parseInt(bubble.attr("rWidth")); }
+			if(bubble.hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
+			if(bubble.hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
+			if(bubble.hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}	
+			bubble.css("left", (parseInt(target.css("left")) + leftOffset) + "px");
+			bubble.css("top", (parseInt(target.css("top")) + topOffset) + "px");
+			//make the target clickable
+			target.on("click", function(event){ bubble.transition({ scale: 1 }, 200); bubble.attr("clicked", "true")});
+			target.mouseenter(function(event){ bubble.transition({ scale: 1 }, 100)});
+			target.mouseleave(function(event){ if(bubble.attr("clicked") != "true") bubble.transition({ scale: 0 }, 100)});
+			target.addClass("hoverable");
+			bubble.transition({ scale: 0 }, 0);
 		});
 		
-		$(".nm_Exclamation").append('<span class="close">x</span>');
-		$(".nm_Exclamation .close").on({
+		$(".nm_Explanation").append('<span class="close">x</span>');
+		$(".nm_Explanation .close").on({
 		  click: function(){
-		    $(this).closest(".nm_Exclamation").transition({ scale: 0 }, 200);
+		    $(this).closest(".nm_Explanation").transition({ scale: 0 }, 200);
+		    $(this).closest(".nm_Explanation").removeAttr("clicked");
 		  }
 		});
 

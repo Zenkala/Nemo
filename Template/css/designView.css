@@ -4,14 +4,15 @@
 }
 
 html {
-	font-family: 'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
+	font-family: 			'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
 	font-size:				16px;
-	line-height: 20px;
+	line-height: 			20px;
 	font-weight: 			normal;
 	font-variant: 			normal;
 }
 
 #contentDiv{
+	background-image:		url("background.png");
 	top:					0px;
 	height:					auto;
 	width:					auto;
@@ -48,7 +49,7 @@ html {
 
 .nm_TextField{
 	background-color: 		rgb(255, 255, 255);
-	border: 				12px solid black;
+	border: 				1px solid black;
 	padding:				8px 10px 15px 10px;
 	text-align:				left;
 }
@@ -136,6 +137,11 @@ html {
 .nm_Hatching_blue{background-image: url("hatching-blue.png");}
 .nm_Hatching_red{background-image: url("hatching-red.png");}
 .nm_Hatching_green{background-image: url("hatching-green.png");}
+
+.nm_Highlight_blue{
+	background-color: 		rgba(0, 158, 194, 0.2);
+	border:					2px solid #009ec2;
+}
 
 .nm_Input{
 

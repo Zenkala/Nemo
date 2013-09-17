@@ -152,9 +152,15 @@ package
 		
 		public static function removeSlide(givenIndex:int):void 
 		{
+			// substract the stay of all elements on this slide by one  
+			CSXSInterface.instance.evalScript("updateStay", String(currentSlide), String("remove")); 
+			
 			CSXSInterface.instance.evalScript("remSlide", String(givenIndex));
 			//select proper slide now
 			currentSlide--;
+			
+			// set stay of 
+			
 			callDW("forceGotoSlide", String(currentSlide));
 			updateGUI();
 		}
@@ -164,6 +170,8 @@ package
 			CSXSInterface.instance.evalScript("addASlide", String(currentSlide)); 
 			("change slide selection from " + currentSlide + " to " + (currentSlide+1));
 			callDW("gotoSlide", String(currentSlide+1), String(currentSlide)); 
+			
+			CSXSInterface.instance.evalScript("updateStay", String(currentSlide), String("add")); 
 			currentSlide++;
 			updateGUI();
 		}
