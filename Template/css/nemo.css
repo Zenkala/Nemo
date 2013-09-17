@@ -3,13 +3,37 @@
 	green: #20af4b;
 	blue: #009ec2;
 */
+@font-face {
+    font-family: "PT Sans Narrow";
+    src: url(PTSans-Narrow.ttf);
+}
 
 html, body {
+<<<<<<< HEAD
+	font-family:	'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
+	font-size:		16px;
+	line-height:	20px;
+	width:	1024px;
+
+}
+
+header#title {
+	position: relative;
+	z-index:1000;
+	background-image: url('title.svg');
+	background-repeat: no-repeat;
+	margin-left: 20px;
+	margin-top: 20px;
+	color: #FFF;
+	font-size: 20px;
+	padding: 15px 40px 15px 40px;
+=======
 	font-family:			'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
 	font-size:				16px;
 	line-height:			20px;
 	width:					1024px;
 	color:					#1d1d1d;
+>>>>>>> c7106330884c4d8c2290fda10f8e2edce56e7809
 }
 
 .comment, .commentGreen{

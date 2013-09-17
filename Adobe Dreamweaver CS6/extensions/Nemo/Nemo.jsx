@@ -1,4 +1,4 @@
-function getCurrentStay() {
+﻿function getCurrentStay() {
     var theDOM = dw.getDocumentDOM();
     if (theDOM != null) {
         var theNode = theDOM.getSelectedNode();
@@ -326,6 +326,33 @@ function remSlide(givenIndex){
         }
         //then do the usual removing thing.
         updateSlides(lastSlide, false);
+    }
+}
+
+function updateStay(givenIndex, action) {
+    var index = parseInt(givenIndex);
+  
+    var nodes = getSlideNodes(false);
+    if(nodes != null) {
+        var i;
+        var j;
+        for(i=0; i< index; i++) {
+            //for each slide
+            for(j=0; j<nodes[i].childNodes.length; j++) {
+                //for each node in a slide
+                if(nodes[i].childNodes[j].stay) { //node has a stay!
+                    if(nodes[i].childNodes[j].stay != 0) {
+                        if((i + nodes[i].childNodes[j].stay) >= index) {
+                            if(action == 'add') {
+                                nodes[i].childNodes[j].stay++;
+                            } else {
+                                nodes[i].childNodes[j].stay--;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
