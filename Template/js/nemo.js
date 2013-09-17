@@ -135,6 +135,31 @@ function startNemoScript(){
 	MathJax.Hub.Configured();
 	MathJax.Hub.Register.StartupHook("End", function () {
 		progress("MathJax ended");			
+
+		//parse all text to set Items (eindtermen, begrippen, terms, units)
+		$(".nm_Text, .nm_TextField, .nm_TextBubble, .nm_Exclamation, .nm_InfoBlock").each(function() {
+			//replace with: #[\w\d ]*?# ?[\d]*
+			var patt = /#[^#]*?# ?[\d]*/g;
+			var strPatt = /[^#][^#]*(?=#)/; //weirdness
+			var targetPatt = /\d*$/;
+			var str = $(this).html();
+
+			//get all matches
+			var result      = patt.exec(str)
+			var results     = new Array();
+			var oldresult   = "";
+			while( result && result!=oldresult){
+			    oldresult   = result;
+			    results.push(result);
+			    result      = patt.exec(str);
+			}
+
+			for(var i=0; i<results.length; i++){
+				console.log("replacing: " + results[i] + " with : " + strPatt.exec(results[i]));
+			    str = str.replace(results[i], '<output class="nm_Begrip" target="' + targetPatt.exec(results[i]) + '">' + strPatt.exec(results[i]) + "</output>"); //get string ending with # and skipping any #'s along the way
+			}
+			$(this).html(str);
+		});
 	
 		//set contentDiv width and innerHeight
 		$("#contentDiv").css("width", "1024px");

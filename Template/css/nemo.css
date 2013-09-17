@@ -9,6 +9,7 @@ html, body {
 	font-size:				16px;
 	line-height:			20px;
 	width:					1024px;
+	color:					#1d1d1d;
 }
 
 .comment, .commentGreen{
@@ -186,8 +187,11 @@ html, body {
 	background-repeat:		repeat;
 }
 
-.nm_begrip{
-	color:					blue;
+.nm_Begrip{
+	background-color: 			rgba(0, 0, 0, 0.36);
+	padding:					0px 4px 2px 3px;
+	font-weight: 				bold;
+	border-radius: 				4px;
 }
 
 .nm_TextfieldNJ{
