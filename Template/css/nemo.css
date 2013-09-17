@@ -3,12 +3,29 @@
 	green: #20af4b;
 	blue: #009ec2;
 */
+@font-face {
+    font-family: "PT Sans Narrow";
+    src: url(PTSans-Narrow.ttf);
+}
 
 html, body {
 	font-family:	'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
 	font-size:		16px;
 	line-height:	20px;
 	width:	1024px;
+
+}
+
+header#title {
+	position: relative;
+	z-index:1000;
+	background-image: url('title.svg');
+	background-repeat: no-repeat;
+	margin-left: 20px;
+	margin-top: 20px;
+	color: #FFF;
+	font-size: 20px;
+	padding: 15px 40px 15px 40px;
 }
 
 .comment, .commentGreen{

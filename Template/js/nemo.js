@@ -5,6 +5,7 @@ var sliding = false;
 var quick = false;
 var gotoSlide = 0;
 
+// "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
 var scripts = [	'js/jquery.transit.min.js',
 				'js/jquery-ui-1.10.3.custom.min.js',
 				'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',/*,
@@ -15,8 +16,7 @@ var scripts = [	'js/jquery.transit.min.js',
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
-				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css",
-				"http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
+				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css"
 			];
 var animations;	
 
@@ -209,18 +209,8 @@ function startNemoScript(){
 			var tempBubble = $(this).clone().appendTo($('#dummyRender')).css("visibility", "hidden");
 			$(this).attr("rHeight", tempBubble.outerHeight());
 			$(this).attr("rWidth", tempBubble.outerWidth());
-
 		});
 		$("#dummyRender").remove();
-
-		$(".nm_TextBubble").each(function(){
-			var h = $(this).attr("rHeight");
-			if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h < 42)) {
-				$(this).append('<div class="nm_TextBubblePointer" style="height: ' + h + 'px; margin-top: -' + 0.5*h + 'px"></div>');
-			} else {
-				$(this).append('<div class="nm_TextBubblePointer"></div>');
-			}
-		});
 
 		//attach bubbels to their targets if any
 		$(".nm_TextBubble[target]").each(function(){
@@ -254,7 +244,7 @@ function startNemoScript(){
 		//$(".nm_slider").slider({ step: 5, value: 15, min: 0, max: 30 });
 
 		//make title
-		$("#title").html(document.title);
+		$("#title span").html(document.title);
 
 		//set total slides
 		totalPages = 0;
@@ -262,6 +252,17 @@ function startNemoScript(){
 			totalPages++;
 		});
 		$("#slideIndex").html("1/"+totalPages);
+
+		$(".nm_TextBubble").each(function(){
+			var h = $(this).attr("rHeight");
+			if(h > 30) { h = h - 30; }
+
+			if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h < 42)) {
+				$(this).append('<div class="nm_TextBubblePointer" style="height: ' + h + 'px; margin-top: -' + 0.5*h + 'px"></div>');
+			} else {
+				$(this).append('<div class="nm_TextBubblePointer"></div>');
+			}
+		});
 
 		//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
 		yepnope([{
