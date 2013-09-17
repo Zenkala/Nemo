@@ -1,4 +1,8 @@
 Changelog
+0.3.7
+  Added NM_Highlight
+  NM_TextBubble can be assigned to target an other element. That element becomes hoverable, showing and hiding the textbubble
+  
 0.3.6
   Replaced classList.contains("nm_Animation") from nemo.jsx in assignAnimation. Since it apparantly is randomly unsupported. Made our own contains function.
   addAnimation now maked the animation and images folder if it doesn't already exists.

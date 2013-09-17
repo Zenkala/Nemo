@@ -63,20 +63,20 @@ html, body {
 
 
 .nm_TextBubble .nm_TextBubblePointer {
-	position: absolute;
-	background-position: left bottom;
-	background-repeat: no-repeat;
+	position: 				absolute;
+	background-position: 	left bottom;
+	background-repeat: 		no-repeat;
 }
 
 .nm_TextBubble.bottom-left .nm_TextBubblePointer, .nm_TextBubble.bottom-middle .nm_TextBubblePointer, .nm_TextBubble.bottom-right .nm_TextBubblePointer, .nm_TextBubble.top-left .nm_TextBubblePointer, .nm_TextBubble.top-middle .nm_TextBubblePointer, .nm_TextBubble.top-right .nm_TextBubblePointer {
-	width: 42px;
-	height: 59px;
+	width: 					42px;
+	height: 				59px;
 }
 
 .nm_TextBubble.middle-left .nm_TextBubblePointer, .nm_TextBubble.middle-right .nm_TextBubblePointer {
-	width: 59px;
-	height: 42px;
-	background-size: 59px 100%;
+	width: 					59px;
+	height: 				42px;
+	background-size: 		59px 100%;
 }
 
 .nm_TextBubble.bottom-left .nm_TextBubblePointer { left:20px; bottom:-58px; background-image:url("point-bottom-left.png"); }
@@ -98,18 +98,18 @@ html, body {
 
 
 .nm_Explanation .close {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 18px;
-    height: 18px;
-    text-align: center;
-    line-height: 18px;
-    border: 2px solid #000;
-    border-radius: 18px;
-    font-weight: bold;
-    background: #fff;
-    cursor: pointer;
+    position:				absolute;
+    top:				 	-10px;
+    right:				 	-10px;
+    width:				 	18px;
+    height:				 	18px;
+    text-align: 			center;
+    line-height: 			18px;
+    border:				 	2px solid #000;
+    border-radius: 			18px;
+    font-weight: 			bold;
+    background:				#fff;
+    cursor:				 	pointer;
 }
 
 .nm_ExplanationContent{	
@@ -118,48 +118,48 @@ html, body {
 }
 
 .nm_InfoBlock {
-	padding-left: 25px;
-	width: 200px;  
-	background-color: #F8FBFE;
+	padding-left: 			25px;
+	width: 					200px;  
+	background-color: 		#F8FBFE;
 }
 
 	.nm_InfoBlock .title {
-		font-weight: bold;
-	    cursor: pointer;
-	    padding-right: 15px;
+		font-weight: 		bold;
+	    cursor: 			pointer;
+	    padding-right: 		15px;
 	}
 
 	.nm_InfoBlock .paragraph {
-		display: none;
+		display: 			none;
 	}
 
 	.nm_InfoBlock .circle {
-		position: absolute;
-		left: -13px;
-		top: -2px;
-	    width: 28px;
-	    height: 28px;
-	    border: 4px solid #000;
-	    border-radius: 28px;
-	    line-height: 28px;
-	    text-align: center;
-	    font-weight: bold;
-	    background-color: #F8FBFE;
+		position: 			absolute;
+		left: 				-13px;
+		top: 				-2px;
+	    width: 				28px;
+	    height: 			28px;
+	    border: 			4px solid #000;
+	    border-radius: 		28px;
+	    line-height: 		28px;
+	    text-align: 		center;
+	    font-weight: 		bold;
+	    background-color: 	#F8FBFE;
 	}
 
 	.nm_InfoBlock .opencloseLid {
-		position: absolute;
-		right: 12px;
-		top: 7px;
-		transform: rotate(90deg);
-		-ms-transform: rotate(90deg);
-		-webkit-transform: rotate(90deg);
+		position: 			absolute;
+		right: 				12px;
+		top: 				7px;
+		transform: 			rotate(90deg);
+		-ms-transform: 		rotate(90deg);
+		-webkit-transform: 	rotate(90deg);
 	}
 
 	.nm_InfoBlock .open {
-		transform: rotate(-90deg);
-		-ms-transform: rotate(-90deg);
-		-webkit-transform: rotate(-90deg);
+		transform: 			rotate(-90deg);
+		-ms-transform: 		rotate(-90deg);
+		-webkit-transform: 	rotate(-90deg);
 	}
 
 .nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
@@ -174,6 +174,11 @@ html, body {
 .nm_Hatching_red.hoverable:hover { border:	2px solid #eb1f3a; }
 .nm_Hatching_green.hoverable:hover { border: 2px solid #20af4b; }
 
+.nm_Highlight_blue{
+	background-color: 		rgba(0, 158, 194, 0.2);
+	border:					2px solid #009ec2;
+}
+.nm_Highlight_blue.hoverable:hover { background-color: rgba(0, 158, 194, 0.5); }
 
 /*Animation proxy's */
 .myAnimationName{

@@ -14,6 +14,6 @@ function isAsset() {
 function objectTag(assetArgs) {
 	var theDOM = dw.getDocumentDOM();
 	var uniqueId = dwscripts.getUniqueId("highlight");
-  return '<span class="nm_Highlight" id="' + uniqueId + '" style="position: absolute; left: 200px; top: 300px; width: 128px; height: 128px;"></span>';
+	return '<span class="nm_Highlight_blue" id="' + uniqueId + '" style="position: absolute; left: 200px; top: 300px; width: 192px; height: 128px;"></span>';
 }
 

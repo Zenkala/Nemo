@@ -133,6 +133,11 @@ html {
 .nm_Hatching_red{background-image: url("hatching-red.png");}
 .nm_Hatching_green{background-image: url("hatching-green.png");}
 
+.nm_Highlight_blue{
+	background-color: 		rgba(0, 158, 194, 0.2);
+	border:					2px solid #009ec2;
+}
+
 .nm_Input{
 
 }

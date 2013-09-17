@@ -85,7 +85,7 @@
 		<button label="NM_Comment_Green" 	name="NM_Comment_Green"	file="Nemo\NM_CommentGreen.htm"	id="NM_CommentGreen"	image="Nemo\NM_CommentGreen.png" />
 		<button label="NM_Input" 			name="NM_Input" 		file="Nemo\NM_Input.htm" 		id="NM_Input" 			image="Nemo\NM_Input.png" />
 		<button label="NM_Hatching" 		name="NM_Hatching" 		file="Nemo\NM_Hatching.htm" 	id="NM_Hatching" 		image="Nemo\NM_Hatching.png" />
-		<button label="NM_Highlight"		name="NM_Highlight"		file="Nemo\NM_Highlight.m" 		id="NM_Highlight"		image="Nemo\NM_Highlight.png" />
+		<button label="NM_Highlight" 		name="NM_Highlight" 	file="Nemo\NM_Highlight.htm" 	id="NM_Highlight" 		image="Nemo\NM_Highlight.png" />
 		<button label="NM_Ground" 			name="NM_Ground" 		file="Nemo\NM_Ground.htm"		id="NM_Ground" 			image="Nemo\NM_Ground.png" />
 		<button label="NM_Animation" 		name="NM_Animation" 	file="Nemo\NM_Animation.htm" 	id="NM_Animation" 		image="Nemo\NM_Animation.png" />		
 	</category>
