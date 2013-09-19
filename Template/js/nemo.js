@@ -33,7 +33,7 @@ var currentProgress = 0;
 var enableProgressBar = false;
 function progress(msg) {
 	currentProgress++;
-	console.log(currentProgress + ": " + msg);
+	log(currentProgress + ": " + msg);
 	if(enableProgressBar) {
 		$("#loadingLogo").css("margin-left", -325 + currentProgress/totalProgress*600);
 	}
@@ -92,7 +92,6 @@ function loadLibs(){
 			load: scripts,
 			callback: function (url, result, key) {
 				progress("loaded: " + url);
-				log("loaded " + url)
 			},
 			complete: function(){
 				log("yepnope complete"); 
@@ -330,21 +329,19 @@ function endNemoScript(){
 
 	setTimeout(function() {
 	    onLoad(); //notify the javascript of the module that we're done
-	}, 100); //wait 100ms to give initizing scripts within Edge Animations a change to do their stuff.
-	
+	    //goto slide last viewed in Dreamweaver
+	    for(i=0; i<gotoSlide; i++) {
+	    	quick = true;
+	    	next();
+	    }
 
-	//goto slide last viewed in Dreamweaver
-	for(i=0; i<gotoSlide; i++) {
-		quick = true;
-		next();
-	}
-
-	if(gotoSlide == 0) { //if we don't do a quick next, no enterframe handles are called. So call them manually.
-		newSlideHdl(0, false);
-		newSlideStopHdl(0, false);
-	}
-	
-	quick = false;
+	    if(gotoSlide == 0) { //if we don't do a quick next, no enterframe handles are called. So call them manually.
+	    	newSlideHdl(0, false);
+	    	newSlideStopHdl(0, false);
+	    }
+	    
+	    quick = false;
+	}, 100); //wait 100ms to give initizing scripts within Edge Animations a chance to do their stuff.
 
 	//prevent scroll
 	$(document).on('touchmove',function(e){
