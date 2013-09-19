@@ -549,14 +549,12 @@ function assignAnimation(givenAnimation) {
             var result    = numPatt.exec(widthPatt.exec(str));
             var oldresult = "";
             while( result && result!=oldresult){
-                alert("width result: " + result + " -- " + maxWidth);
                 oldresult = result;
                 if(parseInt(result) > maxWidth) maxWidth = parseInt(result);
                 result    = numPatt.exec(widthPatt.exec(str));
             }
             result    = numPatt.exec(heightPatt.exec(str));
             while( result && result!=oldresult){
-                alert("height result: " + result + " -- " + maxHeight);
                 oldresult = result;
                 if(parseInt(result) > maxHeight) maxHeight = parseInt(result);
                 result    = numPatt.exec(heightPatt.exec(str));
