@@ -237,9 +237,7 @@ function startNemoScript(){
 		});
 		$("#dummyRender").remove();
 
-<<<<<<< HEAD
 		//attach bubbels to their targets if any
-=======
 		$(".nm_TextBubble").each(function(){
 			var h = $(this).attr("rHeight");
 			if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h < 42)) {
@@ -250,7 +248,6 @@ function startNemoScript(){
 		});
 
 		//attach bubbels to their targets if any And change them to explanations
->>>>>>> c7106330884c4d8c2290fda10f8e2edce56e7809
 		$(".nm_TextBubble[target]").each(function(){
 			$(this).addClass("nm_Explanation");
 			var target = $("#" + $(this).attr("target"));
