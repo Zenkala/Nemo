@@ -1,0 +1,40 @@
+<!doctype html5>
+<html version="0.3.6">
+<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+		<title>Template</title>
+        
+        <script type="text/javascript" charset="utf-8" src="js/yepnope.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/nemo.js"></script>
+        <script type="text/javascript" charset="utf-8" src="template.js"></script>
+        
+        <script type="text/javascript">nemoInit();</script>       
+        
+		<link rel="stylesheet" type="text/css" href="css/reset.css" />    
+        <link id="mainCSS" rel="stylesheet" type="text/css" href="css/designView.css" />
+
+</head> 
+<body>
+    <div id="ghostDiv">
+      <div id="ghostDivCover"></div>
+    </div>
+    
+<div id="contentDiv" style="position: absolute; left: 0px">
+  <div class="slide" id="commentslide">
+    <div class="comment slideNumber">woot!</div>
+  </div>
+  <div class="slide activeSlide" id="slide0">
+    <div class="comment slideNumber">1</div>
+  </div>
+</div>
+
+    <header id="title"><span>Template</span></header>
+    <div id="navigation" style="margin: 670px auto 0px auto; width:130px;">
+      <button onClick="prev()" style="float:left;">Prev</button>
+        <p id="slideIndex" style="float:left;">0/?</p>
+        <button onClick="next()" style="float:left;">Next</button>
+    </div>
+  
+    </body>
+</html>
