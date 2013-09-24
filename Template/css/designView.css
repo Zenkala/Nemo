@@ -75,53 +75,41 @@ ul {
 	background-attachment: 	fixed;
 }
 
-.nm_TextBubble.bottom-left{	
-	background-image: 		url("designView/point-design-bottom-left.png");
-	background-position: 	left bottom;
-	padding-bottom: 		59px;
-}
+.nm_TextBubble.bottom-left{		background-image: url("designView/point-design-bottom-left.png"); 	background-position: left bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-middle{	background-image: url("designView/point-design-bottom-middle.png"); background-position: 50% bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-right{	background-image: url("designView/point-design-bottom-right.png");	background-position: right bottom; padding-bottom: 59px; }
+.nm_TextBubble.top-left{		background-image: url("designView/point-design-top-left.png"); 		background-position: left top; padding-top: 59px; }
+.nm_TextBubble.top-middle{		background-image: url("designView/point-design-top-middle.png"); 	background-position: 50% top; padding-top:	59px; }
+.nm_TextBubble.top-right{		background-image: url("designView/point-design-top-right.png"); 	background-position: right top; padding-top: 59px; }
+.nm_TextBubble.middle-left{		background-image: url("designView/point-design-middle-left.png"); 	background-position: left 50%; padding-left: 59px; }
+.nm_TextBubble.middle-right{	background-image: url("designView/point-design-middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
 
-.nm_TextBubble.bottom-middle{	
-	background-image: 		url("designView/point-design-bottom-middle.png");
-	background-position: 	50% bottom;
-	padding-bottom: 		59px;
-}
+.nm_TextBubble.bottom-left.green{	background-image: url("designView/point-design-green_bottom-left.png"); 	background-position: left bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-middle.green{	background-image: url("designView/point-design-green_bottom-middle.png"); 	background-position: 50% bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-right.green{	background-image: url("designView/point-design-green_bottom-right.png");	background-position: right bottom; padding-bottom: 59px; }
+.nm_TextBubble.top-left.green{		background-image: url("designView/point-design-green_top-left.png"); 		background-position: left top; padding-top: 59px; }
+.nm_TextBubble.top-middle.green{	background-image: url("designView/point-design-green_top-middle.png"); 		background-position: 50% top; padding-top:	59px; }
+.nm_TextBubble.top-right.green{		background-image: url("designView/point-design-green_top-right.png"); 		background-position: right top; padding-top: 59px; }
+.nm_TextBubble.middle-left.green{	background-image: url("designView/point-design-green_middle-left.png"); 	background-position: left 50%; padding-left: 59px; }
+.nm_TextBubble.middle-right.green{	background-image: url("designView/point-design-green_middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
 
-.nm_TextBubble.bottom-right{	
-	background-image: 		url("designView/point-design-bottom-right.png");
-	background-position: 	right bottom;
-	padding-bottom: 		59px;
-}
+.nm_TextBubble.bottom-left.blue{	background-image: url("designView/point-design-blue_bottom-left.png"); 		background-position: left bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-middle.blue{	background-image: url("designView/point-design-blue_bottom-middle.png"); 	background-position: 50% bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-right.blue{	background-image: url("designView/point-design-blue_bottom-right.png");		background-position: right bottom; padding-bottom: 59px; }
+.nm_TextBubble.top-left.blue{		background-image: url("designView/point-design-blue_top-left.png"); 		background-position: left top; padding-top: 59px; }
+.nm_TextBubble.top-middle.blue{		background-image: url("designView/point-design-blue_top-middle.png"); 		background-position: 50% top; padding-top:	59px; }
+.nm_TextBubble.top-right.blue{		background-image: url("designView/point-design-blue_top-right.png"); 		background-position: right top; padding-top: 59px; }
+.nm_TextBubble.middle-left.blue{	background-image: url("designView/point-design-blue_middle-left.png"); 		background-position: left 50%; padding-left: 59px; }
+.nm_TextBubble.middle-right.blue{	background-image: url("designView/point-design-blue_middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
 
-.nm_TextBubble.top-left{	
-	background-image: 		url("designView/point-design-top-left.png");
-	background-position: 	left top;
-	padding-top: 		59px;
-}
-
-.nm_TextBubble.top-middle{	
-	background-image: 		url("designView/point-design-top-middle.png");
-	background-position: 	50% top;
-	padding-top: 		59px;
-}
-
-.nm_TextBubble.top-right{	
-	background-image: 		url("designView/point-design-top-right.png");
-	background-position: 	right top;
-	padding-top: 		59px;
-}
-
-.nm_TextBubble.middle-left{	
-	background-image: 		url("designView/point-design-middle-left.png");
-	background-position: 	left 50%;
-	padding-left: 		59px;
-}
-
-.nm_TextBubble.middle-right{	
-	background-image: 		url("designView/point-design-middle-right.png");
-	background-position: 	right 50%;
-	padding-right: 		59px;
-}
+.nm_TextBubble.bottom-left.red{		background-image: url("designView/point-design-red_bottom-left.png"); 	background-position: left bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-middle.red{	background-image: url("designView/point-design-red_bottom-middle.png"); background-position: 50% bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-right.red{	background-image: url("designView/point-design-red_bottom-right.png");	background-position: right bottom; padding-bottom: 59px; }
+.nm_TextBubble.top-left.red{		background-image: url("designView/point-design-red_top-left.png"); 		background-position: left top; padding-top: 59px; }
+.nm_TextBubble.top-middle.red{		background-image: url("designView/point-design-red_top-middle.png"); 	background-position: 50% top; padding-top:	59px; }
+.nm_TextBubble.top-right.red{		background-image: url("designView/point-design-red_top-right.png"); 	background-position: right top; padding-top: 59px; }
+.nm_TextBubble.middle-left.red{		background-image: url("designView/point-design-red_middle-left.png"); 	background-position: left 50%; padding-left: 59px; }
+.nm_TextBubble.middle-right.red{	background-image: url("designView/point-design-red_middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
 
 
  .nm_Explanation{

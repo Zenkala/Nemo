@@ -129,7 +129,7 @@ function startNemoScript(){
 	MathJax.Hub.Register.StartupHook("End", function () {
 		progress("MathJax ended");			
 
-		//parse all text to set Items (eindtermen, begrippen, terms, units)
+		//parse all text to set begrippen (eindtermen, begrippen, terms, units)
 		$(".nm_Text, .nm_TextField, .nm_TextBubble, .nm_Exclamation, .nm_InfoBlock").each(function() {
 			//replace with: #[\w\d ]*?# ?[\d]*
 			var patt = /#[^#]*?# ?[\d]*/g;
@@ -208,73 +208,7 @@ function startNemoScript(){
 			$(this).css("margin-top", $(this).css("top"));
 		});
 
-		//make nm_TextBubbleContent & nm_Explanation divs.
-		var divBuffer;		
-		$(".nm_TextBubble").each(function(){
-			divBuffer = $("<div>").html($(this).html()).addClass("nm_TextBubbleContent");
-			$(this).empty(); 
-			$(this).append(divBuffer);
-		});
-		$(".nm_Explanation").each(function(){
-			divBuffer = $("<div>").html($(this).html()).addClass("nm_ExplanationContent");
-			$(this).empty();
-			$(this).append(divBuffer);
-		});
-		console.log("content divs for bubbles made");
-
-		$("body").append('<div id="dummyRender"></div>');
-		$(".nm_TextBubble").each(function(){
-			var tempBubble = $(this).clone().appendTo($('#dummyRender')).css("visibility", "hidden");
-			$(this).attr("rHeight", tempBubble.outerHeight());
-			$(this).attr("rWidth", tempBubble.outerWidth());
-		});
-		$("#dummyRender").remove();
-
-		//attach bubbels to their targets if any
-		$(".nm_TextBubble").each(function(){
-			var h = $(this).attr("rHeight");
-			if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h < 42)) {
-				$(this).append('<div class="nm_TextBubblePointer" style="height: ' + h + 'px; margin-top: -' + 0.5*h + 'px"></div>');
-			} else {
-				$(this).append('<div class="nm_TextBubblePointer"></div>');
-			}
-		});
-
-		//attach bubbels to their targets if any And change them to explanations
-		$(".nm_TextBubble[target]").each(function(){
-			$(this).addClass("nm_Explanation");
-			var target = $("#" + $(this).attr("target"));
-			var bubble = $(this);
-			console.log(target)
-			console.log(target.css("left"), $(this).attr("rHeight"), $(this).attr("rWidth"));
-			var leftOffset = 0;
-			var topOffset = 0;
-			if(bubble.hasClass("bottom-left")){		topOffset = -parseInt(bubble.attr("rHeight")) - 58; }
-			if(bubble.hasClass("bottom-middle")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
-			if(bubble.hasClass("bottom-right")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58;									leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}
-			if(bubble.hasClass("middle-left")){		topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset = parseInt(target.css("width")); }
-			if(bubble.hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset -= parseInt(bubble.attr("rWidth")); }
-			if(bubble.hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
-			if(bubble.hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
-			if(bubble.hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}	
-			bubble.css("left", (parseInt(target.css("left")) + leftOffset) + "px");
-			bubble.css("top", (parseInt(target.css("top")) + topOffset) + "px");
-			//make the target clickable
-			target.on("click", function(event){ bubble.transition({ scale: 1 }, 200); bubble.attr("clicked", "true")});
-			target.mouseenter(function(event){ bubble.transition({ scale: 1 }, 100)});
-			target.mouseleave(function(event){ if(bubble.attr("clicked") != "true") bubble.transition({ scale: 0 }, 100)});
-			target.addClass("hoverable");
-			bubble.transition({ scale: 0 }, 0);
-		});
 		
-		$(".nm_Explanation").append('<span class="close">x</span>');
-		$(".nm_Explanation .close").on({
-		  click: function(){
-		    $(this).closest(".nm_Explanation").transition({ scale: 0 }, 200);
-		    $(this).closest(".nm_Explanation").removeAttr("clicked");
-		  }
-		});
-
 
 		//make sliders
 		console.log("do sliders");
@@ -290,6 +224,7 @@ function startNemoScript(){
 		});
 		$("#slideIndex").html("1/"+totalPages);
 
+/*
 		$(".nm_TextBubble").each(function(){
 			var h = $(this).attr("rHeight");
 			if(h > 30) { h = h - 30; }
@@ -300,16 +235,91 @@ function startNemoScript(){
 				$(this).append('<div class="nm_TextBubblePointer"></div>');
 			}
 		});
+*/
 
 		//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
 		yepnope([{
 			load: ["js/finished.js"],
 			complete: function(){
-				progress("Finishing");
-				endNemoScript();
+				progress("TextBubbles");
+				doTextBubbles();
 			}
 		}]);
 	});
+}
+
+function doTextBubbles() {
+	//make nm_TextBubbleContent & nm_Explanation divs.
+	var divBuffer;		
+	$(".nm_TextBubble").each(function(){
+		divBuffer = $("<div>").html($(this).html()).addClass("nm_TextBubbleContent");
+		$(this).empty(); 
+		$(this).append(divBuffer);
+	});
+	$(".nm_Explanation").each(function(){
+		divBuffer = $("<div>").html($(this).html()).addClass("nm_ExplanationContent");
+		$(this).empty();
+		$(this).append(divBuffer);
+	});
+	console.log("content divs for bubbles made");
+
+	$("body").append('<div id="dummyRender"></div>');
+	$(".nm_TextBubble").each(function(){
+		var tempBubble = $(this).clone().appendTo($('#dummyRender')).css("visibility", "hidden");
+		$(this).attr("rHeight", tempBubble.outerHeight());
+		$(this).attr("rWidth", tempBubble.outerWidth());
+	});
+	$("#dummyRender").remove();
+
+	//attach bubbels to their targets if any
+	$(".nm_TextBubble").each(function(){
+		var h = $(this).attr("rHeight");
+		if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h <55)) {
+			console.log("making small");
+			$(this).append('<div class="nm_TextBubblePointer small"></div>');
+		} else {
+			console.log("making big");
+			$(this).append('<div class="nm_TextBubblePointer"></div>');
+		}
+	});
+
+	//attach bubbels to their targets if any And change them to explanations
+	$(".nm_TextBubble[target]").each(function(){
+		$(this).addClass("nm_Explanation");
+		var target = $("#" + $(this).attr("target"));
+		var bubble = $(this);
+		console.log(target)
+		console.log(target.css("left"), $(this).attr("rHeight"), $(this).attr("rWidth"));
+		var leftOffset = 0;
+		var topOffset = 0;
+		if(bubble.hasClass("bottom-left")){		topOffset = -parseInt(bubble.attr("rHeight")) - 58; }
+		if(bubble.hasClass("bottom-middle")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
+		if(bubble.hasClass("bottom-right")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58;									leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}
+		if(bubble.hasClass("middle-left")){		topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset = parseInt(target.css("width")); }
+		if(bubble.hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset -= parseInt(bubble.attr("rWidth")); }
+		if(bubble.hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
+		if(bubble.hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
+		if(bubble.hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}	
+		bubble.css("left", (parseInt(target.css("left")) + leftOffset) + "px");
+		bubble.css("top", (parseInt(target.css("top")) + topOffset) + "px");
+		//make the target clickable
+		target.on("click", function(event){ bubble.transition({ scale: 1 }, 200); bubble.attr("clicked", "true")});
+		target.mouseenter(function(event){ bubble.transition({ scale: 1 }, 100)});
+		target.mouseleave(function(event){ if(bubble.attr("clicked") != "true") bubble.transition({ scale: 0 }, 100)});
+		target.addClass("hoverable");
+		bubble.transition({ scale: 0 }, 0);
+	});
+	
+	$(".nm_Explanation").append('<span class="close">x</span>');
+	$(".nm_Explanation .close").on({
+	  click: function(){
+	    $(this).closest(".nm_Explanation").transition({ scale: 0 }, 200);
+	    $(this).closest(".nm_Explanation").removeAttr("clicked");
+	  }
+	});
+
+	//continue work
+	endNemoScript();
 }
 
 function endNemoScript(){
