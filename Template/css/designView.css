@@ -11,6 +11,18 @@ html {
 	font-variant: 			normal;
 }
 
+ol, ul {
+	margin-left: 25px;
+}
+
+ol {
+	list-style: decimal;
+}
+
+ul {
+	list-style: square;
+}
+
 #contentDiv{
 	background-image:		url("background.png");
 	top:					0px;

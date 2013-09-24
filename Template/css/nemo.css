@@ -16,6 +16,18 @@ html, body {
 
 }
 
+ol, ul {
+	margin-left: 25px;
+}
+
+ol {
+	list-style: decimal;
+}
+
+ul {
+	list-style: square;
+}
+
 header#title {
 	position: relative;
 	z-index:1000;
