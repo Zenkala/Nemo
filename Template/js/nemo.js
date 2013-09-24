@@ -35,7 +35,7 @@ function progress(msg) {
 	currentProgress++;
 	log(currentProgress + ": " + msg);
 	if(enableProgressBar) {
-		$("#loadingLogo").css("margin-left", -325 + currentProgress/totalProgress*600);
+		$("#loaderBar").css("width", currentProgress/totalProgress*120);
 	}
 }
 		
@@ -55,19 +55,13 @@ function nemoInit(){
 			$("#commentslide").remove();
 			$("#ghostDiv").remove();
 
-			//display logo
-			var img = document.createElement("img");
-			img.src = "css/logo.png";
-
-			var lineImg = $('<div id="loadingBar" style="position: absolute; background-image: url(\'css/animation-proxy.svg\'); background-repeat: repeat-x; width: 600px; height: 5px; left:512px; top:336px; margin-left: -300px; margin-top: -2px;" />');			 
-			var logoImg = $('<img src="css/logo.png" id="loadingLogo" style="position: absolute; with: 50px; height: 50px; left:512px; top:336px; margin-left: -25px; margin-top: -25px;" />');
-			$('body').append(lineImg);
-			$('body').append(logoImg);
+			var loader = '<div id="loader" style="width: 210px;height:90px;position:absolute;top:276px;left:412px;"><div id="loaderContainer" style="width: 115px;height: 85px;overflow: hidden;position: absolute;top: 0px;left: 0px;"><div id="loaderBackground" style="background: #CCC;width: 120px;height: 90px;position: absolute;"></div><div id="loaderBar" style="width: 1px;height: 90px;position: absolute;top: 0px;left: 0px;background: #333;"></div><div id="loaderImage" style="width: 120px;height: 90px;background: url(\'css/mask.svg\') no-repeat left top;position: absolute;-webkit-filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.15));"></div></div><div id="loaderTitle" style="font-family: \'Arial Narrow\', Arial, sans; line-height: 24px; font-size: 24px;position: absolute;top: 7px;left: 125px;color: #333"><p><strong>online</strong></p><p><strong>leeromgeving</strong></p><p>nemo ' + $("html").attr("version") + '</p></div></div>';
+			$('body').append(loader);
 
 			//check for animations we have to load 
 			animations = new Array();
 			var animUrl = "";
-			$(".nm_Animation").each(function(){
+			$(".loaderAnimation").each(function(){
 				animUrl = $(this).attr("url").replace(/%20/g, " ");
 				console.log("found animation: " + $(this).attr("id"));
 				animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js");
@@ -321,11 +315,10 @@ function startNemoScript(){
 function endNemoScript(){
 	//done with all our preperation work
 	log("-----------Nemodone-----------");
-	$("#loadingLogo").remove();
-	$("#loadingBar").remove();
+	$("#loader").remove();
 	$("#contentDiv").show();
 	$("#navigation").show();
-	$("#title").show();
+	$("#title").toggle("slide");
 
 	setTimeout(function() {
 	    onLoad(); //notify the javascript of the module that we're done
