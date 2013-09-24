@@ -56,12 +56,13 @@
 		margin-left: 	2px;
 		font-size: 		9%;
 		font-family:	Sans-serif;
+		padding-bottom:	3px;
 	}
 	TD INPUT {
-		width: 			105px;
+		width: 			113px;
 	}
 	TD{
-		width: 			80px;
+		width: 			10px;
 		height:			17px;
 		padding-right:	5px;
 	}
@@ -96,6 +97,19 @@
 						<OPTION VALUE="bottom-right" id="BottomRight">bottom-right</OPTION>
 					</SELECT>
 				</TD>
+			</TR>
+			<TR>
+				<TD>target:</TD>
+				<TD><INPUT NAME="theTarget" ID="theTarget" onChange="updateTag('target')"></TD>
+			</TR>
+			<TR>
+				<TD>color:</TD>
+				<TD><SELECT NAME="theColor" onChange="updateTag('color')">
+					<OPTION VALUE="white" id="White">white</OPTION>
+					<OPTION VALUE="blue" id="Blue">blue</OPTION>
+					<OPTION VALUE="green" id="Green">green</OPTION>
+					<OPTION VALUE="red" id="Red">red</OPTION>
+				</SELECT></TD>
 			</TR>
   		</table>
 	</div>

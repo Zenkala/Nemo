@@ -16,16 +16,17 @@ function receiveArguments()
     var parentChildNodes = parentNode.childNodes;
     var lastChild = parentChildNodes[parentChildNodes.length-1];
     if(((parentChildNodes.length > 2) && (parentChildNodes[0].class=="comment slideNumber")) || (parentChildNodes.length > 1)) {
-        if(lastChild != selNode) {
-          // swap met parentChildNodes[1]
-          var contentA = selNode.outerHTML;
-          var contentB = lastChild.outerHTML;
-          selNode.outerHTML = contentB;
-          lastChild.outerHTML = contentA;
+      if(lastChild != selNode) {
+        var contentOfSelectedNode = selNode.outerHTML;
+        for(var i = 0; i < parentChildNodes.length; i++) {
+          if(parentChildNodes[i] == selNode) {
+            parentChildNodes[i].outerHTML = ""; 
+          }
         }
+        parentNode.innerHTML += contentOfSelectedNode;
+      }
     } 
   } 
-
 }
 
 

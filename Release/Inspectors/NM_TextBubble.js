@@ -5,9 +5,13 @@ var helpDoc = MM.HELP_inspDate;
 
 var HE_ID;
 var HE_POINTER;
+var HE_TARGET;
+var HE_COLOR;
 
 var ID;
 var POINTER;
+var TARGET;
+var COLOR;
 // ******************** API ****************************
 
 function canInspectSelection() {
@@ -24,6 +28,8 @@ function canInspectSelection() {
 function initializeUI() {
 	HE_ID = dwscripts.findDOMObject("theID");
 	HE_POINTER = dwscripts.findDOMObject("thePointer");
+	HE_TARGET = dwscripts.findDOMObject("theTarget");
+	HE_COLOR = dwscripts.findDOMObject("theColor");
 }
 
 
@@ -32,33 +38,52 @@ function inspectSelection() {
 	setGUI();
 }
 
-function setGUI(){
-	
+function setPointer(){
 	var dom = dw.getDocumentDOM();
+	var theObj = dom.getSelectedNode(); 		
+	if(theObj.getAttribute("class")) {
+		var classList = theObj.getAttribute("class").split(" ");
+		if(contains(classList, "top-left"))    {	POINTER = "top-left";		HE_POINTER.selectedIndex = 0; return; }
+		if(contains(classList, "top-middle"))  {	POINTER = "top-middle"; 	HE_POINTER.selectedIndex = 1; return; }
+		if(contains(classList, "top-right"))   {	POINTER = "top-right"; 		HE_POINTER.selectedIndex = 2; return; }
+		if(contains(classList, "middle-left")) { 	POINTER = "middle-left"; 	HE_POINTER.selectedIndex = 3; return; }
+		if(contains(classList, "middle-right")){ 	POINTER = "middle-right"; 	HE_POINTER.selectedIndex = 4; return; }
+		if(contains(classList, "bottom-left")) { 	POINTER = "bottom-left"; 	HE_POINTER.selectedIndex = 5; return; }
+		if(contains(classList, "bottom-middle")){ 	POINTER = "bottom-middle"; 	HE_POINTER.selectedIndex = 6; return; }
+		if(contains(classList, "bottom-right")){ 	POINTER = "bottom-right"; 	HE_POINTER.selectedIndex = 7; return; }
+		HE_POINTER.selectedIndex = 7; POINTER = "bottom-right";
+	} else {
+		HE_POINTER.selectedIndex = 7; POINTER = "bottom-right";
+	}
+}
 
-	var theObj = dom.getSelectedNode(); 
-	
-	
+function setGUI(){	
+	var dom = dw.getDocumentDOM();
+	var theObj = dom.getSelectedNode(); 	
 
 	if (theObj.getAttribute("id")) {
 		ID = theObj.getAttribute("id");
 		HE_ID.value = ID;
 	}
 
-	if(theObj.getAttribute("class")) {
-		POINTER = theObj.getAttribute("class");
-		if(POINTER == "nm_TextBubble top-left")HE_POINTER.selectedIndex = 0;
-		if(POINTER == "nm_TextBubble top-middle")HE_POINTER.selectedIndex = 1;
-		if(POINTER == "nm_TextBubble top-right")HE_POINTER.selectedIndex = 2;
-		if(POINTER == "nm_TextBubble middle-left")HE_POINTER.selectedIndex = 3;
-		if(POINTER == "nm_TextBubble middle-right")HE_POINTER.selectedIndex = 4;
-		if(POINTER == "nm_TextBubble bottom-left")HE_POINTER.selectedIndex = 5;
-		if(POINTER == "nm_TextBubble bottom-middle")HE_POINTER.selectedIndex = 6;
-		if(POINTER == "bottom-right")HE_POINTER.selectedIndex = 7;
+	setPointer();
+
+	if(theObj.getAttribute("target")) {
+		TARGET = theObj.getAttribute("target");
+		HE_TARGET.value = TARGET;
 	} else {
-		HE_POINTER.selectedIndex = 7;
+		HE_TARGET.value = "";
 	}
 
+	if(theObj.getAttribute("class")) {
+		var classList = theObj.getAttribute("class").split(" ");		
+		if(contains(classList, "blue")){ 	COLOR = "blue";		HE_COLOR.selectedIndex = 1;	return;}
+		if(contains(classList, "green")){ 	COLOR = "green"; 	HE_COLOR.selectedIndex = 2;	return;}
+		if(contains(classList, "red")){ 	COLOR = "red"; 		HE_COLOR.selectedIndex = 3;	return;}
+		HE_COLOR.selectedIndex = 0; COLOR = "white";
+	} else {
+		HE_COLOR.selectedIndex = 0; COLOR = "white"; 
+	}
 }
 
 function updateTag(attrib) {	
@@ -68,12 +93,16 @@ function updateTag(attrib) {
 	if (attrib) {
 		switch (attrib) {
 			case "pointer":
-				POINTER = "nm_TextBubble " + HE_POINTER.options[HE_POINTER.selectedIndex].value;
-				if (theObj.getAttribute("class") != POINTER && POINTER != "nm_TextBubble") {
-					
-					theObj.setAttribute("class", POINTER);
-
-				} 
+				POINTER = HE_POINTER.options[HE_POINTER.selectedIndex].value;
+				if(COLOR == "white") {
+					if (theObj.getAttribute("class") != ("nm_TextBubble " + POINTER) && POINTER != "") {						
+						theObj.setAttribute("class", "nm_TextBubble " + POINTER);
+					} 
+				} else {
+					if (theObj.getAttribute("class") != ("nm_TextBubble " + POINTER + " " + COLOR) && POINTER != "") {						
+						theObj.setAttribute("class", "nm_TextBubble " + POINTER + " " + COLOR);
+					} 
+				}
 				break;
 			case "id":
 				ID = HE_ID.value;
@@ -81,6 +110,34 @@ function updateTag(attrib) {
 					theObj.setAttribute("id", ID);
 				} 
 				break;
+			case "target":
+				TARGET = HE_TARGET.value;
+				if (theObj.getAttribute("target") != TARGET) {
+					theObj.setAttribute("target", TARGET);
+				} 
+				break;
+			case "color":
+				COLOR = HE_COLOR.options[HE_COLOR.selectedIndex].value;
+				if(COLOR == "white") {
+					if (theObj.getAttribute("class") != ("nm_TextBubble " + POINTER) && COLOR != "") {						
+						theObj.setAttribute("class", "nm_TextBubble " + POINTER);
+					} 
+				} else {
+					if (theObj.getAttribute("class") != ("nm_TextBubble " + POINTER + " " + COLOR) && COLOR != "") {						
+						theObj.setAttribute("class", "nm_TextBubble " + POINTER + " " + COLOR);
+					} 
+				}
+				break;
 		}
 	}	
+}
+
+function contains(a, obj) {
+    var i = a.length;
+    while (i--) {
+       if (a[i] === obj) {
+           return true;
+       }
+    }
+    return false;
 }

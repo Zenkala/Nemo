@@ -13,22 +13,14 @@ function receiveArguments()
   
   if(parentNode.class == "slide activeSlide") {
     var parentChildNodes = parentNode.childNodes;
-    if(parentChildNodes[0].class == "comment slideNumber" && parentChildNodes.length > 2) {
-      if(selNode != parentChildNodes[1]) {
-        // swap met parentChildNodes[1]
-        var contentA = selNode.outerHTML;
-        var contentB = parentChildNodes[1].outerHTML;
-        selNode.outerHTML = contentB;
-        parentChildNodes[1].outerHTML = contentA;
+    if(((parentChildNodes.length > 2) && (parentChildNodes[0].class=="comment slideNumber")) || (parentChildNodes.length > 1)) {
+      var contentOfSelectedNode = selNode.outerHTML;
+      for(var i = 0; i < parentChildNodes.length; i++) {
+        if(parentChildNodes[i] == selNode) {
+          parentChildNodes[i].outerHTML = ""; 
+        }
       }
-    } else if(parentChildNodes.length > 1) {
-      if(selNode != parentChildNodes[0]) {
-        // swap met parentChildNodes[1]
-        var contentA = selNode.outerHTML;
-        var contentB = parentChildNodes[0].outerHTML;
-        selNode.outerHTML = contentB;
-        parentChildNodes[0].outerHTML = contentA;
-      }
+      parentNode.innerHTML = contentOfSelectedNode + parentNode.innerHTML;
     }
   } 
 }
