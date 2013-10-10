@@ -170,6 +170,7 @@ function startNemoScript(){
 
 			// Give all elements inside group the same name 
 			$(this).find("input").attr("name", id);
+			$(this).append("<div class=\"nm_qCheck\"></div");
 
 			if(type == "closed") {
 				countCorrectItems = $(this).children(".nm_qItem[answer='true']").length;
