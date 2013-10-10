@@ -196,3 +196,21 @@ ul {
 	left:					0px;
 	background-color: 		rgba(255, 255, 255, 0.5);
 }
+
+.nm_qGroup {
+	background-image: url("designView/qGroup.png");
+	background-repeat: repeat;
+}
+
+.nm_qItem {
+	display: block;
+	width: 100%;
+	margin: 0px 0px 2px 0px;
+}
+
+.nm_qItem[answer=false] {
+	background-color: #B48B8B;
+}
+.nm_qItem[answer=true] {
+	background-color: #8BB48D;
+}

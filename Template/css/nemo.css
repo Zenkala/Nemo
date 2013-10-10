@@ -272,16 +272,52 @@ header#title {
 }
 
 .nm_Begrip{
-	background-color: 			rgba(0, 0, 0, 0.36);
+	background-color: 			rgba(0, 0, 0, 0.15);
 	padding:					0px 4px 2px 3px;
 	font-weight: 				bold;
 	border-radius: 				4px;
 }
 
-.nm_TextfieldNJ{
+.nm_qItem {
+	display: inline-block;
+	width: 100%;
+	cursor: pointer;
+	margin: 0px 0px 2px 0px;
 }
 
-.nm_Input{
+.nm_qItem  {
+	background: #F8F8F8;
+}
+
+.nm_qItem:hover, .nm_qItem.selected {
+	background: #E0E0E0;
+}
+
+.nm_qItem.correct {
+	background: #86d29c;
+	color: #333333;
+}
+
+.nm_qItem.wrong {
+	background: #f17e8d;
+	color: #333333;
+}
+
+.nm_qCheck {
+	position: absolute;
+	width: 100px;
+	height: 95px;
+	background-repeat:		no-repeat;	
+	bottom: 0px;
+	right: 0px;
+}
+
+.nm_qCheck.correct {
+	background-image:		url("qItem_correct.svg");
+}
+
+.nm_qCheck.wrong {
+	background-image:		url("qItem_wrong.svg");
 }
 
 .nm_Ground{

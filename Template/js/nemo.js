@@ -35,7 +35,7 @@ function progress(msg) {
 	currentProgress++;
 	log(currentProgress + ": " + msg);
 	if(enableProgressBar) {
-		$("#loaderBar").css("width", currentProgress/totalProgress*120);
+		$("#loaderBar").css("width", currentProgress/totalProgress*2*130);
 	}
 }
 		
@@ -153,7 +153,52 @@ function startNemoScript(){
 			}
 			$(this).html(str);
 		});
-	
+
+
+
+		// Parse quiz elements
+		$(".nm_qGroup").each(function() {
+			var id = $(this).attr("id");
+			log("Parse quiz " + id);
+			var type = "closed";
+			if($(this).attr("type")) type = $(this).attr("type");
+
+			// Give all elements inside group the same name 
+			$(this).find("input").attr("name", id);
+
+			if(type == "closed") {
+				countCorrectItems = $(this).children(".nm_qItem[answer='true']").length;
+				if(countCorrectItems == 1) {
+					// An closed question with only one correct answer
+					$(this).find("input").attr("type", "radio");
+					$(this).find("input").attr("onclick", " checkQuiz('" + id + "', '" + type + "'); ");
+
+				} else if(countCorrectItems > 1) {
+					// An closed question with multiply correct answers
+					$(this).find("input").attr("type", "checkbox");
+					$(this).find("input").attr("onclick", " $( this ).parent().toggleClass( 'selected' );");
+
+					// Render button
+					$(this).append(checkButton(id, type));
+				} else {
+					// An closed question with zero answers; incorrect!
+					log("The quiz with id " + id + " has no correct answers. Quiz could not be parsed.");
+				}
+
+			} else if(type == "open") {
+				// Render button
+				$(this).append(checkButton(id, type));
+			} else {
+				log("The quiz with id " + id + " has no type specified. Quiz could not be parsed.")
+			}
+		});
+
+		// Quiz parse functions
+		function checkButton(qGroupId, qGroupType) {
+			var cButton = "<button onclick=\"checkQuiz('" + qGroupId + "', '" + qGroupType + "')\">Controleer</button>";
+			return cButton;
+		}
+
 		//set contentDiv width and innerHeight
 		$("#contentDiv").css("width", "1024px");
 		$("#contentDiv").css("height", "643px");
@@ -435,3 +480,70 @@ function doSlide(){
 		}//end of currentpage==0
 	}//end of next/prev if.
 }
+
+
+// Quiz functions
+function checkItems(id, type) {
+	var succeeded = false;
+
+	// Could I make this function smaller?
+	$("#" + id + " input").each(function() {
+		if(type == "closed") {
+			if($(this).is(":checked") == $(this).parent().is("[answer='true']")) {
+				succeeded = true;
+				return true;
+			} else {
+				succeeded = false;
+				return false;
+			}
+		} else if(type == "open") {
+			if($(this).val() == $(this).parent().attr("answer")) {
+				succeeded = true;
+				return true;
+			} else {
+				succeeded = false;
+				return false;
+			}
+		}
+	});
+	return succeeded;
+}
+
+function checkQuiz(id, type) {
+	// Check total attempts
+	if(checkItems(id, type)) {
+		$("#" + id + " button, #" + id + " input").prop('disabled', true);
+		showAnswer(id, type);
+		$("#" + id + " .nm_qCheck").hide();
+		$("#" + id + " .nm_qCheck").addClass("correct");
+		$("#" + id + " .nm_qCheck").removeClass("wrong");
+		$("#" + id + " .nm_qCheck").show("blind", "right");
+		// disable onhover
+		// show good job animation
+
+	} else {
+		$("#" + id + " .nm_qCheck").hide();
+		$("#" + id + " .nm_qCheck").removeClass("correct");
+		$("#" + id + " .nm_qCheck").addClass("wrong");
+		$("#" + id + " .nm_qCheck").show("blind", "right").hide("blind", "right");
+	}
+}
+
+function showAnswer(id, type) {
+	// Could I make this function smaller?
+	$("#" + id + " input").each(function() {
+		succeeded = false;
+		if(type == "closed") {
+			succeeded = $(this).parent().is("[answer='true']");
+		} else if(type == "open") {
+			if($(this).val() == $(this).parent().attr("answer")) succeeded = true;
+			else succeeded = false;
+		}
+		if(succeeded) {
+			$(this).parent().addClass("correct", 200);
+		} else {
+			$(this).parent().addClass("wrong", 200);
+		}
+	});
+}
+
