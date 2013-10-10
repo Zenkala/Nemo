@@ -3,6 +3,7 @@ var totalPages = 1;
 var slideBuffer = [];
 var sliding = false;
 var quick = false;
+var suppresEvents = false;
 var gotoSlide = 0;
 
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
@@ -16,14 +17,13 @@ var scripts = [	'js/jquery.transit.min.js',
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
-				"css/ui-lightness/jquery-ui-1.10.3.custom.min.css"
+				"css/ui-lightness/jquery-ui-1.10.3.custom.css"
 			];
 var animations;	
 
 function log(msg) {
-	var logger = window.console;
-	if (logger && logger.markTimeline) {
-		logger.markTimeline(msg);
+	if (console.timeStamp) {
+		console.timeStamp(msg);
 	}
 	console.log(msg)
 }
@@ -45,7 +45,7 @@ function nemoInit(){
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
 		console.log("loaded: jquery-1.9.1.min.js");	
 		$(function() {
-			log("preloader");
+			log("Making preloader");
 
 			//hide and delete comment/ghosting stuff
 			$("#contentDiv").hide();
@@ -55,13 +55,18 @@ function nemoInit(){
 			$("#commentslide").remove();
 			$("#ghostDiv").remove();
 
+			//make preloader
 			var loader = '<div id="loader" style="width: 210px;height:90px;position:absolute;top:276px;left:412px;"><div id="loaderContainer" style="width: 115px;height: 85px;overflow: hidden;position: absolute;top: 0px;left: 0px;"><div id="loaderBackground" style="background: #CCC;width: 120px;height: 90px;position: absolute;"></div><div id="loaderBar" style="width: 1px;height: 90px;position: absolute;top: 0px;left: 0px;background: #333;"></div><div id="loaderImage" style="width: 120px;height: 90px;background: url(\'css/mask.svg\') no-repeat left top;position: absolute;-webkit-filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.15));"></div></div><div id="loaderTitle" style="font-family: \'Arial Narrow\', Arial, sans; line-height: 24px; font-size: 24px;position: absolute;top: 7px;left: 125px;color: #333"><p><strong>online</strong></p><p><strong>leeromgeving</strong></p><p>nemo ' + $("html").attr("version") + '</p></div></div>';
 			$('body').append(loader);
+
+			//calculate totalProgress
+			totalProgress = scripts.length + 7; //script length and 7 other steps.
 
 			//check for animations we have to load 
 			animations = new Array();
 			var animUrl = "";
-			$(".loaderAnimation").each(function(){
+			//$(".loaderAnimation").each(function(){
+			$(".nm_Animation").each(function(){
 				animUrl = $(this).attr("url").replace(/%20/g, " ");
 				console.log("found animation: " + $(this).attr("id"));
 				animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js");
@@ -153,7 +158,7 @@ function startNemoScript(){
 			}
 			$(this).html(str);
 		});
-
+		progress("Parsed begrippen");
 
 
 		// Parse quiz elements
@@ -198,7 +203,9 @@ function startNemoScript(){
 			var cButton = "<button onclick=\"checkQuiz('" + qGroupId + "', '" + qGroupType + "')\">Controleer</button>";
 			return cButton;
 		}
+		progress("Parsed quiz");
 
+		
 		//set contentDiv width and innerHeight
 		$("#contentDiv").css("width", "1024px");
 		$("#contentDiv").css("height", "643px");
@@ -226,14 +233,14 @@ function startNemoScript(){
 		newlink.setAttribute("href", "css/nemo.css");		
 		document.getElementsByTagName("head")[0].replaceChild(newlink, oldlink);	
 		console.log("Swapping " + oldlink.getAttribute("href") + " with " + newlink.getAttribute("href"));	
-		 		
+
 		//set original parent of each element.
 		$(".slide").children().each(function(){
 			$(this).attr("org", $(this).parent().attr("id").substring(5));
 			//console.log("set " + $(this).attr("id") + "(" + $(this).attr("class") + ") org to: " + $(this).attr("org"));
 		});
 		console.log("element origins set");
-		
+		progress("Slides and content positioned");
 
 		// Add open/close functionality to InfoBlock
 		$(".nm_InfoBlock").on({
@@ -281,12 +288,12 @@ function startNemoScript(){
 			}
 		});
 */
+		progress("Made nm_InfoBlock and nm_Slider");
 
 		//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
 		yepnope([{
 			load: ["js/finished.js"],
 			complete: function(){
-				progress("TextBubbles");
 				doTextBubbles();
 			}
 		}]);
@@ -294,6 +301,7 @@ function startNemoScript(){
 }
 
 function doTextBubbles() {
+	progress("Loaded finished.js");
 	//make nm_TextBubbleContent & nm_Explanation divs.
 	var divBuffer;		
 	$(".nm_TextBubble").each(function(){
@@ -363,6 +371,8 @@ function doTextBubbles() {
 	  }
 	});
 
+	progress("nm_TextBubble and nm_Explanation");
+
 	//continue work
 	endNemoScript();
 }
@@ -370,25 +380,36 @@ function doTextBubbles() {
 function endNemoScript(){
 	//done with all our preperation work
 	log("-----------Nemodone-----------");
-	$("#loader").remove();
-	$("#contentDiv").show();
-	$("#navigation").show();
-	$("#title").toggle("slide");
 
 	setTimeout(function() {
+		progress("Done 100ms timeout");
 	    onLoad(); //notify the javascript of the module that we're done
 	    //goto slide last viewed in Dreamweaver
+	    quick = true;
 	    for(i=0; i<gotoSlide; i++) {
-	    	quick = true;
 	    	next();
 	    }
 
 	    if(gotoSlide == 0) { //if we don't do a quick next, no enterframe handles are called. So call them manually.
+	    	//this also, is a ugly hack that prevnets chrome from f*cking up when there is an animation on slide 1, and there are more slides afterwards.
+			suppresEvents = true;
+	    	next();
+	    	prev();
 	    	newSlideHdl(0, false);
 	    	newSlideStopHdl(0, false);
 	    }
 	    
 	    quick = false;
+	    suppresEvents = false;
+
+	    progress("Gone to proper slide. Done preloader work!");
+
+	    //removing preloader
+	    $("#loader").remove();
+	    $("#contentDiv").show();
+	    $("#navigation").show();
+	    $("#title").toggle("slide");
+
 	}, 100); //wait 100ms to give initizing scripts within Edge Animations a chance to do their stuff.
 
 	//prevent scroll
@@ -425,7 +446,7 @@ function doSlide(){
 		currentPage++;
 		console.log("next to " + currentPage);	
 		$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
-		newSlideHdl(currentPage, false);
+		if(!suppresEvents)newSlideHdl(currentPage, false);
 		//put back children that are here to stay
 		$("#slide"+(currentPage-1)).children().each(function(){
 			if((parseInt($(this).attr("org"))+parseInt($(this).attr("stay")))>=currentPage){
@@ -440,7 +461,7 @@ function doSlide(){
 			elementbuffer.reverse().forEach(function(entry){
 				$(entry).prependTo($('#slide' + currentPage));
 			});
-			newSlideStopHdl(currentPage, false);
+			if(!suppresEvents)newSlideStopHdl(currentPage, false);
 			slideBuffer.shift(); //rem first element
 			doSlide(); //recursive
 		});
@@ -453,7 +474,7 @@ function doSlide(){
 			currentPage--;
 			console.log("prev to " + currentPage);	
 			$("#slideIndex").html(""+(currentPage+1)+"/"+totalPages);
-			newSlideHdl(currentPage, true);
+			if(!suppresEvents)newSlideHdl(currentPage, true);
 		
 			//put back children that are here to stay
 			$("#slide"+(currentPage+1)).children().each(function(){
@@ -473,7 +494,7 @@ function doSlide(){
 				elementbuffer.reverse().forEach(function(entry){
 					$(entry).prependTo($('#slide' + currentPage));
 				});
-				newSlideStopHdl(currentPage, true);
+				if(!suppresEvents)newSlideStopHdl(currentPage, true);
 				slideBuffer.shift(); //rem first element
 				doSlide(); //recursive
 			});
