@@ -1,0 +1,335 @@
+/* colors:
+	red: #eb1f3a;
+	green: #20af4b;
+	blue: #009ec2;
+*/
+@font-face {
+    font-family: "PT Sans Narrow";
+    src: url(PTSans-Narrow.ttf);
+}
+
+html, body {
+	font-family:	'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
+	font-size:		16px;
+	line-height:	20px;
+	width:	1024px;
+
+}
+
+ol, ul {
+	margin-left: 25px;
+}
+
+ol {
+	list-style: decimal;
+}
+
+ul {
+	list-style: square;
+}
+
+header#title {
+	position: relative;
+	z-index:1000;
+	background-image: url('title.svg');
+	background-repeat: no-repeat;
+	margin-left: 20px;
+	margin-top: 20px;
+	color: #FFF;
+	font-size: 20px;
+	padding: 15px 40px 15px 40px;
+}
+
+.comment, .commentGreen{
+	display:				none;
+}
+
+#contentDiv{
+	background-image:		url("background.svg");
+	position:				absolute;
+	top:					0px;
+	left:					0px;
+	width:					1024px;
+	height:					672px;
+	overflow:				hidden;
+}
+
+.nm_TextField, .nm_Box {
+	background-color: 		rgb(255, 255, 255);
+	border: 				2px solid black;
+	padding:				8px 10px 15px 10px;
+	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+}
+
+.nm_Text {
+	padding:				8px 10px 15px 10px;
+}
+
+.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, .nm_Explanation, .nm_InfoBlock {
+	font-family: 			'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
+	border-radius:			15px;
+	background-color: 		rgb(255, 255, 255);
+	border: 				2px solid black;
+	padding:				15px;
+	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+}
+
+.nm_Input_range, .nm_Input_text{
+	border-radius:			15px;
+	background-color: 		rgb(255, 255, 255);
+	border: 				2px solid black;
+	padding:				12px 15px 15px 15px;
+	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+}
+.nm_Input_range{
+	background-color: 		#20af4b;
+	width:					200px;
+	height:					50px;
+}
+
+.nm_TextBubble .nm_TextBubblePointer {
+	position: 				absolute;
+	background-position: 	left bottom;
+	background-repeat: 		no-repeat;
+}
+
+.nm_TextBubble.bottom-left .nm_TextBubblePointer, .nm_TextBubble.bottom-middle .nm_TextBubblePointer, .nm_TextBubble.bottom-right .nm_TextBubblePointer, .nm_TextBubble.top-left .nm_TextBubblePointer, .nm_TextBubble.top-middle .nm_TextBubblePointer, .nm_TextBubble.top-right .nm_TextBubblePointer {
+	width: 					42px;
+	height: 				59px;
+}
+
+.nm_TextBubble.middle-left .nm_TextBubblePointer, .nm_TextBubble.middle-right .nm_TextBubblePointer {
+	width: 					59px;
+	height: 				42px;
+	background-size: 		59px 100%;
+}
+
+.nm_TextBubbleContent{
+	min-width: 				50px;
+}
+
+/* old png style
+.nm_TextBubble.bottom-left .nm_TextBubblePointer { 		left:20px;   bottom:-58px; background-image:	url("point-bottom-left.png"); }
+.nm_TextBubble.bottom-middle .nm_TextBubblePointer { 	left:50%;    bottom:-58px; margin-left:-21px; 	background-image:url("point-bottom-middle.png"); }
+.nm_TextBubble.bottom-right .nm_TextBubblePointer { 	right:20px;  bottom:-58px; background-image: 	url("point-bottom-right.png"); }
+.nm_TextBubble.top-left .nm_TextBubblePointer { 		left: 20px;  top:-58px;    background-image:	url("point-top-left.png"); }
+.nm_TextBubble.top-middle .nm_TextBubblePointer { 		left:50%;    top:-58px;    margin-left:-21px; 	background-image:url("point-top-middle.png"); }
+.nm_TextBubble.top-right .nm_TextBubblePointer { 		right:20px;  top:-58px;    background-image:	url("point-top-right.png"); }
+.nm_TextBubble.middle-left .nm_TextBubblePointer { 		left:-57px;  top:50%;      margin-top:-21px; 	background-image:url("point-middle-left.png"); }
+.nm_TextBubble.middle-right .nm_TextBubblePointer { 	right:-57px; top:50%;      margin-top:-21px; 	background-image:url("point-middle-right.png"); }
+*/
+
+/*normal and white*/
+.nm_TextBubble.bottom-left .nm_TextBubblePointer { 			left:20px;   bottom:-54px; 						background-image:url("points/point_bottom-left.svg"); }
+.nm_TextBubble.bottom-middle .nm_TextBubblePointer { 		left:50%;    bottom:-54px; margin-left:-21px; 	background-image:url("points/point_bottom-middle.svg"); }
+.nm_TextBubble.bottom-right .nm_TextBubblePointer { 		right:20px;  bottom:-54px; 						background-image:url("points/point_bottom-right.svg"); }
+.nm_TextBubble.top-left .nm_TextBubblePointer { 			left: 20px;  top:-59px;  						background-image:url("points/point_top-left.svg"); }
+.nm_TextBubble.top-middle .nm_TextBubblePointer { 			left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point_top-middle.svg"); }
+.nm_TextBubble.top-right .nm_TextBubblePointer { 			right:20px;  top:-59px;  						background-image:url("points/point_top-right.svg"); }
+.nm_TextBubble.middle-left .nm_TextBubblePointer { 			left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point_middle-left.svg"); }
+.nm_TextBubble.middle-left .nm_TextBubblePointer.small{ 	left:-59px;  top:50%;      					 	background-image:url("points/point_middle-left_small.svg"); }
+.nm_TextBubble.middle-right .nm_TextBubblePointer { 		right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point_middle-right.svg"); }
+.nm_TextBubble.middle-right .nm_TextBubblePointer.small { 	right:-59px; top:50%;      					 	background-image:url("points/point_middle-right_small.svg"); }
+/* red */
+.nm_TextBubble.bottom-left.red .nm_TextBubblePointer { 		left:20px;   bottom:-54px; 						background-image:url("points/point-red_bottom-left.svg"); }
+.nm_TextBubble.bottom-middle.red .nm_TextBubblePointer { 	left:50%;    bottom:-54px; margin-left:-21px; 	background-image:url("points/point-red_bottom-middle.svg"); }
+.nm_TextBubble.bottom-right.red .nm_TextBubblePointer { 	right:20px;  bottom:-54px; 						background-image:url("points/point-red_bottom-right.svg"); }
+.nm_TextBubble.top-left.red .nm_TextBubblePointer { 		left: 20px;  top:-59px;  						background-image:url("points/point-red_top-left.svg"); }
+.nm_TextBubble.top-middle.red .nm_TextBubblePointer { 		left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point-red_top-middle.svg"); }
+.nm_TextBubble.top-right.red .nm_TextBubblePointer { 		right:20px;  top:-59px;  						background-image:url("points/point-red_top-right.svg"); }
+.nm_TextBubble.middle-left.red .nm_TextBubblePointer { 		left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point-red_middle-left.svg"); }
+.nm_TextBubble.middle-left.red .nm_TextBubblePointer.small{ left:-59px;  top:50%;      					 	background-image:url("points/point-red_middle-left_small.svg"); }
+.nm_TextBubble.middle-right.red .nm_TextBubblePointer { 	right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point-red_middle-right.svg"); }
+.nm_TextBubble.middle-right.red .nm_TextBubblePointer.small{right:-59px; top:50%;      					 	background-image:url("points/point-red_middle-red_small.svg"); }
+/*blue*/
+.nm_TextBubble.bottom-left.blue .nm_TextBubblePointer { 	left:20px;   bottom:-54px; 						background-image:url("points/point-blue_bottom-left.svg"); }
+.nm_TextBubble.bottom-middle.blue .nm_TextBubblePointer { 	left:50%;    bottom:-54px; margin-left:-21px; 	background-image:url("points/point-blue_bottom-middle.svg"); }
+.nm_TextBubble.bottom-right.blue .nm_TextBubblePointer { 	right:20px;  bottom:-54px; 						background-image:url("points/point-blue_bottom-right.svg"); }
+.nm_TextBubble.top-left.blue .nm_TextBubblePointer { 		left: 20px;  top:-59px;  						background-image:url("points/point-blue_top-left.svg"); }
+.nm_TextBubble.top-middle.blue .nm_TextBubblePointer { 		left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point-blue_top-middle.svg"); }
+.nm_TextBubble.top-right.blue .nm_TextBubblePointer { 		right:20px;  top:-59px;  						background-image:url("points/point-blue_top-right.svg"); }
+.nm_TextBubble.middle-left.blue .nm_TextBubblePointer { 	left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point-blue_middle-left.svg"); }
+.nm_TextBubble.middle-left.blue .nm_TextBubblePointer.small{left:-59px;  top:50%;      					 	background-image:url("points/point-blue_middle-left_small.svg"); }
+.nm_TextBubble.middle-right.blue .nm_TextBubblePointer { 	right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point-blue_middle-right.svg"); }
+.nm_TextBubble.middle-right.blue .nm_TextBubblePointer.small{right:-59px; top:50%;      					background-image:url("points/point-blue_middle-right_small.svg"); }
+
+.nm_TextBubble.bottom-left.green .nm_TextBubblePointer { 	left:20px;   bottom:-54px; 						background-image:url("points/point-green_bottom-left.svg"); }
+.nm_TextBubble.bottom-middle.green .nm_TextBubblePointer { 	left:50%;    bottom:-54px; margin-left:-21px; 	background-image:url("points/point-green_bottom-middle.svg"); }
+.nm_TextBubble.bottom-right.green .nm_TextBubblePointer { 	right:20px;  bottom:-54px; 						background-image:url("points/point-green_bottom-right.svg"); }
+.nm_TextBubble.top-left.green .nm_TextBubblePointer { 		left: 20px;  top:-59px;  						background-image:url("points/point-green_top-left.svg"); }
+.nm_TextBubble.top-middle.green .nm_TextBubblePointer { 	left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point-green_top-middle.svg"); }
+.nm_TextBubble.top-right.green .nm_TextBubblePointer { 		right:20px;  top:-59px;  						background-image:url("points/point-green_top-right.svg"); }
+.nm_TextBubble.middle-left.green .nm_TextBubblePointer { 	left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point-green_middle-left.svg"); }
+.nm_TextBubble.middle-left.green .nm_TextBubblePointer.small{left:-59px;  top:50%;      					background-image:url("points/point-green_middle-left_small.svg"); }
+.nm_TextBubble.middle-right.green .nm_TextBubblePointer { 	right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point-green_middle-right.svg"); }
+.nm_TextBubble.middle-right.green .nm_TextBubblePointer.small {right:-59px; top:50%;      					background-image:url("points/point-green_middle-right_small.svg"); }
+
+.nm_TextBubble.top-left, .nm_TextBubble.top-middle, .nm_TextBubble.top-right { margin-top:57px; }
+.nm_TextBubble.middle-left { margin-left:57px; }
+
+
+.nm_TextBubble {	   background: #fff;}
+.nm_TextBubble.white { background: #fff;}
+.nm_TextBubble.red {   background: #f55f73;}
+.nm_TextBubble.green { background: #54cc78;}
+.nm_TextBubble.blue {  background: #5bb8e8;}
+
+.nm_Exclamation{
+	background-color: 		#5bb8e8;
+}
+
+
+.nm_Explanation .close {
+    position:				absolute;
+    top:				 	-10px;
+    right:				 	-10px;
+    width:				 	18px;
+    height:				 	18px;
+    text-align: 			center;
+    line-height: 			18px;
+    border:				 	2px solid #000;
+    border-radius: 			18px;
+    font-weight: 			bold;
+    background:				#009ec2;
+    cursor:				 	pointer;
+}
+
+.nm_ExplanationContent{	
+	padding:				12px 15px 15px 15px;
+	margin:					-14px -77px -16px -22px;
+}
+
+.nm_InfoBlock {
+	padding-left: 			25px;
+	width: 					200px;  
+	background-color: 		#F8FBFE;
+}
+
+	.nm_InfoBlock .title {
+		font-weight: 		bold;
+	    cursor: 			pointer;
+	    padding-right: 		15px;
+	}
+
+	.nm_InfoBlock .paragraph {
+		display: 			none;
+	}
+
+	.nm_InfoBlock .circle {
+		position: 			absolute;
+		left: 				-13px;
+		top: 				-2px;
+	    width: 				28px;
+	    height: 			28px;
+	    border: 			4px solid #000;
+	    border-radius: 		28px;
+	    line-height: 		28px;
+	    text-align: 		center;
+	    font-weight: 		bold;
+	    background-color: 	#F8FBFE;
+	}
+
+	.nm_InfoBlock .opencloseLid {
+		position: 			absolute;
+		right: 				12px;
+		top: 				7px;
+		transform: 			rotate(90deg);
+		-ms-transform: 		rotate(90deg);
+		-webkit-transform: 	rotate(90deg);
+	}
+
+	.nm_InfoBlock .open {
+		transform: 			rotate(-90deg);
+		-ms-transform: 		rotate(-90deg);
+		-webkit-transform: 	rotate(-90deg);
+	}
+
+.nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
+	border-radius: 			50%;
+	background-repeat:		repeat;
+	background-attachment:	fixed;
+}
+.nm_Hatching_blue{background-image: url("hatching-blue.svg");}
+.nm_Hatching_red{background-image: url("hatching-red.svg");}
+.nm_Hatching_green{background-image: url("hatching-green.svg");}
+.nm_Hatching_blue.hoverable:hover { border:	2px solid #009ec2; }
+.nm_Hatching_red.hoverable:hover { border:	2px solid #eb1f3a; }
+.nm_Hatching_green.hoverable:hover { border: 2px solid #20af4b; }
+
+.nm_Highlight_blue{
+	background-color: 		rgba(0, 158, 194, 0.2);
+	border:					2px solid #009ec2;
+}
+.nm_Highlight_blue.hoverable:hover { background-color: rgba(0, 158, 194, 0.5); }
+
+/*Animation proxy's */
+.myAnimationName{
+	background-image:		url("animation-proxy.svg");
+	background-repeat:		repeat;
+}
+
+.nm_Begrip{
+	background-color: 			rgba(0, 0, 0, 0.15);
+	padding:					0px 4px 2px 3px;
+	font-weight: 				bold;
+	border-radius: 				4px;
+}
+
+.nm_qItem {
+	display: inline-block;
+	width: 100%;
+	cursor: pointer;
+	margin: 0px 0px 2px 0px;
+}
+
+.nm_qItem  {
+	background: #F8F8F8;
+}
+
+.nm_qItem:hover, .nm_qItem.selected {
+	background: #E0E0E0;
+}
+
+.nm_qItem.correct {
+	background: #86d29c;
+	color: #333333;
+}
+
+.nm_qItem.wrong {
+	background: #f17e8d;
+	color: #333333;
+}
+
+.nm_qCheck {
+	position: absolute;
+	width: 100px;
+	height: 95px;
+	background-repeat:		no-repeat;	
+	bottom: 0px;
+	right: 0px;
+}
+
+.nm_qCheck.correct {
+	background-image:		url("qItem_correct.svg");
+}
+
+.nm_qCheck.wrong {
+	background-image:		url("qItem_wrong.svg");
+}
+
+.nm_Ground{
+	background-image:		url("ground.svg");
+	background-repeat:		no-repeat;
+	width:					786px;
+	height:					75px;
+}
+
+.slide{
+	position:				absolute;
+	width:					1024px;
+	height:					672px;
+	z-index: 				2;
+}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.3.6" Version="3.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.3.7" Version="3.0">
 	<Author>
 		<![CDATA[Willem van Vliet and Tjibbe van der Laan]]>
 	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
@@ -7,7 +7,12 @@
 		<![CDATA[Made by the OLO 2013.
 For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[Changelog delta since 0.3.5:
+		<![CDATA[
+Changelog delta since 0.3.6
+	Bug fixes animation import
+	Added simple debug console 
+
+Changelog delta since 0.3.5:
 	Fixed assign animation bug.
 	Fixed add animation function not crating the aniamtions and images directory if they don't exist yet.
 
@@ -27,7 +32,7 @@ Changelog delta since 0.3.1:
 	Added Stay-Ghosting
 	Added go to Comment Slide button to extension]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.3.6"/>
+		<Extension Id="com.OLO.Nemo.extension" Version="0.3.7"/>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>

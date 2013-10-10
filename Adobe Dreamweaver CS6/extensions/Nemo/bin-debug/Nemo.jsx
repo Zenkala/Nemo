@@ -531,8 +531,8 @@ function addAnimation(givenName, givenPath){
 function assignAnimation(givenAnimation) {
     var folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
     var theDOM = dw.getDocumentDOM();
-    var widthPatt = /\.P\(w,[0-9]{3,4}\)/;
-    var heightPatt = /\.P\(h,[0-9]{3,4}\)/;
+    var widthPatt = /\.P\(w,[0-9]{3,4}\)/g;
+    var heightPatt = /\.P\(h,[0-9]{3,4}\)/g;
     var numPatt = /[0-9]{3,4}/;
     if (theDOM != null) {
         var theNode   = theDOM.getSelectedNode();
@@ -544,8 +544,24 @@ function assignAnimation(givenAnimation) {
             theNode.id = "" + givenAnimation.replace(/^[_\d]*| /g, ""); //remove any digits and underscores in front of the first proper character. And any spaces.
             //open <givenAnimation>_edge.js, extract the height and width of the stage and assign it to the animationContainer
             var str = DWfile.read(folderpath + "animations/" + givenAnimation + "/" +givenAnimation + "_edge.js"); 
-            theNode.style.width = numPatt.exec(widthPatt.exec(str)) + "px";
-            theNode.style.height = numPatt.exec(heightPatt.exec(str)) + "px";
+            var maxWidth  = 0;
+            var maxHeight = 0;
+            var result    = numPatt.exec(widthPatt.exec(str));
+            var oldresult = "";
+            while( result && result!=oldresult){
+                oldresult = result;
+                if(parseInt(result) > maxWidth) maxWidth = parseInt(result);
+                result    = numPatt.exec(widthPatt.exec(str));
+            }
+            result    = numPatt.exec(heightPatt.exec(str));
+            while( result && result!=oldresult){
+                oldresult = result;
+                if(parseInt(result) > maxHeight) maxHeight = parseInt(result);
+                result    = numPatt.exec(heightPatt.exec(str));
+            }            
+
+            theNode.style.width = maxWidth   + "px";
+            theNode.style.height = maxHeight + "px";
             //done
             return toXML([{'name':'success', 'val':"true"}]);
         }else{
