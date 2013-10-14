@@ -17,7 +17,8 @@ var scripts = [	'js/jquery.transit.min.js',
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
-				"css/ui-lightness/jquery-ui-1.10.3.custom.css"
+				"css/custom-theme/jquery-ui-1.10.3.custom.css",
+				"js/jquery.nm_slider.js"
 			];
 var animations;	
 
@@ -213,12 +214,6 @@ function startNemoScript(){
 			$(this).css("margin-left", $(this).css("left"));
 			$(this).css("margin-top", $(this).css("top"));
 		});
-
-		
-
-		//make sliders
-		console.log("do sliders");
-		//$(".nm_slider").slider({ step: 5, value: 15, min: 0, max: 30 });
 
 		//make title
 		$("#title span").html(document.title);
