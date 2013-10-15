@@ -327,7 +327,7 @@ header#title {
 	height:					75px;
 }
 
-.nm_slider label {
+.nm_Slider label {
   	position: 				absolute;
   	margin-top: 			20px;
   	margin-left: 			-10px;
@@ -335,13 +335,13 @@ header#title {
   	width:					20px;
 }
 
-.nm_slider .sliderTitle {
+.nm_Slider .sliderTitle {
 	top:					-75px;
 	left:					8px;
 	width:					auto;
 }
 
-.nm_slider .sliderHandleLabel {
+.nm_Slider .sliderHandleLabel {
 	text-align: 			center;
 	width:					3em;
 	top: 					-25px;

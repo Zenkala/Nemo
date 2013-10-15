@@ -1,4 +1,7 @@
 Changelog
+0.3.8
+  Added nm_slider
+
 0.3.7
   Added NM_Highlight
   NM_TextBubble can be assigned to target an other element. That element becomes hoverable, showing and hiding the textbubble

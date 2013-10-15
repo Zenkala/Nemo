@@ -198,19 +198,24 @@ ul {
 }
 
 .nm_qGroup {
-	background-image: url("designView/qGroup.png");
-	background-repeat: repeat;
+	background-image: 		url("designView/qGroup.png");
+	background-repeat: 		repeat;
 }
 
 .nm_qItem {
-	display: block;
-	width: 100%;
-	margin: 0px 0px 2px 0px;
+	display: 				block;
+	width: 					100%;
+	margin: 				0px 0px 2px 0px;
 }
 
 .nm_qItem[answer=false] {
-	background-color: #B48B8B;
+	background-color:		 #B48B8B;
 }
 .nm_qItem[answer=true] {
-	background-color: #8BB48D;
+	background-color:		#8BB48D;
+}
+
+.nm_Slider{
+	background-image: 		url("designView/slider.png");
+	background-repeat: 		no-repeat;
 }
