@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <panelset>
 
-  <!-- default to App and Document maximized, but don't hard code sizes (code will compute) -->
-  <application maximize="true"/>
-  <document maximize="true"/>
+  <application colorIcon="false" maximize="true" rect="218 112 1062 912"/>
 
-  <!-- RIGHT - Insert, CSS, Code, Application, Tag Inspector, Files, Frames (hidden), History (hidden) -->
-  <panelframe dock="right">
-    <panelcontainer expanded="true">
-      <panel id="objects" showLabel="true" visibleTab="Nemo"/>
+  <document maximize="true" rect="0 0 600 600"/>
+
+  <panelframe dock="floating" monitor="1" height="96" width="80" x="830" y="173">
+    <panelcontainer expanded="true" height="349" visible="false">
+      <panel height="349" id="css styles" unconstrainedheight="300" unconstrainedwidth="208" visibleTab="false" width="232"/>
     </panelcontainer>
-    <panelcontainer expanded="true">
-      <panel height="400" id="com.OLO.Nemo.extension" unconstrainedheight="400" unconstrainedwidth="232" width="232"/>
+    <panelcontainer expanded="true" height="370" visible="false">
+      <panel height="370" id="BCModulePanel" unconstrainedheight="370" unconstrainedwidth="232" visibleTab="false" width="232"/>
+    </panelcontainer>
+    <panelcontainer expanded="true" height="275" visible="false">
+      <panel height="275" id="server scripts" unconstrainedheight="270" unconstrainedwidth="208" visibleTab="false" width="232"/>
+    </panelcontainer>
+    <panelcontainer expanded="true" height="275" visible="false">
+      <panel height="275" id="site" unconstrainedheight="300" unconstrainedwidth="232" visibleTab="false" width="232"/>
     </panelcontainer>
   </panelframe>
 
-  <!-- BOTTOM - Property Inspector, results (hidden) -->
-  <panelframe dock="bottom">
-    <panelcontainer>
-      <panel id="propertiesMfc"/>
+  <panelframe dock="right" height="982" iconmodewidth="80" width="234" x="1" y="12">
+    <panelcontainer expanded="true" height="471" visible="true">
+      <panel category="" height="471" id="objects" showLabel="true" unconstrainedheight="300" unconstrainedwidth="208" viewStyle="menu" width="232"/>
     </panelcontainer>
-    <panelcontainer visible="false">
-      <panel id="properties"/>
+    <panelcontainer expanded="true" height="470" visible="true">
+      <panel height="470" id="com.OLO.Nemo.extension" unconstrainedheight="400" unconstrainedwidth="232" width="232"/>
     </panelcontainer>
-   </panelframe>
+  </panelframe>
 
-  <!-- FLOATING, individuals don't need to be listed - default behavior...-->
+  <panelframe dock="bottom" height="127" width="1045" x="0" y="1">
+    <panelcontainer expanded="true" height="107" visible="true">
+      <panel height="107" id="propertiesMfc" unconstrainedheight="107" unconstrainedwidth="990" width="1043"/>
+    </panelcontainer>
+    <panelcontainer expanded="true" height="52" visible="false">
+      <panel height="52" id="properties" unconstrainedheight="52" unconstrainedwidth="820" width="990"/>
+    </panelcontainer>
+  </panelframe>
+
 </panelset>
