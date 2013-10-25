@@ -198,8 +198,8 @@ ul {
 }
 
 .nm_qGroup {
-	background-image: url("designView/qGroup.png");
-	background-repeat: repeat;
+	background-image: 		url("designView/qGroup.png");
+	background-repeat: 		repeat;
 }
 
 .nm_qItem {
@@ -210,8 +210,13 @@ ul {
 }
 
 .nm_qItem[answer=false] {
-	background-color: #B48B8B;
+	background-color:		 #B48B8B;
 }
 .nm_qItem[answer=true] {
-	background-color: #8BB48D;
+	background-color:		#8BB48D;
+}
+
+.nm_Slider{
+	background-image: 		url("designView/slider.png");
+	background-repeat: 		no-repeat;
 }

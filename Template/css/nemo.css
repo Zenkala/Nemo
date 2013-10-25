@@ -418,6 +418,29 @@ li:last-of-type {
 	height:					75px;
 }
 
+.nm_Slider label {
+  	position: 				absolute;
+  	margin-top: 			20px;
+  	margin-left: 			-10px;
+  	text-align:				center;
+  	width:					20px;
+}
+
+.nm_Slider .sliderTitle {
+	top:					-75px;
+	left:					8px;
+	width:					auto;
+}
+
+.nm_Slider .sliderHandleLabel {
+	text-align: 			center;
+	width:					3em;
+	top: 					-25px;
+	left:					-1em;
+	position: 				absolute;
+
+}
+
 .slide{
 	position:				absolute;
 	width:					1024px;

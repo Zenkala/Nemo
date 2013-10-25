@@ -18,7 +18,8 @@ var scripts = [	'js/jquery.transit.min.js',
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
-				"css/ui-lightness/jquery-ui-1.10.3.custom.css"
+				"css/custom-theme/jquery-ui-1.10.3.custom.css",
+				"js/jquery.nm_slider.js"
 			];
 var animations;	
 
@@ -26,7 +27,7 @@ function log(msg) {
 	if (console.timeStamp) {
 		console.timeStamp(msg);
 	}
-	console.log(msg)
+	console.log('%c' + msg, 'background: #e3f6ca;');
 }
 
 var totalProgress = 14;
@@ -41,7 +42,7 @@ function progress(msg) {
 }
 		
 function nemoInit(){
-	log("-----------NemoInit-----------");	
+	console.log("%c-----------NemoInit-----------", 'background: #f0e269;');
 	//first thing: load jquery
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
 		console.log("loaded: jquery-1.9.1.min.js");	
@@ -162,6 +163,16 @@ function startNemoScript(){
 		});
 		progress("Parsed begrippen");
 
+		// Parse Sliders
+
+		$(".nm_Slider.autoGenerate").each(function() {
+				console.log($(this).attr("range"));
+			$(this).nm_slider({
+
+				range: (typeof $(this).attr("range") == 'undefined') ? false: true
+    		});
+		});
+		progress("Parsed sliders");
 
 		// Parse quiz elements
 		$(".nm_qGroup").each(function() {
@@ -268,12 +279,6 @@ function startNemoScript(){
 			$(this).css("margin-left", $(this).css("left"));
 			$(this).css("margin-top", $(this).css("top"));
 		});
-
-		
-
-		//make sliders
-		console.log("do sliders");
-		//$(".nm_slider").slider({ step: 5, value: 15, min: 0, max: 30 });
 
 		//make title
 		$("#title span").html(document.title);
@@ -391,7 +396,7 @@ function doTextBubbles() {
 
 function endNemoScript(){
 	//done with all our preperation work
-	log("-----------Nemodone-----------");
+	console.log("%c-----------Nemodone-----------", 'background: #f0e269;');
 
 	setTimeout(function() {
 		progress("Done 100ms timeout");
@@ -456,7 +461,7 @@ function doSlide(){
 	if(slideBuffer[0] == "next"){
 		var elementbuffer = [];		
 		currentPage++;
-		console.log("next to " + currentPage);	
+		console.log("%cnext to " + currentPage, 'background: #cacef6;');	
 		$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
 		
 		if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
@@ -490,7 +495,7 @@ function doSlide(){
 		}else{
 			var elementbuffer = [];
 			currentPage--;
-			console.log("prev to " + currentPage);	
+			console.log("%cprev to " + currentPage, 'background: #cacef6;');
 			$("#slideIndex").html(""+(currentPage+1)+"/"+totalPages);
 
 			if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
