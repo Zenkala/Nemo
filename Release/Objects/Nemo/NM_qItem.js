@@ -13,6 +13,6 @@ function isAsset() {
 
 function objectTag(assetArgs) {
 	var uniqueId = dwscripts.getUniqueId("qItem");
-	return '<label class="nm_qItem" id="' + uniqueId +'"><input type="radio" id="input_' + uniqueId + '" />Label</label>';
+	return '<div class="nm_qItem" id="' + uniqueId +'"><input type="radio" id="input_' + uniqueId + '" /><label for="input_' + uniqueId + '"><span><span></span></span>Label</label></div>';
 }
 

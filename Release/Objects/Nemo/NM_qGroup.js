@@ -13,6 +13,7 @@ function isAsset() {
 
 function objectTag(assetArgs) {
 	var uniqueId = dwscripts.getUniqueId("nemoquiz");
-	return '<div class="nm_qGroup" id="' + uniqueId +'" type="closed"><label class="nm_qItem" id="' + uniqueId +'A"><input type="radio" id="input_' + uniqueId + 'A" />Label A</label><label class="nm_qItem" id="' + uniqueId +'B"><input type="radio" id="input_' + uniqueId + 'B" />Label B</label><label class="nm_qItem" id="' + uniqueId +'C"><input type="radio" id="input_' + uniqueId + 'C" />Label C</label></div>';
+
+	return '<div class="nm_qGroup" id="' + uniqueId +'" type="closed"><div class="nm_qItem" id="' + uniqueId +'A" answer="false"><input type="radio" id="input_' + uniqueId + 'A" /><label for="input_' + uniqueId + '"><span><span></span></span>Label A</label></div><div class="nm_qItem" id="' + uniqueId +'B" answer="false"><input type="radio" id="input_' + uniqueId + 'B" /><label for="input_' + uniqueId + '"><span><span></span></span>Label B</label></div><div class="nm_qItem" id="' + uniqueId +'C" answer="false"><input type="radio" id="input_' + uniqueId + 'C" /><label for="input_' + uniqueId + '"><span><span></span></span>Label C</label></div></div>';
 }
 

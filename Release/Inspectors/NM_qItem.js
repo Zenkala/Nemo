@@ -1,17 +1,17 @@
 // Copyright 2000, 2001, 2002, 2003 Macromedia, Inc. All rights reserved.
 // ******************** GLOBALS ****************************
 
-var helpDoc = MM.HELP_inspDate;
-
 var HE_ID;
 var HE_TYPE;
 var HE_ANSWER;
-var HE_EXPLANATION;
+var HE_CORRECTEXP;
+var HE_WRONGEXP;
 
 var ID;
 var TYPE;
 var ANSWER;
-var EXPLANATION;
+var CORRECTEXP;
+var WRONGEXP;
 // ******************** API ****************************
 
 function canInspectSelection() {
@@ -39,13 +39,19 @@ function initializeUI() {
 	// If Answer object isn't initialized, initialize with default options
 	if(!HE_ANSWER) {
     	HE_ANSWER = new ListControl("theAnswer");
-    	HE_ANSWER.setAll(["False", "True"], [0, 1]);
+    	HE_ANSWER.setAll([], []);
  	}
 
 	// If Explanation object isn't initialized, initialize with default options
- 	if(!HE_EXPLANATION) {
- 		HE_EXPLANATION = new ListControl("theExplanation");
- 		HE_EXPLANATION.setAll([], []);
+ 	if(!HE_CORRECTEXP) {
+ 		HE_CORRECTEXP = new ListControl("theCorrectExp");
+ 		HE_CORRECTEXP.setAll([], []);
+ 	}
+
+ 	// If Explanation object isn't initialized, initialize with default options
+ 	if(!HE_WRONGEXP) {
+ 		HE_WRONGEXP = new ListControl("theWrongExp");
+ 		HE_WRONGEXP.setAll([], []);
  	}
 }
 
@@ -62,6 +68,7 @@ function setGUI(){
 	var theObj = dom.getSelectedNode(); 	
 
 	// Get ID of selected item and store in ID object of inspector
+	
 	if (theObj.getAttribute("id")) {
 		ID = theObj.getAttribute("id");
 		HE_ID.value = ID;
@@ -101,28 +108,39 @@ function setGUI(){
 		var answer = theObj.getAttribute("answer");	
 		ANSWER = answer;
 		HE_ANSWER.pick(answer);
+	} else {
+		HE_ANSWER.set("");
 	}
 
 
 	// Get all TextBubbles on current slide. These could be set as explanation for quiz item
-	var allTextBubbles = [];
-    var allNodes = dom.getElementById("contentDiv").childNodes;
-    if(allNodes != null) {
-        for(i=0; i< allNodes.length; i++) {
-            if(allNodes[i].class == "slide activeSlide") {
-        		for(var j = 0; j < allNodes[i].childNodes.length; j++) {
-					var classList = allNodes[i].childNodes[j].getAttribute("class").split(" "); 
-					if(contains(classList, "nm_TextBubble")) {
-						allTextBubbles.push(allNodes[i].childNodes[j].getAttribute("id"));
+	// Remove the current object from the list
+	var allTextBubbles = new Array();
+	if(dom.getElementById("contentDiv")) {
+		var allNodes = dom.getElementById("contentDiv").childNodes;
+		if(allNodes) {
+	        for(i=0; i < allNodes.length; i++) {
+	            if(allNodes[i].class == "slide activeSlide") {
+	        		for(var j = 0; j < allNodes[i].childNodes.length; j++) {
+	        			if((allNodes[i].childNodes[j].getAttribute("class")) && (allNodes[i].childNodes[j].getAttribute("id"))) {
+	        				var classList = allNodes[i].childNodes[j].getAttribute("class").split(" "); 
+							if((contains(classList, "nm_TextBubble")) && (allNodes[i]).childNodes[j] != theObj.parentNode.parentNode) {
+								allTextBubbles.push(allNodes[i].childNodes[j].getAttribute("id"));
+							}
+	        			} // else, there is an element without a class. Its not a valid element, so ignore 
 					}
-				}
 
-            }
-        }
-    }
+	            }
+	        }
+    	} else {
+    		// There is no textbubble on any slide
+    	}
+	} else {
+		// This is not a correct template 
+	}
 
 	// Fill the Explanation object with possible TextBubbles (allTextBubbles)
-	var currValues = HE_EXPLANATION.getValue("all");
+	var currValues = HE_CORRECTEXP.getValue('all');
 	var needUpdate = false;
 	if(allTextBubbles.length != currValues.length) { needUpdate = true; }
 	for(var i=0; i<allTextBubbles.length; i++) {
@@ -132,17 +150,23 @@ function setGUI(){
 	    }
 	}
 	if(needUpdate) {
-		HE_EXPLANATION.setAll(allTextBubbles, allTextBubbles);
+		HE_CORRECTEXP.setAll(allTextBubbles, allTextBubbles);
+		HE_WRONGEXP.setAll(allTextBubbles, allTextBubbles);
+	}
+	
+	
+	if(theObj.parentNode.getAttribute("correctexp")) {
+		var correctexp = theObj.parentNode.getAttribute("correctexp");	
+		CORRECTEXP = correctexp;
+		HE_CORRECTEXP.set(correctexp);
+	}
+	
+	if(theObj.parentNode.getAttribute("wrongexp")) {
+		var wrongexp = theObj.parentNode.getAttribute("wrongexp");	
+		WRONGEXP = wrongexp;
+		HE_WRONGEXP.set(wrongexp);
 	}
 
-	// Check if the Explanation is set, if so, pick the value
-	if(theObj.getAttribute("explanation")) {
-		var explanation = theObj.getAttribute("explanation");	
-		EXPLANATION = explanation;
-		HE_EXPLANATION.set(explanation);
-	} else {
-		HE_EXPLANATION.set("");
-	}
 }
 
 
@@ -200,22 +224,57 @@ function updateTag(attrib) {
 
 			case "answer":
 				if(HE_ANSWER.get() != theObj.getAttribute("answer")) {
+					
 					ANSWER = HE_ANSWER.get();
 					if(ANSWER == "True") { ANSWER = "true"; } 
 					if(ANSWER == "False") { ANSWER = "false"; }
-					theObj.setAttribute("answer", ANSWER);
+					if((HE_TYPE.selectedIndex == 0) && ((ANSWER != "true") && (ANSWER != "false") && (ANSWER != ""))) {
+						alert("This answer is not allowed for an closed quiz.");
+						HE_ANSWER.set("");
+					} else {
+						theObj.setAttribute("answer", ANSWER);
+					}
 				}
 				break;
 
-			case "explanation":
-				old_explanation = EXPLANATION;
-				EXPLANATION = HE_EXPLANATION.get();
-				if (theObj.getAttribute("explanation") != EXPLANATION) {
-					theObj.setAttribute("explanation", EXPLANATION);
-					if(dom.getElementById(EXPLANATION)) { dom.getElementById(EXPLANATION).setAttribute("target", theObj.getAttribute("id")); }
-					if(old_explanation) { dom.getElementById(old_explanation).setAttribute("target", " "); }
+			case "correctexp":
+				CORRECTEXP = HE_CORRECTEXP.get();
+
+				if ((theObj.parentNode.getAttribute("correctexp") != CORRECTEXP)) {
+					if(!(dom.getElementById(CORRECTEXP))) { 
+						if(CORRECTEXP != "") {
+							result = window.confirm("The explanation " + CORRECTEXP + " does not exist. Are you sure you would set this explanation?");
+							if(result) {
+								theObj.parentNode.setAttribute("correctexp", CORRECTEXP);
+							}
+						} else {
+							theObj.parentNode.setAttribute("correctexp", CORRECTEXP);
+						}
+					} else {
+						theObj.parentNode.setAttribute("correctexp", CORRECTEXP);
+					}
 				} 
 				break;
+
+			case "wrongexp":
+				WRONGEXP = HE_WRONGEXP.get();
+
+				if ((theObj.parentNode.getAttribute("wrongexp") != WRONGEXP)) {
+					if(!(dom.getElementById(WRONGEXP))) { 
+						if(WRONGEXP != "") {
+							result = window.confirm("The explanation " + WRONGEXP + " does not exist. Are you sure you would set this explanation?");
+							if(result) {
+								theObj.parentNode.setAttribute("wrongexp", WRONGEXP);
+							}
+						} else {
+							theObj.parentNode.setAttribute("wrongexp", WRONGEXP);
+						}
+					} else {
+						theObj.parentNode.setAttribute("wrongexp", WRONGEXP);
+					}
+				} 
+				break;
+
 		}
 	}
 }
