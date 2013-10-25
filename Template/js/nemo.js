@@ -9,6 +9,7 @@ var gotoSlide = 0;
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
 var scripts = [	'js/jquery.transit.min.js',
 				'js/jquery-ui-1.10.3.custom.min.js',
+				'js/functions.js',
 				'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',/*,
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.logAxisRenderer.min.js",
@@ -45,6 +46,7 @@ function nemoInit(){
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
 		console.log("loaded: jquery-1.9.1.min.js");	
 		$(function() {
+
 			log("Making preloader");
 
 			//hide and delete comment/ghosting stuff
@@ -163,6 +165,11 @@ function startNemoScript(){
 
 		// Parse quiz elements
 		$(".nm_qGroup").each(function() {
+			$(this).children(".nm_qCheck").append(quizCheck());
+			$(this).children(".nm_qCheck").hide();
+			$(this).find(".nm_qCheck .wrong").hide();
+			$(this).find(".nm_qCheck .correct").hide();
+
 			var id = $(this).attr("id");
 			log("Parse quiz " + id);
 			var type = "closed";
@@ -170,14 +177,15 @@ function startNemoScript(){
 
 			// Give all elements inside group the same name 
 			$(this).find("input").attr("name", id);
-			$(this).append("<div class=\"nm_qCheck\"></div");
 
 			if(type == "closed") {
 				countCorrectItems = $(this).children(".nm_qItem[answer='true']").length;
 				if(countCorrectItems == 1) {
 					// An closed question with only one correct answer
 					$(this).find("input").attr("type", "radio");
-					$(this).find("input").attr("onclick", " checkQuiz('" + id + "', '" + type + "'); ");
+					$(this).find("input").each(function() {
+						$(this).attr("onclick", " checkQuiz('" + id + "', '" + type + "', '" + $(this).parent().attr("id") + "'); ");
+					});
 
 				} else if(countCorrectItems > 1) {
 					// An closed question with multiply correct answers
@@ -201,7 +209,7 @@ function startNemoScript(){
 
 		// Quiz parse functions
 		function checkButton(qGroupId, qGroupType) {
-			var cButton = "<button onclick=\"checkQuiz('" + qGroupId + "', '" + qGroupType + "')\">Controleer</button>";
+			var cButton = "<button onclick=\"checkQuiz('" + qGroupId + "', '" + qGroupType + "', '" + qGroupId + "')\">Controleer</button>";
 			return cButton;
 		}
 		progress("Parsed quiz");
@@ -342,26 +350,29 @@ function doTextBubbles() {
 		$(this).addClass("nm_Explanation");
 		var target = $("#" + $(this).attr("target"));
 		var bubble = $(this);
-		console.log(target)
-		console.log(target.css("left"), $(this).attr("rHeight"), $(this).attr("rWidth"));
-		var leftOffset = 0;
-		var topOffset = 0;
-		if(bubble.hasClass("bottom-left")){		topOffset = -parseInt(bubble.attr("rHeight")) - 58; }
-		if(bubble.hasClass("bottom-middle")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
-		if(bubble.hasClass("bottom-right")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58;									leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}
-		if(bubble.hasClass("middle-left")){		topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset = parseInt(target.css("width")); }
-		if(bubble.hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset -= parseInt(bubble.attr("rWidth")); }
-		if(bubble.hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
-		if(bubble.hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
-		if(bubble.hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}	
-		bubble.css("left", (parseInt(target.css("left")) + leftOffset) + "px");
-		bubble.css("top", (parseInt(target.css("top")) + topOffset) + "px");
-		//make the target clickable
-		target.on("click", function(event){ bubble.transition({ scale: 1 }, 200); bubble.attr("clicked", "true")});
-		target.mouseenter(function(event){ bubble.transition({ scale: 1 }, 100)});
-		target.mouseleave(function(event){ if(bubble.attr("clicked") != "true") bubble.transition({ scale: 0 }, 100)});
-		target.addClass("hoverable");
 		bubble.transition({ scale: 0 }, 0);
+		if(!target.hasClass("nm_qItem")) {
+			console.log(target)
+			console.log(target.css("left"), $(this).attr("rHeight"), $(this).attr("rWidth"));
+			var leftOffset = 0;
+			var topOffset = 0;
+			if(bubble.hasClass("bottom-left")){		topOffset = -parseInt(bubble.attr("rHeight")) - 58; }
+			if(bubble.hasClass("bottom-middle")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
+			if(bubble.hasClass("bottom-right")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58;									leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}
+			if(bubble.hasClass("middle-left")){		topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset = parseInt(target.css("width")); }
+			if(bubble.hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset -= parseInt(bubble.attr("rWidth")); }
+			if(bubble.hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
+			if(bubble.hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
+			if(bubble.hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}	
+			bubble.css("left", (parseInt(target.css("left")) + leftOffset) + "px");
+			bubble.css("top", (parseInt(target.css("top")) + topOffset) + "px");
+			//make the target clickable
+			target.on("click", function(event){ bubble.transition({ scale: 1 }, 200); bubble.attr("clicked", "true")});
+			target.mouseenter(function(event){ bubble.transition({ scale: 1 }, 100)});
+			target.mouseleave(function(event){ if(bubble.attr("clicked") != "true") bubble.transition({ scale: 0 }, 100)});
+			target.addClass("hoverable");
+			bubble.transition({ scale: 0 }, 0);
+		}
 	});
 	
 	$(".nm_Explanation").append('<span class="close">x</span>');
@@ -447,6 +458,12 @@ function doSlide(){
 		currentPage++;
 		console.log("next to " + currentPage);	
 		$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
+		
+		if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
+		} else { $("#navigation #next").prop('disabled', false);}
+		if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
+		} else { $("#navigation #prev").prop('disabled', false);}
+		
 		if(!suppresEvents)newSlideHdl(currentPage, false);
 		//put back children that are here to stay
 		$("#slide"+(currentPage-1)).children().each(function(){
@@ -475,6 +492,12 @@ function doSlide(){
 			currentPage--;
 			console.log("prev to " + currentPage);	
 			$("#slideIndex").html(""+(currentPage+1)+"/"+totalPages);
+
+			if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
+			} else { $("#navigation #next").prop('disabled', false);}
+			if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
+			} else { $("#navigation #prev").prop('disabled', false);}
+
 			if(!suppresEvents)newSlideHdl(currentPage, true);
 		
 			//put back children that are here to stay
@@ -502,70 +525,3 @@ function doSlide(){
 		}//end of currentpage==0
 	}//end of next/prev if.
 }
-
-
-// Quiz functions
-function checkItems(id, type) {
-	var succeeded = false;
-
-	// Could I make this function smaller?
-	$("#" + id + " input").each(function() {
-		if(type == "closed") {
-			if($(this).is(":checked") == $(this).parent().is("[answer='true']")) {
-				succeeded = true;
-				return true;
-			} else {
-				succeeded = false;
-				return false;
-			}
-		} else if(type == "open") {
-			if($(this).val() == $(this).parent().attr("answer")) {
-				succeeded = true;
-				return true;
-			} else {
-				succeeded = false;
-				return false;
-			}
-		}
-	});
-	return succeeded;
-}
-
-function checkQuiz(id, type) {
-	// Check total attempts
-	if(checkItems(id, type)) {
-		$("#" + id + " button, #" + id + " input").prop('disabled', true);
-		showAnswer(id, type);
-		$("#" + id + " .nm_qCheck").hide();
-		$("#" + id + " .nm_qCheck").addClass("correct");
-		$("#" + id + " .nm_qCheck").removeClass("wrong");
-		$("#" + id + " .nm_qCheck").show("blind", "right");
-		// disable onhover
-		// show good job animation
-
-	} else {
-		$("#" + id + " .nm_qCheck").hide();
-		$("#" + id + " .nm_qCheck").removeClass("correct");
-		$("#" + id + " .nm_qCheck").addClass("wrong");
-		$("#" + id + " .nm_qCheck").show("blind", "right").hide("blind", "right");
-	}
-}
-
-function showAnswer(id, type) {
-	// Could I make this function smaller?
-	$("#" + id + " input").each(function() {
-		succeeded = false;
-		if(type == "closed") {
-			succeeded = $(this).parent().is("[answer='true']");
-		} else if(type == "open") {
-			if($(this).val() == $(this).parent().attr("answer")) succeeded = true;
-			else succeeded = false;
-		}
-		if(succeeded) {
-			$(this).parent().addClass("correct", 200);
-		} else {
-			$(this).parent().addClass("wrong", 200);
-		}
-	});
-}
-
