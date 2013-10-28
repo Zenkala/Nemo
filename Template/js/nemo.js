@@ -164,13 +164,22 @@ function startNemoScript(){
 		progress("Parsed begrippen");
 
 		// Parse Sliders
-
+		var sliderObject;
 		$(".nm_Slider.autoGenerate").each(function() {
-				console.log($(this).attr("range"));
-			$(this).nm_slider({
-
-				range: (typeof $(this).attr("range") == 'undefined') ? false: true
-    		});
+			console.log($(this).attr("range"));
+			sliderObject = {range: (typeof $(this).attr("range") == 'undefined') ? false: true};
+    		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseInt($(this).attr("min"));
+    		if(typeof $(this).attr("max") != 'undefined') sliderObject.max = parseInt($(this).attr("max"));
+    		if(typeof $(this).attr("stepping") != 'undefined') sliderObject.step = parseInt($(this).attr("stepping"));
+    		if(sliderObject.range) {
+    			sliderObject.values = [ 
+    				sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 30,
+    				sliderObject.value = (typeof $(this).attr("value2") != 'undefined') ?  parseInt($(this).attr("value2")) : 70
+    			];
+    		} else {
+    			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 50;
+    		}
+    		$(this).nm_slider( sliderObject );
 		});
 		progress("Parsed sliders");
 
