@@ -7,6 +7,7 @@
 	    	var settings = $.extend({
 	            // These are the defaults.
 	            value: 50,
+	            range: false,
 	            min: 1,
 	            max: 100,
 	            title: "Een Slider",
@@ -35,13 +36,11 @@
 	    	}
 
 	    	//make handle labels
-	    	if(typeof settings.values != "undefined"){
+	    	if(settings.range){
 		    	$($(this).find(".ui-slider-handle:first")).append($('<span class="sliderHandleLabel sliderHandleMin">' + settings.values[0] + '</span>'));
 		    	$($(this).find(".ui-slider-handle:nth-child(3)")).append($('<span class="sliderHandleLabel sliderHandleMax">' + settings.values[1] + '</span>'));
 		    } else {
-    	    	if(typeof settings.value != "undefined"){
-    		    	$($(this).find(".ui-slider-handle:first")).append($('<span class="sliderHandleLabel sliderHandleMin">' + settings.value + '</span>'));
-    		    } 
+    		    $($(this).find(".ui-slider-handle:first")).append($('<span class="sliderHandleLabel sliderHandleMin">' + settings.value + '</span>'));
 		    }
 	    }); 
 	};

@@ -72,7 +72,7 @@
 <body class="piBody">
 <!-- Specify the image that will appear in the Property inspector -->
 	<SPAN ID="image" STYLE="position:absolute; width:54px; height:36px; z-index:16; left: 3px; top: 2px;">
-		<IMG SRC="NM_TextBubble_2x.png" WIDTH="54" HEIGHT="36" NAME="marqueeImage" style="margin:3px;">
+		<IMG SRC="NM_Slider_2x.png" WIDTH="54" HEIGHT="36" NAME="marqueeImage" style="margin:3px;">
 	</SPAN>
 	<!-- If your form fields are in different AP elements, you must ¬
 	create a separate form inside each AP element and reference it as ¬
@@ -83,31 +83,32 @@
 				<TD>ID:</TD>
 				<TD><INPUT NAME="theID" ID="theID" onChange="updateTag('id')" /></TD>
 
-				<TD>min:</TD>
-				<TD><INPUT NAME="theMin" ID="theMin" onChange="updateTag('min')" /></TD>
+				<TD>Min:</TD>
+				<TD><INPUT NAME="theMin" ID="theMin" onChange="updateTag('min')" style="width: 50px;"/></TD>
 
-				<TD>value1:</TD>
-				<TD><INPUT NAME="theValue1" ID="theValue1" onChange="updateTag('value1')" /></TD>
+				<TD>Value1:</TD>
+				<TD><INPUT NAME="theValue1" ID="theValue1" onChange="updateTag('value1')" style="width: 50px;" /></TD>
 			</TR>
 			<TR>
 				<TD>AutoGenerate:</TD>
 				<TD><INPUT NAME="theAG" ID="theAG" onclick="updateTag('ag')" type="checkbox" /></TD>
 
-				<TD>max:</TD>
-				<TD><INPUT NAME="theMax" ID="theMax" onChange="updateTag('max')" /></TD>
+				<TD>Max:</TD>
+				<TD><INPUT NAME="theMax" ID="theMax" onChange="updateTag('max')" style="width: 50px;" /></TD>
 
-				<TD>value2:</TD>
-				<TD><INPUT NAME="theValue2" ID="theValue2" onChange="updateTag('value2')" /></TD>				
+				<TD>Value2:</TD>
+				<TD><INPUT NAME="theValue2" ID="theValue2" onChange="updateTag('value2')" style="width: 50px;" /></TD>				
 			</TR>
 			<TR>
 				<TD>Range:</TD>
 				<TD><INPUT NAME="theRange" ID="theRange" onclick="updateTag('range')" type="checkbox"/></TD>
 
-				<TD>stepping:</TD>
-				<TD><INPUT NAME="theStepping" ID="theStepping" onChange="updateTag('stepping')" /></TD>
+				<TD>Stepping:</TD>
+				<TD><INPUT NAME="theStepping" ID="theStepping" onChange="updateTag('stepping')" style="width: 50px;" /></TD>
 			</TR>
 			<TR>
-				
+				<TD>Title:</TD>
+				<TD colspan= 3><INPUT NAME="theTitle" ID="theTitle" onChange="updateTag('title')" style="width: 259px;"/></TD>	
 			</TR>
   		</table>
 	</div>

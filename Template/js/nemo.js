@@ -22,6 +22,7 @@ var scripts = [	'js/jquery.transit.min.js',
 				"js/jquery.nm_slider.js"
 			];
 var animations;	
+var animationNames;	
 
 function log(msg) {
 	if (console.timeStamp) {
@@ -67,11 +68,13 @@ function nemoInit(){
 
 			//check for animations we have to load 
 			animations = new Array();
+			animationNames = new Array();
 			var animUrl = "";
 			//$(".loaderAnimation").each(function(){
 			$(".nm_Animation").each(function(){
 				animUrl = $(this).attr("url").replace(/%20/g, " ");
 				console.log("found animation: " + $(this).attr("id"));
+				animationNames.push($(this).attr("id"));
 				animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js");
 				totalProgress++;
 			});
@@ -114,12 +117,28 @@ function loadAnims(){
 			},
 			complete: function(){
 				log("loading animations complete"); 
-				startNemoScript();
+				attachBootLoaders();
 			}
 		}]);
 	}else{
+		animationsReadyFlag = true;
 		startNemoScript();
 	}
+}
+
+function attachBootLoaders(){
+	//This function is called everytime a Edge composition is ready for prime time.
+	//the parameter compId contains the name of the composition that has finished loading.
+	//We check if that animation was in the list of animations-that-arn't-done-loading-yet and remove it from the said list.
+	//So, when the list is empty all animations are done loading and we can continue
+	AdobeEdge.bootstrapCallback(function(compId) {
+		console.log('%c' + "Animation " + compId + " bootloader done!", 'background: #caf0f6;');
+		if($.inArray(compId[0], animationNames) >=0 ) animationNames.splice($.inArray(compId[0], animationNames), 1);
+		if(animationNames.length <= 0) {
+			console.log('%c' + "All animation bootLoaders are done!", 'background: #caf0f6;');
+			startNemoScript();
+		}
+	});
 }
 
 function startNemoScript(){		
@@ -179,6 +198,7 @@ function startNemoScript(){
     		} else {
     			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 50;
     		}
+    		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
     		$(this).nm_slider( sliderObject );
 		});
 		progress("Parsed sliders");
@@ -417,10 +437,10 @@ function endNemoScript(){
 	    }
 
 	    if(gotoSlide == 0) { //if we don't do a quick next, no enterframe handles are called. So call them manually.
-	    	//this also, is a ugly hack that prevnets chrome from f*cking up when there is an animation on slide 1, and there are more slides afterwards.
-			suppresEvents = true;
-	    	next();
-	    	prev();
+	    	//this also, is a ugly hack that prevents chrome from f*cking up when there is an animation on slide 1, and there are more slides afterwards.
+			//suppresEvents = true;
+	    	//next();
+	    	//prev();
 	    	newSlideHdl(0, false);
 	    	newSlideStopHdl(0, false);
 	    }
@@ -436,7 +456,7 @@ function endNemoScript(){
 	    $("#navigation").show();
 	    $("#title").toggle("slide");
 
-	}, 100); //wait 100ms to give initizing scripts within Edge Animations a chance to do their stuff.
+	}, 50); //wait 50ms to give an extra buffer
 
 	//prevent scroll
 	$(document).on('touchmove',function(e){

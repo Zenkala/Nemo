@@ -11,6 +11,7 @@ var HE_MAX;
 var HE_STEPPING;
 var HE_VALUE1;
 var HE_VALUE2;
+var HE_TITLE;
 
 var ID;
 var AG;
@@ -20,6 +21,7 @@ var MAX;
 var STEPPING;
 var VALUE1;
 var VALUE2;
+var TITLE;
 // ******************** API ****************************
 
 function canInspectSelection() {
@@ -42,6 +44,7 @@ function initializeUI() {
 	HE_STEPPING = dwscripts.findDOMObject("theStepping");
 	HE_VALUE1 = dwscripts.findDOMObject("theValue1");
 	HE_VALUE2 = dwscripts.findDOMObject("theValue2");
+	HE_TITLE = dwscripts.findDOMObject("theTitle");
 }
 
 
@@ -117,6 +120,14 @@ function setGUI(){
 		VALUE2 = theObj.getAttribute("value2");
 		HE_VALUE2.value = VALUE2;
 	}	
+
+	if(typeof theObj.getAttribute("title") == 'undefined'){
+		TITLE = "Een Slider";
+		HE_TITLE.value = TITLE;
+	} else {
+		TITLE = theObj.getAttribute("title");
+		HE_TITLE.value = TITLE;
+	}	
 }
 
 function updateTag(attrib) {	
@@ -187,8 +198,18 @@ function updateTag(attrib) {
 				} else {
 					theObj.removeAttribute("value2");					
 				}
-				break;								
-	}
+				break;		
+			case "title":
+				TITLE = HE_TITLE.value;
+				if(TITLE){
+					if (theObj.getAttribute("title") != TITLE && TITLE != "") {
+						theObj.setAttribute("title", TITLE);
+					} 					
+				} else {
+					theObj.removeAttribute("title");					
+				}
+				break;						
+		}
 	}	
 }
 
