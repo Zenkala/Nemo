@@ -835,6 +835,11 @@ body .ui-tooltip {
 	color: #1c94c4;
 	text-decoration: none;
 }
+
+.ui-button{
+	background-color: #a5e2f0;
+}
+
 .ui-state-hover,
 .ui-widget-content .ui-state-hover,
 .ui-widget-header .ui-state-hover,

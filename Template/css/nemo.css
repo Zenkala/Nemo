@@ -418,6 +418,13 @@ li:last-of-type {
 	height:					75px;
 }
 
+.nm_Button {
+	padding:				0px 5px 2px 5px;
+}
+
+.nm_Slider {	
+  	margin-top: 			50px;
+}
 .nm_Slider label {
   	position: 				absolute;
   	margin-top: 			20px;
@@ -438,7 +445,6 @@ li:last-of-type {
 	top: 					-25px;
 	left:					-1em;
 	position: 				absolute;
-
 }
 
 .slide{
