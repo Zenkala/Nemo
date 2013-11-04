@@ -1,6 +1,8 @@
 Changelog
 0.3.8
   Added nm_slider
+  All objects will have a unique id (not present in release directory)	
+  Added highlight to release
 
 0.3.7
   Added NM_Highlight

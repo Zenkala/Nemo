@@ -41,11 +41,12 @@ else
   if ((newURL == '')  && bDialogState) {  return ''; }
 
   var thisDOM = dw.getDocumentDOM();
+  var uniqueId = dwscripts.getUniqueId("image");
 
   if (imgDim && !thisDOM.getUseFluidMediaForTag("img")){
-    rtnStr= '<img src="' + newURL + '" class="nm_Image" style="position: absolute; left: 100px; top:300px;" width="' + imgDim[0] +'" height="' + imgDim[1] + '">';
+    rtnStr= '<img src="' + newURL + '" class="nm_Image" id="' + uniqueId + '" style="position: absolute; left: 100px; top:300px;" width="' + imgDim[0] +'" height="' + imgDim[1] + '">';
   }else{
-    rtnStr= '<img src="' + newURL + '" class="nm_Image" style="position: absolute; left: 100px; top:300px;">';
+    rtnStr= '<img src="' + newURL + '" class="nm_Image" id="' + uniqueId + '" style="position: absolute; left: 100px; top:300px;">';
   }
 
   return rtnStr
