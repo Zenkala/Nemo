@@ -15,6 +15,10 @@
 	        }, options );
 
 	       	$(this).css("height", ""); //remove height
+	       	//wrap in container
+	       	$(this).wrap( "<div class='nm_SliderContainer' style='position: absolute; top: " + $(this).css("top") + "; left: " + $(this).css("left") + ";'></div>" );
+	       	$(this).css("left", "");
+	       	$(this).css("top", "");
 	        $(this).slider(settings); //make the default slider
 
 	    	//add title

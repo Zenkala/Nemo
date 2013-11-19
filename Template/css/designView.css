@@ -230,3 +230,13 @@ ul {
 	border: 1px solid 		#009ec2;
 	font-size: 				1.1em;
 }
+
+.nm_Experiment {
+	height:					513px;
+	left:					20px;
+	width:					200px;
+	position: 				relative;
+	top:					100px;
+	background-color: 		#009ec2;
+	border:					2px solid #009ec2;
+}

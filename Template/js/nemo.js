@@ -254,6 +254,19 @@ function startNemoScript(){
 		}
 		progress("Parsed quiz");
 
+		//parse experiemental sections
+		$(".nm_Experiment").each(function() {
+			console.log("experiment! " + $(this).attr("id"));
+			$(this).children().each(function() {
+				$(this).css("position", "relative");
+				$(this).css("left", "");
+				$(this).css("top", "");
+				//$(this).css("margin-top", "50px");
+				//$(this).css("border", "solid 0px black");
+				console.log(this);
+			});
+		});
+
 		
 		//set contentDiv width and innerHeight
 		$("#contentDiv").css("width", "1024px");
