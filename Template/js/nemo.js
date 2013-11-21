@@ -336,7 +336,8 @@ function startNemoScript(){
 				nr = nr.replace("slide","");
 				i = parseInt(nr);
 				slidesToMoveTitle.unshift(i);
-				if($(this).attr("stay").length) {
+				var attr = $(this).attr('stay');
+				if(typeof attr !== 'undefined' && attr !== false) {
 					var stay = $(this).attr("stay");
 					console.log("The experimentpane has a stay of " + stay);
 					var j = parseInt(stay);
