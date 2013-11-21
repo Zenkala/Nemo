@@ -275,6 +275,8 @@ function startNemoScript(){
 		}
 		progress("Parsed quiz");
 
+
+		/* This is Willem's experimental slide functionality. Sorry Willem, we have to discuss which functionality is better 
 		//parse experiemental sections
 		$(".nm_Experiment").each(function() {
 			$(this).children().each(function() {
@@ -286,7 +288,7 @@ function startNemoScript(){
 				console.log(this);
 			});
 		});
-
+		*/
 		
 		//set contentDiv width and innerHeight
 		$("#contentDiv").css("width", "1024px");
@@ -324,8 +326,10 @@ function startNemoScript(){
 		console.log("element origins set");
 		progress("Slides and content positioned");
 
-		// Check position title
+		// Add experiment slide
 		if(!document.getElementById("contentDiv_bg")) $("#contentDiv").prepend('<div id="contentDiv_bg" class="default"></div>');
+
+		// Move title if experiment pane is on slide
 		$(".nm_ExperimentPane").each(function() {
 			if($(this).parent().hasClass("slide")) {
 				var nr = $(this).parent().attr("id");
@@ -344,6 +348,7 @@ function startNemoScript(){
 				console.log("Error .nm_ExperimentPane. Could not find the slide.");
 			}
 		});
+		progress("Parsed experiment panes");
 
 		// Add open/close functionality to InfoBlock
 		$(".nm_InfoBlock").on({
@@ -372,19 +377,6 @@ function startNemoScript(){
 			totalPages++;
 		});
 		$("#slideIndex").html("1/"+totalPages);
-
-/*
-		$(".nm_TextBubble").each(function(){
-			var h = $(this).attr("rHeight");
-			if(h > 30) { h = h - 30; }
-
-			if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h < 42)) {
-				$(this).append('<div class="nm_TextBubblePointer" style="height: ' + h + 'px; margin-top: -' + 0.5*h + 'px"></div>');
-			} else {
-				$(this).append('<div class="nm_TextBubblePointer"></div>');
-			}
-		});
-*/
 		progress("Made nm_InfoBlock and nm_Slider");
 
 		//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
@@ -558,42 +550,10 @@ function doSlide(){
 		console.log("stop");
 		sliding = false;
 		return;
-		
 	}
 		
 	sliding = true;
 	if(slideBuffer[0] == "next"){
-		var elementbuffer = [];		
-		currentPage++;
-		if(currentPage >= totalPages) currentPage = (totalPages-1);
-		if(currentPage < 0) currentPage = 0;
-
-		console.log("%cnext to " + currentPage, 'background: #cacef6;');	
-		$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
-		
-		if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
-		} else { $("#navigation #next").prop('disabled', false);}
-		if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
-		} else { $("#navigation #prev").prop('disabled', false);}
-		
-		if(!suppresEvents)newSlideHdl(currentPage, false);
-		updateSlideLook(currentPage, quick);
-		//put back children that are here to stay
-		$("#slide"+(currentPage-1)).children().each(function(){
-			if((parseInt($(this).attr("org"))+parseInt($(this).attr("stay")))>=currentPage){
-				//attach satys children to content div as temporairy storage
-				elementbuffer.push($(this));
-				$('#contentDiv').append( $(this) );
-			}
-		});
-		moveTitle(currentPage, quick);
-		//move all slides
-		$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
-		$("html").transition({}, quick?0:350, function() {		
-			elementbuffer.reverse().forEach(function(entry){
-				$(entry).prependTo($('#slide' + currentPage));
-			});
-			if(!suppresEvents)newSlideStopHdl(currentPage, false);
 		if(currentPage+1>=totalPages){//skip this order
 			slideBuffer.shift(); //rem first element
 			doSlide(); //recursive
@@ -602,13 +562,11 @@ function doSlide(){
 			currentPage++;
 			console.log("%cnext to " + currentPage, 'background: #cacef6;');	
 			$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
-			
-			if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
-			} else { $("#navigation #next").prop('disabled', false);}
-			if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
-			} else { $("#navigation #prev").prop('disabled', false);}
+
+			toggleNavigation(currentPage, totalPages);
 			
 			if(!suppresEvents)newSlideHdl(currentPage, false);
+			updateSlideLook(currentPage, quick);
 			//put back children that are here to stay
 			$("#slide"+(currentPage-1)).children().each(function(){
 				if((parseInt($(this).attr("org"))+parseInt($(this).attr("stay")))>=currentPage){
@@ -617,6 +575,7 @@ function doSlide(){
 					$('#contentDiv').append( $(this) );
 				}
 			});
+			moveTitle(currentPage, quick);
 			//move all slides
 			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
 			$("html").transition({}, quick?0:350, function() {		
@@ -638,10 +597,7 @@ function doSlide(){
 			console.log("%cprev to " + currentPage, 'background: #cacef6;');
 			$("#slideIndex").html(""+(currentPage+1)+"/"+totalPages);
 
-			if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
-			} else { $("#navigation #next").prop('disabled', false);}
-			if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
-			} else { $("#navigation #prev").prop('disabled', false);}
+			toggleNavigation(currentPage, totalPages);
 
 			if(!suppresEvents)newSlideHdl(currentPage, true);
 			updateSlideLook(currentPage, quick);
@@ -656,8 +612,8 @@ function doSlide(){
 				}else{
 					//$(this).transition({translate:0}, 350, 'easeOutExpo');
 				}
-			});		
-			moveTitle(currentPage, quick);
+			});	
+			moveTitle(currentPage, quick);	
 			//move all slides
 			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
 			$("html").transition({}, quick?0:350, function() {			

@@ -160,12 +160,15 @@ function showTip(id, type) {
 	});
 }
 
-function nemoLoader() {
-	return;
-}
-
 function quizCheck() {
   return '<svg class="correct" version="1.1" width="100px" height="100px" viewBox="0 0 100 100"><path fill="none" stroke="#000000" stroke-width="5" stroke-dashoffset="0" stroke-dasharray="330 330" stroke miterlimit="10" d="M1.354,70.315c0,0,15.266-9.843,30.833-21.556C47.755,37.048,71.272,10.815,66.355,3.732c-2.191-3.157-13.432,0.067-25.167,6.083C26.59,17.298,11.064,28.961,9.354,36.398C6.271,49.814,28.106,47.035,34.188,46.815c4.478-0.162,16.123-1.007,22.353,1.622s7.668,11.003,3.605,17.503S40.283,84.316,43.854,90.982s21.958-1.792,31.042-5.542s22.875-11.208,22.875-11.208"></path></svg><svg class="wrong" width="100px" height="100px" viewBox="0 0 100 100"><path class="a" fill="none" stroke="black" stroke-width="5" stroke-miterlimit="10" d="M5.833,85.38C23.801,57.896,56.463,28.071,81.862,8.202"/><path class="b" fill="none" stroke="black" stroke-width="5" stroke-miterlimit="10" d="M5.833,13.321c7.068,7.208,46.47,47.115,71.676,77.179"/></svg>';
+}
+
+function toggleNavigation(currentPage, totalPages) {
+	if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
+	} else { $("#navigation #next").prop('disabled', false);}
+	if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
+	} else { $("#navigation #prev").prop('disabled', false);}
 }
 
 
