@@ -12,12 +12,21 @@
 }
 
 function setStay(givenStay) {
- var theDOM = dw.getDocumentDOM();
+    var theDOM = dw.getDocumentDOM();
     if (theDOM != null) {
         var theNode = theDOM.getSelectedNode();
-        if(theNode != null) theNode.stay = givenStay;
+        if(theNode != null) {
+            if((theNode.tagName == 'INPUT') || (theNode.tagName == 'SPAN') || (theNode.tagName == 'DIV') || (theNode.tagName == 'IMG')) {
+                if((theNode.class == 'slide activeSlide') || (theNode.class == 'slide') || (theNode.id == 'ghostDiv') || (theNode.id == 'ghostDivCover') || (theNode.class == 'nm_qItem') || (theNode.class == 'nm_qGroup') || (theNode.id == 'title') || (theNode.id == 'navigation')) {
+                    // Do nothing. This works better than the other way around
+                } else {
+                    theNode.stay = givenStay;
+                }
+            }
+        }
     }
 }
+
 
 //Old system. report stays to extension. and recieve the ghosts from it on slide change.
 /*
@@ -254,11 +263,21 @@ function moveSlide(fromPos, toPos) {
 
 function addASlide(givenCurrentSlide) {
     var theDOM = dw.getDocumentDOM();
+    
     if(theDOM != null) {
         var j = getTotalSlides(true);
         var c = parseInt(givenCurrentSlide);
-        theDOM.getElementById("contentDiv").innerHTML += ('<div class="slide" id="slide' + j + '"><div class="comment slideNumber">'+(j+1)+ '</div></div>');
-        if(j>0 && (c+1)<(j+1))moveSlide(j, (c+1));
+           
+        var node = theDOM.getElementById("slide" + c);
+        theDOM.setSelectedNode(node);
+        theDOM.insertHTML('<div class="slide" id="slide' + j + '"><div class="comment slideNumber">'+(j+1)+ '</div></div>', false);
+        
+        // Reset slide numbering
+        var slides = getSlideNodes (false);
+        for(i = 0; i < slides.length; i++) {
+            var id = ("slide"+i);
+            slides[i].setAttribute("id", id);
+        }
     }
 }
 
@@ -330,6 +349,7 @@ function remSlide(givenIndex){
 }
 
 function updateStay(givenIndex, action) {
+    
     var index = parseInt(givenIndex);
   
     var nodes = getSlideNodes(false);

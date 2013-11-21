@@ -55,7 +55,7 @@ package
 
 			//set timer
 			
-            var myTimer:Timer = new Timer(33, 0);
+            var myTimer:Timer = new Timer(100, 0);
             myTimer.addEventListener("timer", timerHandler);
             myTimer.start();
             var myTimerPath:Timer = new Timer(1000, 0);
@@ -101,7 +101,7 @@ package
 		
 		public static function selectSlide(event:IndexChangeEvent):void
 		{
-			("change slide selection from " + event.oldIndex + " to " + event.newIndex);
+			addToLog("change slide selection from " + event.oldIndex + " to " + event.newIndex);
 			currentSlide = event.newIndex;
 			callDW("gotoSlide", String(currentSlide), String(event.oldIndex)); 
 			//setGhosts();
@@ -112,7 +112,7 @@ package
 			var oldSlide: int = currentSlide;
 			currentSlide--;		
 			if(currentSlide<-1) currentSlide = totalSlides-1;
-			("change slide selection from " + oldSlide + " to " + currentSlide);
+			addToLog("change slide selection from " + oldSlide + " to " + currentSlide);
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
 			//callDW("forceGotoSlide", String(currentSlide)); 
 			if(extension) slideContainer.selectedIndex = currentSlide;		
@@ -124,7 +124,7 @@ package
 			var oldSlide: int = currentSlide;
 			currentSlide++;		
 			if(currentSlide>=totalSlides) currentSlide = -1;		
-			("change slide selection from " + oldSlide + " to " + currentSlide);	
+			addToLog("change slide selection from " + oldSlide + " to " + currentSlide);	
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
 			//callDW("forceGotoSlide", String(currentSlide)); 
 			if(extension) slideContainer.selectedIndex = currentSlide;
@@ -157,10 +157,10 @@ package
 			
 			CSXSInterface.instance.evalScript("remSlide", String(givenIndex));
 			//select proper slide now
+			
 			currentSlide--;
-			
-			// set stay of 
-			
+			//setGhosts();
+			callDW("createGhosts", String(currentSlide));
 			callDW("forceGotoSlide", String(currentSlide));
 			updateGUI();
 		}
@@ -168,28 +168,30 @@ package
 		public static function addASlide(event:MouseEvent):void
 		{
 			CSXSInterface.instance.evalScript("addASlide", String(currentSlide)); 
-			("change slide selection from " + currentSlide + " to " + (currentSlide+1));
+			CSXSInterface.instance.evalScript("updateStay", String(currentSlide+1), String("add")); 
+			addToLog("change slide selection from " + currentSlide + " to " + (currentSlide+1));
 			callDW("gotoSlide", String(currentSlide+1), String(currentSlide)); 
 			
-			CSXSInterface.instance.evalScript("updateStay", String(currentSlide), String("add")); 
 			currentSlide++;
+			//setGhosts();
+			callDW("createGhosts", String(currentSlide));
 			updateGUI();
 		}
 		
 		public static function getAnimationList():void
 		{			
-			("checkForAnimations");
+			addToLog("checkForAnimations");
 			var rdata:* = requestDW("checkForAnimations");
 			("" + rdata.animations);
 			if(rdata.animations == "none") {
 				//no animations found! empty the arrays
-				("no animations found");
+				addToLog("no animations found");
 				animations = new Array();
 				animationPaths = new Array();
 			} else { //animations found! fill the arrys
 				animations = rdata.animations.split(",");
 				animationPaths = rdata.paths.split(",");
-				("animations: " + animations + "\npaths: " + rdata.paths.split(","));
+				addToLog("animations: " + animations + "\npaths: " + rdata.paths.split(","));
 			}			
 		}
 		
@@ -197,22 +199,22 @@ package
 		{			
 			var rdata:* = requestDW("addAnimation", "", "none"); //no name, new animation
 			if(rdata.animation == "none"){
-				("addAnimation failed");
+				addToLog("addAnimation failed");
 			} else {
 				
 				if(animations.indexOf(rdata.animation) == -1){ //add animation if not already in list.
 					animations.push(rdata.animation); 
 					animationPaths.push(rdata.path);
 				}
-				
+		
 				updateGUI();
-				("Added animation: " + rdata.animation + " path: " + rdata.path);
+				addToLog("Added animation: " + rdata.animation + " path: " + rdata.path);
 			}
 			
 		}
 		
 		public static function updateAnimation(event:ItemClickEvent):void {
-			("update " + event.item.toString() + "(" + animationPaths[animations.indexOf(event.item.toString())] + ")");
+			addToLog("update " + event.item.toString() + "(" + animationPaths[animations.indexOf(event.item.toString())] + ")");
 			
 			var rdata:* = requestDW(
 				"addAnimation", //call add, even for update
@@ -220,22 +222,22 @@ package
 				animationPaths[animations.indexOf(event.item.toString())] //path, got by getting the index from the name
 			);
 			if(rdata.animation == "none"){
-				("updateAniamtion failed");
+				addToLog("updateAniamtion failed");
 			} else {
 				animationPaths[animations.indexOf(event.item.toString())] = rdata.path; //there is a chance that there is a now path selected. so override the old one.
-				("" + rdata.animation + " updated to " + rdata.path);
+				addToLog("" + rdata.animation + " updated to " + rdata.path);
 			}
 		}
 		
 		public static function assignAnimation(event:MouseEvent):void
 		{
 			if(animationContainer.selectedIndex >= 0) {
-				("assign animation: " + animations[animationContainer.selectedIndex] + " - " + animationContainer.selectedIndex);
+				addToLog("assign animation: " + animations[animationContainer.selectedIndex] + " - " + animationContainer.selectedIndex);
 				var rstr:String = requestDW("assignAnimation", animations[animationContainer.selectedIndex]).success;
 				if(rstr == "true") {
 					//
 				} else { 
-					("meh");
+					addToLog("meh");
 				}
 			}
 		}
@@ -251,9 +253,9 @@ package
 		{
 			if(nrSlides.value == totalSlides) return;
 			if(nrSlides.value > totalSlides) {
-				("add slides to " + nrSlides.value);
+				addToLog("add slides to " + nrSlides.value);
 			}else{
-				("trim slides to " + nrSlides.value);
+				addToLog("trim slides to " + nrSlides.value);
 			}
 			
 			callDW("updateSlides", String(nrSlides.value), "false"); 
@@ -266,7 +268,7 @@ package
 		
 		public static function changeStay(event:Event):void
 		{
-			("changing stay to: " + stay.value);
+			addToLog("changing stay to: " + stay.value);
 			currentStay = stay.value;
 			callDW("setStay", String(currentStay));
 		}		
@@ -290,7 +292,7 @@ package
 			var path:String = requestDW("getDocumentPath").path;
 			if(!path) path = ""; //set empty
 			if(path != oldDocumentPath) { //document changed!
-				("Document changed to: " + path + "!");
+				addToLog("Document changed to: " + path + "!");
 				oldDocumentPath = path;
 							
 				getAnimationList();
@@ -316,7 +318,7 @@ package
 			{
 				return result.data;	    	
 			} else {
-				("ERROR: requestDW(" + givenFunctionName +") resturns null!");
+				addToLog("ERROR: requestDW(" + givenFunctionName +") resturns null!");
 				return "";
 			}
 		}
