@@ -21,6 +21,9 @@
 	       	$(this).css("top", "");
 	        $(this).slider(settings); //make the default slider
 
+	        //make slider touch friendly
+	        $('.ui-slider-handle').draggable();
+
 	    	//add title
 	    	$( this ).append($('<label class="sliderTitle">' + (settings.title) + '</label>'));
 

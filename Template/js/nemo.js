@@ -19,6 +19,9 @@ var scripts = [	'js/jquery.transit.min.js',
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
 				"css/custom-theme/jquery-ui-1.10.3.custom.css",
+				"js/jquery.ui.touch-punch.min.js",
+				"js/jquery.event.move.js",
+				"js/jquery.event.swipe.js",
 				"js/jquery.nm_slider.js"
 			];
 var animations;	
@@ -185,7 +188,6 @@ function startNemoScript(){
 		// Parse Sliders
 		var sliderObject;
 		$(".nm_Slider.autoGenerate").each(function() {
-			console.log($(this).attr("range"));
 			sliderObject = {range: (typeof $(this).attr("range") == 'undefined') ? false: true};
     		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseInt($(this).attr("min"));
     		if(typeof $(this).attr("max") != 'undefined') sliderObject.max = parseInt($(this).attr("max"));
@@ -256,7 +258,6 @@ function startNemoScript(){
 
 		//parse experiemental sections
 		$(".nm_Experiment").each(function() {
-			console.log("experiment! " + $(this).attr("id"));
 			$(this).children().each(function() {
 				$(this).css("position", "relative");
 				$(this).css("left", "");
@@ -384,10 +385,8 @@ function doTextBubbles() {
 	$(".nm_TextBubble").each(function(){
 		var h = $(this).attr("rHeight");
 		if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h <55)) {
-			console.log("making small");
 			$(this).append('<div class="nm_TextBubblePointer small"></div>');
 		} else {
-			console.log("making big");
 			$(this).append('<div class="nm_TextBubblePointer"></div>');
 		}
 	});
@@ -441,7 +440,7 @@ function endNemoScript(){
 	console.log("%c-----------Nemodone-----------", 'background: #f0e269;');
 
 	setTimeout(function() {
-		progress("Done 100ms timeout");
+		progress("Done 50ms timeout");
 	    onLoad(); //notify the javascript of the module that we're done
 	    //goto slide last viewed in Dreamweaver
 	    quick = true;
@@ -469,15 +468,16 @@ function endNemoScript(){
 	    $("#navigation").show();
 	    $("#title").toggle("slide");
 
-	}, 50); //wait 50ms to give an extra buffer
+	    //prevent scroll
+	    
+	    $(document).on('touchmove',function(e){
+	    	e.preventDefault();
+	    });
+	    
+	    $("html").on("swipeleft", function(e){console.log("swipe next"); next();});
+	    $("html").on("swiperight", function(e){console.log("swipe prev"); prev();}); 
 
-	//prevent scroll
-	$(document).on('touchmove',function(e){
-		e.preventDefault();
-	});
-	
-	//$('html').on("swipeleft", function(){next();});
-	//$('html').on("swiperight", function(){prev();});
+	}, 50); //wait 50ms to give an extra buffer	
 }
 
 function next(){
