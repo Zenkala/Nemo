@@ -3,6 +3,9 @@ Changelog
   Added nm_slider
   All objects will have a unique id (not present in release directory)	
   Added highlight to release
+  Added NM_ClosedQuiz instead of NM_qGroup & nm_qItem. Inspector nm_qItem is still present
+  Added nm_ExperimentPane
+  Added dialog for Closed Quiz component
 
 0.3.7
   Added NM_Highlight

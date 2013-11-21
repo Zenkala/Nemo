@@ -1,0 +1,32 @@
+<!-- MENU-LOCATION=NONE -->
+<html xmlns:MMString="http://www.macromedia.com/schemes/data/string/">
+<head>
+<!-- Copyright 2000, 2001, 2002, 2003 Macromedia, Inc. All rights reserved. -->
+<title>NM_ClosedQuiz</title>
+<script>
+// Copyright 2000, 2001, 2002, 2003, 2004 Macromedia, Inc. All rights reserved.
+
+function isDOMRequired() {
+	return false;
+}
+
+function objectTag(){
+  // We're keeping this a separate command, as we want to use the
+  // "buttons at the bottom" style.
+  var cmdFile = dreamweaver.getConfigurationPath() + "/Commands/NM_ClosedQuiz.htm";
+  var cmdDOM = dreamweaver.getDocumentDOM(cmdFile);
+  if ( dw.getShowDialogsOnInsert() )
+  {
+     dreamweaver.popupCommand("NM_ClosedQuiz.htm");
+  }
+  else
+  {
+     // Import default
+  }
+  return (cmdDOM.parentWindow.createComponentStr());	
+}
+</script>
+</head>
+<body>
+</body>
+</html>
