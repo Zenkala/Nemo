@@ -5,6 +5,8 @@ var sliding = false;
 var quick = false;
 var suppresEvents = false;
 var gotoSlide = 0;
+var blockSliding = false;
+var swipeTimer;
 
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
 var scripts = [	'js/jquery.transit.min.js',
@@ -22,6 +24,7 @@ var scripts = [	'js/jquery.transit.min.js',
 				"js/jquery.ui.touch-punch.min.js",
 				"js/jquery.event.move.js",
 				"js/jquery.event.swipe.js",
+				"js/jquery.timer.js",
 				"js/jquery.nm_slider.js"
 			];
 var animations;	
@@ -469,28 +472,53 @@ function endNemoScript(){
 	    $("#title").toggle("slide");
 
 	    //prevent scroll
-	    
 	    $(document).on('touchmove',function(e){
 	    	e.preventDefault();
 	    });
+
+	    //make a timer
+	    swipeTimer = $.timer(function() {
+	    	swipeTimer.stop();
+	    	console.log("unblock");
+        	blockSliding = false;
+	    });
+
+	    swipeTimer.set({ time : 100, autostart : false });
+
 	    
-	    $("html").on("swipeleft", function(e){console.log("swipe next"); next();});
-	    $("html").on("swiperight", function(e){console.log("swipe prev"); prev();}); 
+	    //$("html").on("swipeleft",  ":not(.nm_SliderContainer)", function(e){console.log("swipe next"); next();});
+	    //$("html").on("swiperight", ":not(.nm_SliderContainer)", function(e){console.log("swipe prev"); prev();}); 
+	    $("#contentDiv").on("swipeleft",   function(e){
+	    	console.log($(e.target));
+	    	next();});
+	    $("#contentDiv").on("swiperight",  function(e){console.log( $(e.target)); prev();}); 
+	    $(".nm_SliderContainer").on("mousedown", function(e) { console.log("blokc! mouse"); blockSliding = true; });
+	    $(".nm_SliderContainer").on("touchstart", function(e) { console.log("blokc! touch"); blockSliding = true; });
+	    //$(".nm_SliderContainer").on("mouseup", function(e) { console.log("unblokc!"); blockSliding = false; });
 
 	}, 50); //wait 50ms to give an extra buffer	
 }
 
 function next(){
-	slideBuffer.push("next");
-	if(!sliding)doSlide();
+	if(!blockSliding) {
+		slideBuffer.push("next");
+		if(!sliding)doSlide();
+	} else {
+		console.log("unblocking");
+		swipeTimer.play(true);
+	}
 }
 function prev(){
-	slideBuffer.push("prev");	
-	if(!sliding)doSlide();
+	if(!blockSliding) {
+		slideBuffer.push("prev");	
+		if(!sliding)doSlide();
+	} else {
+		console.log("unblocking");
+		swipeTimer.play(true);
+	}
 }
 
 function doSlide(){
-	console.log("doSlide called. buffer: " + slideBuffer.length + " quick: " + quick)
 	if(slideBuffer.length<=0){
 		console.log("stop");
 		sliding = false;
@@ -499,37 +527,41 @@ function doSlide(){
 	}
 		
 	sliding = true;
-	console.log("go");
 	if(slideBuffer[0] == "next"){
-		var elementbuffer = [];		
-		currentPage++;
-		console.log("%cnext to " + currentPage, 'background: #cacef6;');	
-		$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
-		
-		if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
-		} else { $("#navigation #next").prop('disabled', false);}
-		if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
-		} else { $("#navigation #prev").prop('disabled', false);}
-		
-		if(!suppresEvents)newSlideHdl(currentPage, false);
-		//put back children that are here to stay
-		$("#slide"+(currentPage-1)).children().each(function(){
-			if((parseInt($(this).attr("org"))+parseInt($(this).attr("stay")))>=currentPage){
-				//attach satys children to content div as temporairy storage
-				elementbuffer.push($(this));
-				$('#contentDiv').append( $(this) );
-			}
-		});
-		//move all slides
-		$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
-		$("html").transition({}, quick?0:350, function() {		
-			elementbuffer.reverse().forEach(function(entry){
-				$(entry).prependTo($('#slide' + currentPage));
-			});
-			if(!suppresEvents)newSlideStopHdl(currentPage, false);
+		if(currentPage+1>=totalPages){//skip this order
 			slideBuffer.shift(); //rem first element
 			doSlide(); //recursive
-		});
+		}else{
+			var elementbuffer = [];		
+			currentPage++;
+			console.log("%cnext to " + currentPage, 'background: #cacef6;');	
+			$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
+			
+			if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
+			} else { $("#navigation #next").prop('disabled', false);}
+			if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
+			} else { $("#navigation #prev").prop('disabled', false);}
+			
+			if(!suppresEvents)newSlideHdl(currentPage, false);
+			//put back children that are here to stay
+			$("#slide"+(currentPage-1)).children().each(function(){
+				if((parseInt($(this).attr("org"))+parseInt($(this).attr("stay")))>=currentPage){
+					//attach satys children to content div as temporairy storage
+					elementbuffer.push($(this));
+					$('#contentDiv').append( $(this) );
+				}
+			});
+			//move all slides
+			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
+			$("html").transition({}, quick?0:350, function() {		
+				elementbuffer.reverse().forEach(function(entry){
+					$(entry).prependTo($('#slide' + currentPage));
+				});
+				if(!suppresEvents)newSlideStopHdl(currentPage, false);
+				slideBuffer.shift(); //rem first element
+				doSlide(); //recursive
+			});
+		}
 	}else{ //back
 		if(currentPage==0){//skip this order
 			slideBuffer.shift(); //rem first element
