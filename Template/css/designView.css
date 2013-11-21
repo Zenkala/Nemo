@@ -174,8 +174,15 @@ ul {
 	display:				block;
 }
 
+.slide[type=experiment] {
+	background-image:url("designView/experimentslide.png"); 
+	background-position: 305px 288px;
+	background-repeat: no-repeat;
+	background-color: rgba(205, 229, 235, 0.5);
+}
+
 #commentslide {
-	background: 			#F1F2F2	url("commentslide.png") 356px 288px no-repeat;
+	background: 			#F1F2F2	url("designView/commentslide.png") 356px 288px no-repeat;
 }
 
 .slideNumber {
@@ -197,11 +204,6 @@ ul {
 	background-color: 		rgba(255, 255, 255, 0.5);
 }
 
-.nm_qGroup {
-	background-image: 		url("designView/qGroup.png");
-	background-repeat: 		repeat;
-}
-
 .nm_qItem {
 	display: block;
 	width: 100%;
@@ -219,4 +221,14 @@ ul {
 .nm_Slider{
 	background-image: 		url("designView/slider.png");
 	background-repeat: 		no-repeat;
+}
+
+.nm_ExperimentPane {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 300px;
+	height: 600px;
+	border: 1px;
+	background-color: rgba(0, 0, 0, 0.5);
 }

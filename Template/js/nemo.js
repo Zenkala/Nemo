@@ -5,6 +5,8 @@ var sliding = false;
 var quick = false;
 var suppresEvents = false;
 var gotoSlide = 0;
+var slidesToMoveTitle = [];
+var isTitleMoved = false;
 
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
 var scripts = [	'js/jquery.transit.min.js',
@@ -175,14 +177,24 @@ function startNemoScript(){
 		progress("Parsed sliders");
 
 		// Parse quiz elements
-		$(".nm_qGroup").each(function() {
+		$(".nm_ClosedQuiz").each(function() {
+			$(this).append('<div class="nm_qCheck"></div>');
 			$(this).children(".nm_qCheck").append(quizCheck());
 			$(this).children(".nm_qCheck").hide();
 			$(this).find(".nm_qCheck .wrong").hide();
 			$(this).find(".nm_qCheck .correct").hide();
 
+			$(this).find(".nm_qItem").each(function() {
+				var tip = $(this).attr("tip");
+				if(tip) {
+					$("#" + tip).addClass("nm_Explanation");
+					$("#" + tip).transition({ scale: 0 }, 0);
+				}
+				$(this).children("label").prepend("<span><span></span></span>");
+			});
+
 			var id = $(this).attr("id");
-			log("Parse quiz " + id);
+			log("Parse Closed Quiz " + id);
 			var type = "closed";
 			if($(this).attr("type")) type = $(this).attr("type");
 
@@ -192,14 +204,18 @@ function startNemoScript(){
 			if(type == "closed") {
 				countCorrectItems = $(this).children(".nm_qItem[answer='true']").length;
 				if(countCorrectItems == 1) {
-					// An closed question with only one correct answer
+					/* 	MULTIPLY CHOICE 
+						An closed question with only one correct answer
+					*/
 					$(this).find("input").attr("type", "radio");
 					$(this).find("input").each(function() {
 						$(this).attr("onclick", " checkQuiz('" + id + "', '" + type + "', '" + $(this).parent().attr("id") + "'); ");
 					});
 
 				} else if(countCorrectItems > 1) {
-					// An closed question with multiply correct answers
+					/* 	TRUE FALSE
+						An closed question with multiply correct answers
+					*/
 					$(this).find("input").attr("type", "checkbox");
 					$(this).find("input").attr("onclick", " $( this ).parent().toggleClass( 'selected' );");
 
@@ -261,6 +277,27 @@ function startNemoScript(){
 		});
 		console.log("element origins set");
 		progress("Slides and content positioned");
+
+		// Check position title
+		if(!document.getElementById("contentDiv_bg")) $("#contentDiv").prepend('<div id="contentDiv_bg" class="default"></div>');
+		$(".nm_ExperimentPane").each(function() {
+			if($(this).parent().hasClass("slide")) {
+				var nr = $(this).parent().attr("id");
+				nr = nr.replace("slide","");
+				i = parseInt(nr);
+				slidesToMoveTitle.unshift(i);
+				if($(this).attr("stay").length) {
+					var stay = $(this).attr("stay");
+					console.log("The experimentpane has a stay of " + stay);
+					var j = parseInt(stay);
+					for(var x = (i+1); x <= (i+j); ++x) {
+						slidesToMoveTitle.unshift(x);
+					}
+				}
+			} else {
+				console.log("Error .nm_ExperimentPane. Could not find the slide.");
+			}
+		});
 
 		// Add open/close functionality to InfoBlock
 		$(".nm_InfoBlock").on({
@@ -357,8 +394,6 @@ function doTextBubbles() {
 		var bubble = $(this);
 		bubble.transition({ scale: 0 }, 0);
 		if(!target.hasClass("nm_qItem")) {
-			console.log(target)
-			console.log(target.css("left"), $(this).attr("rHeight"), $(this).attr("rWidth"));
 			var leftOffset = 0;
 			var topOffset = 0;
 			if(bubble.hasClass("bottom-left")){		topOffset = -parseInt(bubble.attr("rHeight")) - 58; }
@@ -461,6 +496,9 @@ function doSlide(){
 	if(slideBuffer[0] == "next"){
 		var elementbuffer = [];		
 		currentPage++;
+		if(currentPage >= totalPages) currentPage = (totalPages-1);
+		if(currentPage < 0) currentPage = 0;
+
 		console.log("%cnext to " + currentPage, 'background: #cacef6;');	
 		$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
 		
@@ -470,6 +508,7 @@ function doSlide(){
 		} else { $("#navigation #prev").prop('disabled', false);}
 		
 		if(!suppresEvents)newSlideHdl(currentPage, false);
+		updateSlideLook(currentPage, quick);
 		//put back children that are here to stay
 		$("#slide"+(currentPage-1)).children().each(function(){
 			if((parseInt($(this).attr("org"))+parseInt($(this).attr("stay")))>=currentPage){
@@ -478,6 +517,7 @@ function doSlide(){
 				$('#contentDiv').append( $(this) );
 			}
 		});
+		moveTitle(currentPage, quick);
 		//move all slides
 		$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
 		$("html").transition({}, quick?0:350, function() {		
@@ -504,7 +544,7 @@ function doSlide(){
 			} else { $("#navigation #prev").prop('disabled', false);}
 
 			if(!suppresEvents)newSlideHdl(currentPage, true);
-		
+			updateSlideLook(currentPage, quick);
 			//put back children that are here to stay
 			$("#slide"+(currentPage+1)).children().each(function(){
 				if(parseInt($(this).attr("org"))<=currentPage){
@@ -517,6 +557,7 @@ function doSlide(){
 					//$(this).transition({translate:0}, 350, 'easeOutExpo');
 				}
 			});		
+			moveTitle(currentPage, quick);
 			//move all slides
 			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
 			$("html").transition({}, quick?0:350, function() {			
