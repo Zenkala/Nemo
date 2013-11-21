@@ -414,6 +414,19 @@ header#title span {
 	height:					75px;
 }
 
+.nm_Button {
+	padding:				0px 5px 2px 5px;
+}
+
+.nm_Slider {	
+  	margin-top: 			50px;
+}
+
+.nm_SliderContainer{
+  	height: 				85px;
+  	width: 					216px;
+  	margin:					20px 5px;
+}
 .nm_Slider label {
   	position: 				absolute;
   	margin-top: 			20px;
@@ -434,14 +447,25 @@ header#title span {
 	top: 					-25px;
 	left:					-1em;
 	position: 				absolute;
-
 }
+
 
 .slide{
 	position:				absolute;
 	width:					1024px;
 	height:					672px;
 	z-index: 				2;
+}
+
+.nm_Experiment {
+	height:					413px;
+	left:					20px;
+	width:					220px;
+	padding:				0px 10px;
+	position: 				relative;
+	top:					100px;
+	background-color: 		rgba(0, 158, 194, 0.2);
+	border:					2px solid #009ec2;
 }
 
 .nm_ExperimentPane {
@@ -459,8 +483,8 @@ header#title span {
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	width:					1024px;
-	height:					672px;
+	width:1024px;
+	height:	672px;
 }
 #contentDiv_bg.default { background-image: url("bg_default.svg"); }
 #contentDiv_bg.experiment { background-image: url("bg_experiment.svg"); }

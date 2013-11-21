@@ -9,6 +9,9 @@ var HE_RANGE;
 var HE_MIN;
 var HE_MAX;
 var HE_STEPPING;
+var HE_VALUE1;
+var HE_VALUE2;
+var HE_TITLE;
 
 var ID;
 var AG;
@@ -16,6 +19,9 @@ var RANGE;
 var MIN;
 var MAX;
 var STEPPING;
+var VALUE1;
+var VALUE2;
+var TITLE;
 // ******************** API ****************************
 
 function canInspectSelection() {
@@ -36,6 +42,9 @@ function initializeUI() {
 	HE_MIN = dwscripts.findDOMObject("theMin");
 	HE_MAX = dwscripts.findDOMObject("theMax");
 	HE_STEPPING = dwscripts.findDOMObject("theStepping");
+	HE_VALUE1 = dwscripts.findDOMObject("theValue1");
+	HE_VALUE2 = dwscripts.findDOMObject("theValue2");
+	HE_TITLE = dwscripts.findDOMObject("theTitle");
 }
 
 
@@ -95,6 +104,30 @@ function setGUI(){
 		STEPPING = theObj.getAttribute("stepping");
 		HE_STEPPING.value = STEPPING;
 	}	
+
+	if(typeof theObj.getAttribute("value1") == 'undefined'){
+		VALUE1 = 10;
+		HE_VALUE1.value = VALUE1;
+	} else {
+		VALUE1 = theObj.getAttribute("value1");
+		HE_VALUE1.value = VALUE1;
+	}	
+
+	if(typeof theObj.getAttribute("value2") == 'undefined'){
+		VALUE2 = 0;
+		HE_VALUE2.value = VALUE2;
+	} else {
+		VALUE2 = theObj.getAttribute("value2");
+		HE_VALUE2.value = VALUE2;
+	}	
+
+	if(typeof theObj.getAttribute("title") == 'undefined'){
+		TITLE = "Een Slider";
+		HE_TITLE.value = TITLE;
+	} else {
+		TITLE = theObj.getAttribute("title");
+		HE_TITLE.value = TITLE;
+	}	
 }
 
 function updateTag(attrib) {	
@@ -150,6 +183,32 @@ function updateTag(attrib) {
 					theObj.removeAttribute("stepping");					
 				}
 				break;	
+			case "value1":
+				VALUE1 = parseInt(HE_VALUE1.value);
+				if(VALUE1){
+					theObj.setAttribute("value1", VALUE1);
+				} else {
+					theObj.removeAttribute("value1");					
+				}
+				break;				
+			case "value2":
+				VALUE2 = parseInt(HE_VALUE2.value);
+				if(VALUE2){
+					theObj.setAttribute("value2", VALUE2);
+				} else {
+					theObj.removeAttribute("value2");					
+				}
+				break;		
+			case "title":
+				TITLE = HE_TITLE.value;
+				if(TITLE){
+					if (theObj.getAttribute("title") != TITLE && TITLE != "") {
+						theObj.setAttribute("title", TITLE);
+					} 					
+				} else {
+					theObj.removeAttribute("title");					
+				}
+				break;						
 		}
 	}	
 }

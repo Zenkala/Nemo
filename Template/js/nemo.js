@@ -7,6 +7,8 @@ var suppresEvents = false;
 var gotoSlide = 0;
 var slidesToMoveTitle = [];
 var isTitleMoved = false;
+var blockSliding = false;
+var swipeTimer;
 
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
 var scripts = [	'js/jquery.transit.min.js',
@@ -21,9 +23,14 @@ var scripts = [	'js/jquery.transit.min.js',
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
 				"css/custom-theme/jquery-ui-1.10.3.custom.css",
+				"js/jquery.ui.touch-punch.min.js",
+				"js/jquery.event.move.js",
+				"js/jquery.event.swipe.js",
+				"js/jquery.timer.js",
 				"js/jquery.nm_slider.js"
 			];
 var animations;	
+var animationNames;	
 
 function log(msg) {
 	if (console.timeStamp) {
@@ -69,11 +76,13 @@ function nemoInit(){
 
 			//check for animations we have to load 
 			animations = new Array();
+			animationNames = new Array();
 			var animUrl = "";
 			//$(".loaderAnimation").each(function(){
 			$(".nm_Animation").each(function(){
 				animUrl = $(this).attr("url").replace(/%20/g, " ");
 				console.log("found animation: " + $(this).attr("id"));
+				animationNames.push($(this).attr("id"));
 				animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js");
 				totalProgress++;
 			});
@@ -116,12 +125,28 @@ function loadAnims(){
 			},
 			complete: function(){
 				log("loading animations complete"); 
-				startNemoScript();
+				attachBootLoaders();
 			}
 		}]);
 	}else{
+		animationsReadyFlag = true;
 		startNemoScript();
 	}
+}
+
+function attachBootLoaders(){
+	//This function is called everytime a Edge composition is ready for prime time.
+	//the parameter compId contains the name of the composition that has finished loading.
+	//We check if that animation was in the list of animations-that-arn't-done-loading-yet and remove it from the said list.
+	//So, when the list is empty all animations are done loading and we can continue
+	AdobeEdge.bootstrapCallback(function(compId) {
+		console.log('%c' + "Animation " + compId + " bootloader done!", 'background: #caf0f6;');
+		if($.inArray(compId[0], animationNames) >=0 ) animationNames.splice($.inArray(compId[0], animationNames), 1);
+		if(animationNames.length <= 0) {
+			console.log('%c' + "All animation bootLoaders are done!", 'background: #caf0f6;');
+			startNemoScript();
+		}
+	});
 }
 
 function startNemoScript(){		
@@ -166,13 +191,22 @@ function startNemoScript(){
 		progress("Parsed begrippen");
 
 		// Parse Sliders
-
+		var sliderObject;
 		$(".nm_Slider.autoGenerate").each(function() {
-				console.log($(this).attr("range"));
-			$(this).nm_slider({
-
-				range: (typeof $(this).attr("range") == 'undefined') ? false: true
-    		});
+			sliderObject = {range: (typeof $(this).attr("range") == 'undefined') ? false: true};
+    		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseInt($(this).attr("min"));
+    		if(typeof $(this).attr("max") != 'undefined') sliderObject.max = parseInt($(this).attr("max"));
+    		if(typeof $(this).attr("stepping") != 'undefined') sliderObject.step = parseInt($(this).attr("stepping"));
+    		if(sliderObject.range) {
+    			sliderObject.values = [ 
+    				sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 30,
+    				sliderObject.value = (typeof $(this).attr("value2") != 'undefined') ?  parseInt($(this).attr("value2")) : 70
+    			];
+    		} else {
+    			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 50;
+    		}
+    		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
+    		$(this).nm_slider( sliderObject );
 		});
 		progress("Parsed sliders");
 
@@ -240,6 +274,18 @@ function startNemoScript(){
 			return cButton;
 		}
 		progress("Parsed quiz");
+
+		//parse experiemental sections
+		$(".nm_Experiment").each(function() {
+			$(this).children().each(function() {
+				$(this).css("position", "relative");
+				$(this).css("left", "");
+				$(this).css("top", "");
+				//$(this).css("margin-top", "50px");
+				//$(this).css("border", "solid 0px black");
+				console.log(this);
+			});
+		});
 
 		
 		//set contentDiv width and innerHeight
@@ -379,10 +425,8 @@ function doTextBubbles() {
 	$(".nm_TextBubble").each(function(){
 		var h = $(this).attr("rHeight");
 		if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h <55)) {
-			console.log("making small");
 			$(this).append('<div class="nm_TextBubblePointer small"></div>');
 		} else {
-			console.log("making big");
 			$(this).append('<div class="nm_TextBubblePointer"></div>');
 		}
 	});
@@ -434,7 +478,7 @@ function endNemoScript(){
 	console.log("%c-----------Nemodone-----------", 'background: #f0e269;');
 
 	setTimeout(function() {
-		progress("Done 100ms timeout");
+		progress("Done 50ms timeout");
 	    onLoad(); //notify the javascript of the module that we're done
 	    //goto slide last viewed in Dreamweaver
 	    quick = true;
@@ -443,10 +487,10 @@ function endNemoScript(){
 	    }
 
 	    if(gotoSlide == 0) { //if we don't do a quick next, no enterframe handles are called. So call them manually.
-	    	//this also, is a ugly hack that prevnets chrome from f*cking up when there is an animation on slide 1, and there are more slides afterwards.
-			suppresEvents = true;
-	    	next();
-	    	prev();
+	    	//this also, is a ugly hack that prevents chrome from f*cking up when there is an animation on slide 1, and there are more slides afterwards.
+			//suppresEvents = true;
+	    	//next();
+	    	//prev();
 	    	newSlideHdl(0, false);
 	    	newSlideStopHdl(0, false);
 	    }
@@ -462,28 +506,54 @@ function endNemoScript(){
 	    $("#navigation").show();
 	    $("#title").toggle("slide");
 
-	}, 100); //wait 100ms to give initizing scripts within Edge Animations a chance to do their stuff.
+	    //prevent scroll
+	    $(document).on('touchmove',function(e){
+	    	e.preventDefault();
+	    });
 
-	//prevent scroll
-	$(document).on('touchmove',function(e){
-		e.preventDefault();
-	});
-	
-	//$('html').on("swipeleft", function(){next();});
-	//$('html').on("swiperight", function(){prev();});
+	    //make a timer
+	    swipeTimer = $.timer(function() {
+	    	swipeTimer.stop();
+	    	console.log("unblock");
+        	blockSliding = false;
+	    });
+
+	    swipeTimer.set({ time : 100, autostart : false });
+
+	    
+	    //$("html").on("swipeleft",  ":not(.nm_SliderContainer)", function(e){console.log("swipe next"); next();});
+	    //$("html").on("swiperight", ":not(.nm_SliderContainer)", function(e){console.log("swipe prev"); prev();}); 
+	    $("#contentDiv").on("swipeleft",   function(e){
+	    	console.log($(e.target));
+	    	next();});
+	    $("#contentDiv").on("swiperight",  function(e){console.log( $(e.target)); prev();}); 
+	    $(".nm_SliderContainer").on("mousedown", function(e) { console.log("blokc! mouse"); blockSliding = true; });
+	    $(".nm_SliderContainer").on("touchstart", function(e) { console.log("blokc! touch"); blockSliding = true; });
+	    //$(".nm_SliderContainer").on("mouseup", function(e) { console.log("unblokc!"); blockSliding = false; });
+
+	}, 50); //wait 50ms to give an extra buffer	
 }
 
 function next(){
-	slideBuffer.push("next");
-	if(!sliding)doSlide();
+	if(!blockSliding) {
+		slideBuffer.push("next");
+		if(!sliding)doSlide();
+	} else {
+		console.log("unblocking");
+		swipeTimer.play(true);
+	}
 }
 function prev(){
-	slideBuffer.push("prev");	
-	if(!sliding)doSlide();
+	if(!blockSliding) {
+		slideBuffer.push("prev");	
+		if(!sliding)doSlide();
+	} else {
+		console.log("unblocking");
+		swipeTimer.play(true);
+	}
 }
 
 function doSlide(){
-	console.log("doSlide called. buffer: " + slideBuffer.length + " quick: " + quick)
 	if(slideBuffer.length<=0){
 		console.log("stop");
 		sliding = false;
@@ -492,7 +562,6 @@ function doSlide(){
 	}
 		
 	sliding = true;
-	console.log("go");
 	if(slideBuffer[0] == "next"){
 		var elementbuffer = [];		
 		currentPage++;
@@ -525,9 +594,40 @@ function doSlide(){
 				$(entry).prependTo($('#slide' + currentPage));
 			});
 			if(!suppresEvents)newSlideStopHdl(currentPage, false);
+		if(currentPage+1>=totalPages){//skip this order
 			slideBuffer.shift(); //rem first element
 			doSlide(); //recursive
-		});
+		}else{
+			var elementbuffer = [];		
+			currentPage++;
+			console.log("%cnext to " + currentPage, 'background: #cacef6;');	
+			$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
+			
+			if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
+			} else { $("#navigation #next").prop('disabled', false);}
+			if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
+			} else { $("#navigation #prev").prop('disabled', false);}
+			
+			if(!suppresEvents)newSlideHdl(currentPage, false);
+			//put back children that are here to stay
+			$("#slide"+(currentPage-1)).children().each(function(){
+				if((parseInt($(this).attr("org"))+parseInt($(this).attr("stay")))>=currentPage){
+					//attach satys children to content div as temporairy storage
+					elementbuffer.push($(this));
+					$('#contentDiv').append( $(this) );
+				}
+			});
+			//move all slides
+			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
+			$("html").transition({}, quick?0:350, function() {		
+				elementbuffer.reverse().forEach(function(entry){
+					$(entry).prependTo($('#slide' + currentPage));
+				});
+				if(!suppresEvents)newSlideStopHdl(currentPage, false);
+				slideBuffer.shift(); //rem first element
+				doSlide(); //recursive
+			});
+		}
 	}else{ //back
 		if(currentPage==0){//skip this order
 			slideBuffer.shift(); //rem first element
