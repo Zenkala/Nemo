@@ -484,6 +484,9 @@ function endNemoScript(){
 			//suppresEvents = true;
 	    	//next();
 	    	//prev();
+	    	toggleNavigation(0, 2);
+	    	updateSlideLook(currentPage, quick);
+	    	moveTitle(0);
 	    	newSlideHdl(0, false);
 	    	newSlideStopHdl(0, false);
 	    }
