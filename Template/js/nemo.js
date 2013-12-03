@@ -9,6 +9,7 @@ var slidesToMoveTitle = [];
 var isTitleMoved = false;
 var blockSliding = false;
 var swipeTimer;
+var jaxTimeout = 0;
 
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
 var scripts = [	'js/jquery.transit.min.js',
@@ -155,239 +156,250 @@ function startNemoScript(){
 	log("configure MathJax");
 	//jax initializes slow. So there is a change it's not yet done when we get here.
 	if(typeof MathJax == 'undefined') {
-		console.log("jax undefined! trying again over 200 ms");		
-		window.setTimeout("startNemoScript()",200);//try again
-		return null; //quick this function for now.
-	}//else: jax is defined. we can continue!
+		console.log("jax undefined! trying again over 200 ms " + (jaxTimeout+1) + "/10");		
+		if(jaxTimeout<=10){
+			jaxTimeout++;
+			window.setTimeout("startNemoScript()", 200);//try again
+			return null; //quick this function for now.
+		} else {
+			//jax times out, continue anyway
+			parseComponents();
+			console.log('%c' + "MathJax is unable to load!", 'background: #ff0000;');
+			throw new Error("MathJax is unable to load!");
+			return null;
+		}
+	}//else: jax is defined. we can continue! 
 
 	MathJax.Hub.Configured();
-	MathJax.Hub.Register.StartupHook("End", function () {
-		progress("MathJax ended");			
+	MathJax.Hub.Register.StartupHook("End", function () { parseComponents(); });
+}
 
-		//parse all text to set begrippen (eindtermen, begrippen, terms, units)
-		$(".nm_Text, .nm_TextField, .nm_TextBubble, .nm_Exclamation, .nm_InfoBlock").each(function() {
-			//replace with: #[\w\d ]*?# ?[\d]*
-			var patt = /#[^#]*?# ?[\d]*/g;
-			var strPatt = /[^#][^#]*(?=#)/; //weirdness
-			var targetPatt = /\d*$/;
-			var str = $(this).html();
+function parseComponents() {
+	progress("MathJax ended");			
 
-			//get all matches
-			var result      = patt.exec(str)
-			var results     = new Array();
-			var oldresult   = "";
-			while( result && result!=oldresult){
-			    oldresult   = result;
-			    results.push(result);
-			    result      = patt.exec(str);
+	//parse all text to set begrippen (eindtermen, begrippen, terms, units)
+	$(".nm_Text, .nm_TextField, .nm_TextBubble, .nm_Exclamation, .nm_InfoBlock").each(function() {
+		//replace with: #[\w\d ]*?# ?[\d]*
+		var patt = /#[^#]*?# ?[\d]*/g;
+		var strPatt = /[^#][^#]*(?=#)/; //weirdness
+		var targetPatt = /\d*$/;
+		var str = $(this).html();
+
+		//get all matches
+		var result      = patt.exec(str)
+		var results     = new Array();
+		var oldresult   = "";
+		while( result && result!=oldresult){
+		    oldresult   = result;
+		    results.push(result);
+		    result      = patt.exec(str);
+		}
+
+		for(var i=0; i<results.length; i++){
+			console.log("replacing: " + results[i] + " with : " + strPatt.exec(results[i]));
+		    str = str.replace(results[i], '<output class="nm_Begrip" target="' + targetPatt.exec(results[i]) + '">' + strPatt.exec(results[i]) + "</output>"); //get string ending with # and skipping any #'s along the way
+		}
+		$(this).html(str);
+	});
+	progress("Parsed begrippen");
+
+	// Parse Sliders
+	var sliderObject;
+	$(".nm_Slider.autoGenerate").each(function() {
+		sliderObject = {range: (typeof $(this).attr("range") == 'undefined') ? false: true};
+		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseInt($(this).attr("min"));
+		if(typeof $(this).attr("max") != 'undefined') sliderObject.max = parseInt($(this).attr("max"));
+		if(typeof $(this).attr("stepping") != 'undefined') sliderObject.step = parseInt($(this).attr("stepping"));
+		if(sliderObject.range) {
+			sliderObject.values = [ 
+				sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 30,
+				sliderObject.value = (typeof $(this).attr("value2") != 'undefined') ?  parseInt($(this).attr("value2")) : 70
+			];
+		} else {
+			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 50;
+		}
+		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
+		$(this).nm_slider( sliderObject );
+	});
+	progress("Parsed sliders");
+
+	// Parse quiz elements
+	$(".nm_ClosedQuiz").each(function() {
+		$(this).append('<div class="nm_qCheck"></div>');
+		$(this).children(".nm_qCheck").append(quizCheck());
+		$(this).children(".nm_qCheck").hide();
+		$(this).find(".nm_qCheck .wrong").hide();
+		$(this).find(".nm_qCheck .correct").hide();
+
+		$(this).find(".nm_qItem").each(function() {
+			var tip = $(this).attr("tip");
+			if(tip) {
+				$("#" + tip).addClass("nm_Explanation");
+				$("#" + tip).transition({ scale: 0 }, 0);
 			}
-
-			for(var i=0; i<results.length; i++){
-				console.log("replacing: " + results[i] + " with : " + strPatt.exec(results[i]));
-			    str = str.replace(results[i], '<output class="nm_Begrip" target="' + targetPatt.exec(results[i]) + '">' + strPatt.exec(results[i]) + "</output>"); //get string ending with # and skipping any #'s along the way
-			}
-			$(this).html(str);
+			$(this).children("label").prepend("<span><span></span></span>");
 		});
-		progress("Parsed begrippen");
 
-		// Parse Sliders
-		var sliderObject;
-		$(".nm_Slider.autoGenerate").each(function() {
-			sliderObject = {range: (typeof $(this).attr("range") == 'undefined') ? false: true};
-    		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseInt($(this).attr("min"));
-    		if(typeof $(this).attr("max") != 'undefined') sliderObject.max = parseInt($(this).attr("max"));
-    		if(typeof $(this).attr("stepping") != 'undefined') sliderObject.step = parseInt($(this).attr("stepping"));
-    		if(sliderObject.range) {
-    			sliderObject.values = [ 
-    				sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 30,
-    				sliderObject.value = (typeof $(this).attr("value2") != 'undefined') ?  parseInt($(this).attr("value2")) : 70
-    			];
-    		} else {
-    			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 50;
-    		}
-    		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
-    		$(this).nm_slider( sliderObject );
-		});
-		progress("Parsed sliders");
+		var id = $(this).attr("id");
+		log("Parse Closed Quiz " + id);
+		var type = "closed";
+		if($(this).attr("type")) type = $(this).attr("type");
 
-		// Parse quiz elements
-		$(".nm_ClosedQuiz").each(function() {
-			$(this).append('<div class="nm_qCheck"></div>');
-			$(this).children(".nm_qCheck").append(quizCheck());
-			$(this).children(".nm_qCheck").hide();
-			$(this).find(".nm_qCheck .wrong").hide();
-			$(this).find(".nm_qCheck .correct").hide();
+		// Give all elements inside group the same name 
+		$(this).find("input").attr("name", id);
 
-			$(this).find(".nm_qItem").each(function() {
-				var tip = $(this).attr("tip");
-				if(tip) {
-					$("#" + tip).addClass("nm_Explanation");
-					$("#" + tip).transition({ scale: 0 }, 0);
-				}
-				$(this).children("label").prepend("<span><span></span></span>");
-			});
+		if(type == "closed") {
+			countCorrectItems = $(this).children(".nm_qItem[answer='true']").length;
+			if(countCorrectItems == 1) {
+				/* 	MULTIPLY CHOICE 
+					An closed question with only one correct answer
+				*/
+				$(this).find("input").attr("type", "radio");
+				$(this).find("input").each(function() {
+					$(this).attr("onclick", " checkQuiz('" + id + "', '" + type + "', '" + $(this).parent().attr("id") + "'); ");
+				});
 
-			var id = $(this).attr("id");
-			log("Parse Closed Quiz " + id);
-			var type = "closed";
-			if($(this).attr("type")) type = $(this).attr("type");
+			} else if(countCorrectItems > 1) {
+				/* 	TRUE FALSE
+					An closed question with multiply correct answers
+				*/
+				$(this).find("input").attr("type", "checkbox");
+				$(this).find("input").attr("onclick", " $( this ).parent().toggleClass( 'selected' );");
 
-			// Give all elements inside group the same name 
-			$(this).find("input").attr("name", id);
-
-			if(type == "closed") {
-				countCorrectItems = $(this).children(".nm_qItem[answer='true']").length;
-				if(countCorrectItems == 1) {
-					/* 	MULTIPLY CHOICE 
-						An closed question with only one correct answer
-					*/
-					$(this).find("input").attr("type", "radio");
-					$(this).find("input").each(function() {
-						$(this).attr("onclick", " checkQuiz('" + id + "', '" + type + "', '" + $(this).parent().attr("id") + "'); ");
-					});
-
-				} else if(countCorrectItems > 1) {
-					/* 	TRUE FALSE
-						An closed question with multiply correct answers
-					*/
-					$(this).find("input").attr("type", "checkbox");
-					$(this).find("input").attr("onclick", " $( this ).parent().toggleClass( 'selected' );");
-
-					// Render button
-					$(this).append(checkButton(id, type));
-				} else {
-					// An closed question with zero answers; incorrect!
-					log("The quiz with id " + id + " has no correct answers. Quiz could not be parsed.");
-				}
-
-			} else if(type == "open") {
 				// Render button
 				$(this).append(checkButton(id, type));
 			} else {
-				log("The quiz with id " + id + " has no type specified. Quiz could not be parsed.")
+				// An closed question with zero answers; incorrect!
+				log("The quiz with id " + id + " has no correct answers. Quiz could not be parsed.");
 			}
-		});
 
-		// Quiz parse functions
-		function checkButton(qGroupId, qGroupType) {
-			var cButton = "<button onclick=\"checkQuiz('" + qGroupId + "', '" + qGroupType + "', '" + qGroupId + "')\">Controleer</button>";
-			return cButton;
+		} else if(type == "open") {
+			// Render button
+			$(this).append(checkButton(id, type));
+		} else {
+			log("The quiz with id " + id + " has no type specified. Quiz could not be parsed.")
 		}
-		progress("Parsed quiz");
-
-
-		/* This is Willem's experimental slide functionality. Sorry Willem, we have to discuss which functionality is better 
-		//parse experiemental sections
-		$(".nm_Experiment").each(function() {
-			$(this).children().each(function() {
-				$(this).css("position", "relative");
-				$(this).css("left", "");
-				$(this).css("top", "");
-				//$(this).css("margin-top", "50px");
-				//$(this).css("border", "solid 0px black");
-				console.log(this);
-			});
-		});
-		*/
-		
-		//set contentDiv width and innerHeight
-		$("#contentDiv").css("width", "1024px");
-		$("#contentDiv").css("height", "643px");
-		//set other css styles which are set for workview
-		$(".slide").css("border", '');
-		
-		//remove commentSlide
-		$("#commentslide").remove();
-
-		//position all the slides.
-		console.log("positioning the slides");
-		var i = 0;
-		$(".slide").each(function() {
-			$(this).css("left", (i*1024) + "px");
-			//also check if this is the slide we should display.
-			if($(this).attr("class") == "slide activeSlide") gotoSlide = i; //console.log("current selected!");
-			i++;
-		});
-
-		//swap work css to display css 
-		var oldlink = document.getElementById("mainCSS");
-		var newlink = document.createElement("link");
-		newlink.setAttribute("rel", "stylesheet");
-		newlink.setAttribute("type", "text/css");
-		newlink.setAttribute("href", "css/nemo.css");		
-		document.getElementsByTagName("head")[0].replaceChild(newlink, oldlink);	
-		console.log("Swapping " + oldlink.getAttribute("href") + " with " + newlink.getAttribute("href"));	
-
-		//set original parent of each element.
-		$(".slide").children().each(function(){
-			$(this).attr("org", $(this).parent().attr("id").substring(5));
-			//console.log("set " + $(this).attr("id") + "(" + $(this).attr("class") + ") org to: " + $(this).attr("org"));
-		});
-		console.log("element origins set");
-		progress("Slides and content positioned");
-
-		// Add experiment slide
-		if(!document.getElementById("contentDiv_bg")) $("#contentDiv").prepend('<div id="contentDiv_bg" class="default"></div>');
-
-		// Move title if experiment pane is on slide
-		$(".nm_ExperimentPane").each(function() {
-			if($(this).parent().hasClass("slide")) {
-				var nr = $(this).parent().attr("id");
-				nr = nr.replace("slide","");
-				i = parseInt(nr);
-				slidesToMoveTitle.unshift(i);
-				var attr = $(this).attr('stay');
-				if(typeof attr !== 'undefined' && attr !== false) {
-					var stay = $(this).attr("stay");
-					console.log("The experimentpane has a stay of " + stay);
-					var j = parseInt(stay);
-					for(var x = (i+1); x <= (i+j); ++x) {
-						slidesToMoveTitle.unshift(x);
-					}
-				}
-			} else {
-				console.log("Error .nm_ExperimentPane. Could not find the slide.");
-			}
-		});
-		progress("Parsed experiment panes");
-
-		// Add open/close functionality to InfoBlock
-		$(".nm_InfoBlock").on({
-			click: function() {
-				var opencloseLid = $(this).find(".opencloseLid");
-				$(this).find(".paragraph").slideToggle(function() {
-					opencloseLid.toggleClass("open");
-				});
-			}
-		});
-		//$(".nm_InfoBlock").width('200px');
-		$(".nm_InfoBlock").height('auto');
-		//remove position absolute and attempt to place on the right position for it's children.
-		$(".nm_InfoBlock .paragraph").children().each(function(){
-			$(this).css("position", ""); 
-			$(this).css("margin-left", $(this).css("left"));
-			$(this).css("margin-top", $(this).css("top"));
-		});
-
-		//make title
-		$("#title span").html(document.title);
-
-		//set total slides
-		totalPages = 0;
-		$(".slide").each(function(){
-			totalPages++;
-		});
-		$("#slideIndex").html("1/"+totalPages);
-		progress("Made nm_InfoBlock and nm_Slider");
-
-		//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
-		yepnope([{
-			load: ["js/finished.js"],
-			complete: function(){
-				doTextBubbles();
-			}
-		}]);
 	});
+
+	// Quiz parse functions
+	function checkButton(qGroupId, qGroupType) {
+		var cButton = "<button onclick=\"checkQuiz('" + qGroupId + "', '" + qGroupType + "', '" + qGroupId + "')\">Controleer</button>";
+		return cButton;
+	}
+	progress("Parsed quiz");
+
+
+	/* This is Willem's experimental slide functionality. Sorry Willem, we have to discuss which functionality is better 
+	//parse experiemental sections
+	$(".nm_Experiment").each(function() {
+		$(this).children().each(function() {
+			$(this).css("position", "relative");
+			$(this).css("left", "");
+			$(this).css("top", "");
+			//$(this).css("margin-top", "50px");
+			//$(this).css("border", "solid 0px black");
+			console.log(this);
+		});
+	});
+	*/
+	
+	//set contentDiv width and innerHeight
+	$("#contentDiv").css("width", "1024px");
+	$("#contentDiv").css("height", "643px");
+	//set other css styles which are set for workview
+	$(".slide").css("border", '');
+	
+	//remove commentSlide
+	$("#commentslide").remove();
+
+	//position all the slides.
+	console.log("positioning the slides");
+	var i = 0;
+	$(".slide").each(function() {
+		$(this).css("left", (i*1024) + "px");
+		//also check if this is the slide we should display.
+		if($(this).attr("class") == "slide activeSlide") gotoSlide = i; //console.log("current selected!");
+		i++;
+	});
+
+	//swap work css to display css 
+	var oldlink = document.getElementById("mainCSS");
+	var newlink = document.createElement("link");
+	newlink.setAttribute("rel", "stylesheet");
+	newlink.setAttribute("type", "text/css");
+	newlink.setAttribute("href", "css/nemo.css");		
+	document.getElementsByTagName("head")[0].replaceChild(newlink, oldlink);	
+	console.log("Swapping " + oldlink.getAttribute("href") + " with " + newlink.getAttribute("href"));	
+
+	//set original parent of each element.
+	$(".slide").children().each(function(){
+		$(this).attr("org", $(this).parent().attr("id").substring(5));
+		//console.log("set " + $(this).attr("id") + "(" + $(this).attr("class") + ") org to: " + $(this).attr("org"));
+	});
+	console.log("element origins set");
+	progress("Slides and content positioned");
+
+	// Add experiment slide
+	if(!document.getElementById("contentDiv_bg")) $("#contentDiv").prepend('<div id="contentDiv_bg" class="default"></div>');
+
+	// Move title if experiment pane is on slide
+	$(".nm_ExperimentPane").each(function() {
+		if($(this).parent().hasClass("slide")) {
+			var nr = $(this).parent().attr("id");
+			nr = nr.replace("slide","");
+			i = parseInt(nr);
+			slidesToMoveTitle.unshift(i);
+			var attr = $(this).attr('stay');
+			if(typeof attr !== 'undefined' && attr !== false) {
+				var stay = $(this).attr("stay");
+				console.log("The experimentpane has a stay of " + stay);
+				var j = parseInt(stay);
+				for(var x = (i+1); x <= (i+j); ++x) {
+					slidesToMoveTitle.unshift(x);
+				}
+			}
+		} else {
+			console.log("Error .nm_ExperimentPane. Could not find the slide.");
+		}
+	});
+	progress("Parsed experiment panes");
+
+	// Add open/close functionality to InfoBlock
+	$(".nm_InfoBlock").on({
+		click: function() {
+			var opencloseLid = $(this).find(".opencloseLid");
+			$(this).find(".paragraph").slideToggle(function() {
+				opencloseLid.toggleClass("open");
+			});
+		}
+	});
+	//$(".nm_InfoBlock").width('200px');
+	$(".nm_InfoBlock").height('auto');
+	//remove position absolute and attempt to place on the right position for it's children.
+	$(".nm_InfoBlock .paragraph").children().each(function(){
+		$(this).css("position", ""); 
+		$(this).css("margin-left", $(this).css("left"));
+		$(this).css("margin-top", $(this).css("top"));
+	});
+
+	//make title
+	$("#title span").html(document.title);
+
+	//set total slides
+	totalPages = 0;
+	$(".slide").each(function(){
+		totalPages++;
+	});
+	$("#slideIndex").html("1/"+totalPages);
+	progress("Made nm_InfoBlock and nm_Slider");
+
+	//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
+	yepnope([{
+		load: ["js/finished.js"],
+		complete: function(){
+			doTextBubbles();
+		}
+	}]);
 }
 
 function doTextBubbles() {
