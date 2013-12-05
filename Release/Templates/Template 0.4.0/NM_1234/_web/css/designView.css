@@ -1,0 +1,265 @@
+@font-face {
+    font-family: "PT Sans Narrow";
+    src: url(PTSans-Narrow.ttf);
+}
+
+html {
+	font-family: 			'PT Sans Narrow', 'Arial Narrow', Arial, sans-serif;
+	font-size:				16px;
+	line-height: 			20px;
+	font-weight: 			normal;
+	font-variant: 			normal;
+}
+
+ol, ul {
+	margin-left: 25px;
+}
+
+ol {
+	list-style: decimal;
+}
+
+ul {
+	list-style: square;
+}
+
+#contentDiv{
+	background-image:		url("background.png");
+	top:					0px;
+	height:					auto;
+	width:					auto;
+	visibility: 			hidden;
+}
+#title{
+	display:				none;
+	visibility: 			hidden;
+}
+#navigation{
+	display:				none;
+}
+
+.comment{
+	display:				block;
+	color:					purple;
+}
+
+.commentGreen{
+	display:				block;
+	color:					green;
+}
+
+.nm_begrip{
+	color:					blue;
+}
+
+.nm_Exclamation, .nm_TextBubble, .nm_TextfieldNJ, input, .nm_Explanation, .nm_InfoBlock, .nm_Box{
+	background-color: 		rgb(255, 255, 255);
+	border: 				1px solid black;
+	padding:				10px;
+	text-align:				left;
+}
+
+.nm_TextField{
+	background-color: 		rgb(255, 255, 255);
+	border: 				1px solid black;
+	padding:				8px 10px 15px 10px;
+	text-align:				left;
+}
+
+.nm_Text{
+	padding:				8px 10px 15px 10px;
+}
+
+.nm_TextBubble {
+	background-repeat: 		no-repeat;
+	background-attachment: 	fixed;
+}
+
+.nm_TextBubble.bottom-left{		background-image: url("designView/point-design-bottom-left.png"); 	background-position: left bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-middle{	background-image: url("designView/point-design-bottom-middle.png"); background-position: 50% bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-right{	background-image: url("designView/point-design-bottom-right.png");	background-position: right bottom; padding-bottom: 59px; }
+.nm_TextBubble.top-left{		background-image: url("designView/point-design-top-left.png"); 		background-position: left top; padding-top: 59px; }
+.nm_TextBubble.top-middle{		background-image: url("designView/point-design-top-middle.png"); 	background-position: 50% top; padding-top:	59px; }
+.nm_TextBubble.top-right{		background-image: url("designView/point-design-top-right.png"); 	background-position: right top; padding-top: 59px; }
+.nm_TextBubble.middle-left{		background-image: url("designView/point-design-middle-left.png"); 	background-position: left 50%; padding-left: 59px; }
+.nm_TextBubble.middle-right{	background-image: url("designView/point-design-middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
+
+.nm_TextBubble.bottom-left.green{	background-image: url("designView/point-design-green_bottom-left.png"); 	background-position: left bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-middle.green{	background-image: url("designView/point-design-green_bottom-middle.png"); 	background-position: 50% bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-right.green{	background-image: url("designView/point-design-green_bottom-right.png");	background-position: right bottom; padding-bottom: 59px; }
+.nm_TextBubble.top-left.green{		background-image: url("designView/point-design-green_top-left.png"); 		background-position: left top; padding-top: 59px; }
+.nm_TextBubble.top-middle.green{	background-image: url("designView/point-design-green_top-middle.png"); 		background-position: 50% top; padding-top:	59px; }
+.nm_TextBubble.top-right.green{		background-image: url("designView/point-design-green_top-right.png"); 		background-position: right top; padding-top: 59px; }
+.nm_TextBubble.middle-left.green{	background-image: url("designView/point-design-green_middle-left.png"); 	background-position: left 50%; padding-left: 59px; }
+.nm_TextBubble.middle-right.green{	background-image: url("designView/point-design-green_middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
+
+.nm_TextBubble.bottom-left.blue{	background-image: url("designView/point-design-blue_bottom-left.png"); 		background-position: left bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-middle.blue{	background-image: url("designView/point-design-blue_bottom-middle.png"); 	background-position: 50% bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-right.blue{	background-image: url("designView/point-design-blue_bottom-right.png");		background-position: right bottom; padding-bottom: 59px; }
+.nm_TextBubble.top-left.blue{		background-image: url("designView/point-design-blue_top-left.png"); 		background-position: left top; padding-top: 59px; }
+.nm_TextBubble.top-middle.blue{		background-image: url("designView/point-design-blue_top-middle.png"); 		background-position: 50% top; padding-top:	59px; }
+.nm_TextBubble.top-right.blue{		background-image: url("designView/point-design-blue_top-right.png"); 		background-position: right top; padding-top: 59px; }
+.nm_TextBubble.middle-left.blue{	background-image: url("designView/point-design-blue_middle-left.png"); 		background-position: left 50%; padding-left: 59px; }
+.nm_TextBubble.middle-right.blue{	background-image: url("designView/point-design-blue_middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
+
+.nm_TextBubble.bottom-left.red{		background-image: url("designView/point-design-red_bottom-left.png"); 	background-position: left bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-middle.red{	background-image: url("designView/point-design-red_bottom-middle.png"); background-position: 50% bottom; padding-bottom: 59px; }
+.nm_TextBubble.bottom-right.red{	background-image: url("designView/point-design-red_bottom-right.png");	background-position: right bottom; padding-bottom: 59px; }
+.nm_TextBubble.top-left.red{		background-image: url("designView/point-design-red_top-left.png"); 		background-position: left top; padding-top: 59px; }
+.nm_TextBubble.top-middle.red{		background-image: url("designView/point-design-red_top-middle.png"); 	background-position: 50% top; padding-top:	59px; }
+.nm_TextBubble.top-right.red{		background-image: url("designView/point-design-red_top-right.png"); 	background-position: right top; padding-top: 59px; }
+.nm_TextBubble.middle-left.red{		background-image: url("designView/point-design-red_middle-left.png"); 	background-position: left 50%; padding-left: 59px; }
+.nm_TextBubble.middle-right.red{	background-image: url("designView/point-design-red_middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
+
+.nm_TextBubble {	   background: #fff;}
+.nm_TextBubble.white { background: #fff;}
+.nm_TextBubble.red {   background: #f55f73;}
+.nm_TextBubble.green { background: #54cc78;}
+.nm_TextBubble.blue {  background: #5bb8e8;}
+
+ .nm_Explanation{
+	background-image: 		url("point-design.png");
+	background-color: 		#5bb8e8;
+	background-repeat: 		no-repeat;
+	background-position: 	right bottom;
+	background-attachment: 	fixed;
+	padding:				10px 10px 45px 10px;
+ }
+
+ .nm_Exclamation{
+	background-color: 		#5bb8e8;
+}
+
+.nm_InfoBlock .circle, .nm_InfoBlock .opencloseLid {
+	display: none;
+}
+
+.nm_Hatching_blue, .nm_Hatching_red, .nm_Hatching_green{
+	border-radius: 			50%;	
+	background-repeat:		no-repeat;
+	background-attachment:	fixed;
+}
+.nm_Hatching_blue{background-image: url("hatching-blue.png");}
+.nm_Hatching_red{background-image: url("hatching-red.png");}
+.nm_Hatching_green{background-image: url("hatching-green.png");}
+
+.nm_Highlight_blue{
+	background-color: 		rgba(0, 158, 194, 0.2);
+	border:					2px solid #009ec2;
+}
+
+.nm_Input{
+
+}
+
+.nm_Animation{
+	background-image:		url("animation-proxy.png");
+	background-repeat:		repeat;
+}
+
+.nm_Ground{
+	background-image:		url("ground.png");
+	background-repeat:		no-repeat;
+	width:					786px;
+	height:					75px;
+}
+
+.slide{
+	position: 				absolute;
+	width: 					1024px;
+	height: 				641px;
+	border: 				1px black solid;
+	z-index: 				2;
+	left:					0px;
+	display: 				none;
+	visibility: 			visible;
+}
+
+.activeSlide {
+	display:				block;
+}
+
+.slide[type=experiment] {
+	background-image:url("designView/experimentslide.png"); 
+	background-position: 305px 288px;
+	background-repeat: no-repeat;
+	background-color: rgba(205, 229, 235, 0.5);
+}
+
+#commentslide {
+	background: 			#F1F2F2	url("designView/commentslide.png") 356px 288px no-repeat;
+}
+
+.slideNumber {
+	text-align:				center;
+}
+
+#ghostDiv {
+	position:				absolute;
+	top:					0px;
+	left:					0px;
+}
+
+#ghostDivCover {
+	width:					1024px;
+	height:					641px;
+	position:				absolute;
+	top:					0px;
+	left:					0px;
+	background-color: 		rgba(255, 255, 255, 0.5);
+}
+
+.nm_qItem {
+	display: block;
+	width: 100%;
+	margin: 0px 0px 2px 0px;
+	border: 1px solid;
+}
+
+.nm_qItem[answer=false] {
+	background-color:		 #B48B8B;
+}
+.nm_qItem[answer=true] {
+	background-color:		#8BB48D;
+}
+
+.nm_Slider{
+	background-image: 		url("designView/slider.png");
+	background-repeat: 		no-repeat;
+}
+
+.nm_Button {
+	font-weight:			bold;
+	color:					#1c94c4;
+	text-align: 			center;
+	padding:				7px 26px 9px 26px;
+	background-color: 		#a5e2f0;
+	border: 1px solid 		#009ec2;
+	font-size: 				1.1em;
+}
+
+/* This style is for Willem's Experiment slide 
+.nm_Experiment {
+	height:					513px;
+	left:					20px;
+	width:					200px;
+	position: 				relative;
+	top:					100px;
+	background-color: 		#009ec2;
+	border:					2px solid #009ec2;
+}
+*/
+
+.nm_ExperimentPane {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	padding: 20px;
+	height: 560px;
+	width: 260px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.nm_ExperimentPane p {
+	color: #F5F5F5;
+}
