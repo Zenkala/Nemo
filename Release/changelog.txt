@@ -1,4 +1,10 @@
 Changelog
+0.3.9
+    Improved insert check for all components
+    Grouped components
+    Removed unnecessary components nm_explanation and nm_exclamation
+    Improved image import with a kind of SVG support
+
 0.3.8
   Added nm_slider
   All objects will have a unique id (not present in release directory)	

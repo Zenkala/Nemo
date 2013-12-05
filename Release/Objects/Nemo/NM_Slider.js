@@ -11,9 +11,25 @@ function isAsset() {
 	return true;
 }
 
-function objectTag(assetArgs) {
-	var theDOM = dw.getDocumentDOM();
+function insertObject() {
+	var dom = dw.getDocumentDOM();
 	var uniqueId = dwscripts.getUniqueId("nm_Slider");
-  return '<div class="nm_Slider autoGenerate" id="' + uniqueId + '" style="position: absolute; width: 200px; height: 100px; top: 200px; left: 50px;"></div>';
-}
+	var selType = nm.getSelectionType();
+	var errMsg = "Please click inside the slide.";
 
+	if(selType == 1) {
+		errMsg = "";
+		dom.insertHTML('<div class="nm_Slider autoGenerate" id="' + uniqueId + '" style="position: absolute; width: 200px; height: 100px; top: 200px; left: 350px;"></div>');
+	} else if (selType == 2) {
+		errMsg = "";
+		dom.insertHTML('<div class="nm_Slider autoGenerate" id="' + uniqueId + '" style="position: relative; width: 260px; height: 100px;"></div>');
+	} else {
+		errMsg = "";
+		var activeSlide = nm.getActiveSlideNode();
+		var inner = activeSlide.innerHTML;
+		inner += '<div class="nm_Slider autoGenerate" id="' + uniqueId + '" style="position: absolute; width: 200px; height: 100px; top: 200px; left: 350px;"></div>';
+		activeSlide.innerHTML = inner;
+	}
+
+	return errMsg;
+}

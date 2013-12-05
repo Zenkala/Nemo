@@ -7,14 +7,12 @@ function isDOMRequired() {
 	return false;
 }
 
-function canInsertObject() {
-	return true;
-}
-
 function insertObject() {
 	var dom = dw.getDocumentDOM();
+	var errMsg = "";
 	if(dom) {
 		var el = "";
+		var elFound = false;
 
 		// 	Something selected? Maybe this element is not on the current slide, 
 		//	so the experimentpane will be placed on another slide.
@@ -25,6 +23,7 @@ function insertObject() {
 			    if(sel.id) {
 			    	if(patt.test(sel.id)) {
 			    		el = sel;
+			    		elFound = true;
 			    		break;
 			    	} 
 			    }
@@ -32,37 +31,52 @@ function insertObject() {
 			}
 		}
 
-		// 	Nothing selected? Assume that the user will place the experimentpane
+		// 	Nothing found? Assume that the user will place the experimentpane
 		//	onto the activeSlide (the slide that is currently visible)
-		else {
+		if(!elFound) {
 			var s = 0;
 			var patt = /activeSlide/g;
 			while(true) {
-				el = getElementById("slide" + s);
-				var str = el.getAttribute("class");
-				if(patt.test(str)) break;
-				s++;
-				if(s > 100) {
-					el = "";
-					break; 
+				sel = dom.getElementById("slide" + s);
+				if(!sel) break;
+				var str = sel.class;
+				if(str) {
+					if(patt.test(str)) {
+						el = sel;
+						break;
+					}
 				}
+				s++;
 			}
 		}
-		if(el) {
-			dom.setSelectedNode(el, true, false);
-			var id = getUniqueId();
-			dom.insertHTML(returnPane(id), false);
 
-			if(el.type) {
-				if(el.type != "experiment") setAsExperiment(el);
-			} else {
-				setAsExperiment(el);
+		if(el) {
+			var elInnerHTML = dwscripts.getInnerHTML(el);
+			var patt = new RegExp("nm_ExperimentPane");
+			if(patt.test(elInnerHTML)) {
+				errMsg = "This slide has already an experiment pane.";
 			}
 		} else {
-			alert("Failed to insert experiment pane. Could not find a slide.");
+			errMsg = "Failed to insert experiment pane. Could not find the slide.";
 		}
 		
+	} else {
+		errMsg = "Could not find the document DOM.";
 	}
+
+	if(!errMsg) {
+		dom.setSelectedNode(el, true, false);
+		var id = getUniqueId();
+		dom.insertHTML(returnPane(id), false);
+
+		if(el.type) {
+			if(el.type != "experiment") setAsExperiment(el);
+		} else {
+			setAsExperiment(el);
+		}
+	}
+
+	return errMsg;
 
 }
 
@@ -75,6 +89,6 @@ function getUniqueId() {
 }
 
 function setAsExperiment(element) {
-	var r = confirm("Would you like to convert the slide into an experiment slide?");
+	var r = dwscripts.askYesNo("Would you like to convert the slide into an experiment slide?");
 	if(r) element.setAttribute("type", "experiment");
 }

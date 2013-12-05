@@ -74,21 +74,30 @@
 
 	
 	<category name="Nemo" folder="Nemo" id="DW_Insertbar_Nemo">
-		<button label="NM_Image" 			name="NM_Image" 		file="Nemo\NM_Image.htm" 		id="NM_Image" 			image="Nemo\NM_Image.png" />
-		<button label="NM_Text" 			name="NM_Text" 			file="Nemo\NM_Text.htm" 		id="NM_Text" 			image="Nemo\NM_Text.png" />
-		<button label="NM_TextField" 		name="NM_TextField" 	file="Nemo\NM_TextField.htm" 	id="NM_TextField" 		image="Nemo\NM_TextField.png" />
-		<button label="NM_TextBubble" 		name="NM_TextBubble" 	file="Nemo\NM_TextBubble.htm" 	id="NM_TextBubble" 		image="Nemo\NM_TextBubble.png" />
-		<button label="NM_Exclamation" 		name="NM_Exclamation" 	file="Nemo\NM_Exclamation.htm" 	id="NM_Exclamation"		image="Nemo\NM_Exclamation.png" />
-		<button label="NM_InfoBlock" 		name="NM_InfoBlock" 	file="Nemo\NM_InfoBlock.htm" 	id="NM_InfoBlock" 		image="Nemo\NM_InfoBlock.png" />
-		<button label="NM_Comment" 			name="NM_Comment" 		file="Nemo\NM_Comment.htm"		id="NM_Comment" 		image="Nemo\NM_Comment.png" />
-		<button label="NM_Comment_Green" 	name="NM_Comment_Green"	file="Nemo\NM_CommentGreen.htm"	id="NM_CommentGreen"	image="Nemo\NM_CommentGreen.png" />
-		<button label="NM_Input" 			name="NM_Input" 		file="Nemo\NM_Input.htm" 		id="NM_Input" 			image="Nemo\NM_Input.png" />
-		<button label="NM_Hatching" 		name="NM_Hatching" 		file="Nemo\NM_Hatching.htm" 	id="NM_Hatching" 		image="Nemo\NM_Hatching.png" />
-		<button label="NM_Box" 				name="NM_Box" 			file="Nemo\NM_Box.htm" 			id="NM_Box" 			image="Nemo\NM_Box.png" />
-		<button label="NM_Ground" 			name="NM_Ground" 		file="Nemo\NM_Ground.htm"		id="NM_Ground" 			image="Nemo\NM_Ground.png" />
-		<button label="NM_Animation" 		name="NM_Animation" 	file="Nemo\NM_Animation.htm" 	id="NM_Animation" 		image="Nemo\NM_Animation.png" />	
-		<button label="NM_quizGroup" 		name="NM_quizGroup"		file="Nemo\NM_qGroup.htm" 		id="NM_qGroup" 			image="Nemo\NM_qGroup.png" />		
-		<button label="NM_quizItem" 		name="NM_quizItem" 		file="Nemo\NM_qItem.htm" 		id="NM_qItem" 			image="Nemo\NM_qItem.png" />		
+		<button label="Text" 				name="Text" 			file="Nemo\NM_Text.htm" 		id="NM_Text" 				image="Nemo\NM_Text.png" />
+		<button label="TextField" 			name="TextField" 		file="Nemo\NM_TextField.htm" 	id="NM_TextField" 			image="Nemo\NM_TextField.png" />
+		<button label="Box" 					name="Box" 				file="Nemo\NM_Box.htm" 			id="NM_Box" 				image="Nemo\NM_Box.png" />
+		<button label="TextBubble" 			name="TextBubble" 		file="Nemo\NM_TextBubble.htm" 	id="NM_TextBubble" 			image="Nemo\NM_TextBubble.png" />
+		<button label="InfoBlock" 			name="InfoBlock" 		file="Nemo\NM_InfoBlock.htm" 	id="NM_InfoBlock" 			image="Nemo\NM_InfoBlock.png" />		
+		<button label="Image" 					name="Image" 			file="Nemo\NM_Image.htm" 		id="NM_Image" 				image="Nemo\NM_Image.png" />
+		<button label="Animation" 				name="Animation" 		file="Nemo\NM_Animation.htm" 	id="NM_Animation" 			image="Nemo\NM_Animation.png" />
+		
+		<menubutton label="Layout" name="NM_LayoutGroup" folder="NM_LayoutGroup" id="NM_LayoutGroup" image="Nemo\NM_Hatching.png">
+			<button label="Hatching" 			name="Hatching" 		file="Nemo\NM_Hatching.htm" 		id="NM_Hatching" 		image="Nemo\NM_Hatching.png" />
+			<button label="Highlight" 			name="Highlight" 		file="Nemo\NM_Highlight.htm" 		id="NM_Highlight" 		image="Nemo\NM_Highlight.png" />
+			<button label="Ground" 				name="Ground" 			file="Nemo\NM_Ground.htm"			id="NM_Ground" 			image="Nemo\NM_Ground.png" />
+		</menubutton>
+		<button label="ExperimentPane" 			name="ExperimentPane" 	file="Nemo\NM_ExperimentPane.htm" 	id="NM_ExperimentPane" 	image="Nemo\NM_ExperimentPane.png" />
+		<menubutton label="Interactive" name="NM_Interactive" folder="NM_Interactive" id="NM_Interactive" image="Nemo\NM_Slider.png">
+			<button label="Input" 				name="Input" 		file="Nemo\NM_Input.htm" 		id="NM_Input" 					image="Nemo\NM_Input.png" />
+			<button label="Button" 				name="Button" 		file="Nemo\NM_Button.htm" 		id="NM_Button" 					image="Nemo\NM_Button.png" />
+			<button label="Slider" 				name="Slider" 		file="Nemo\NM_Slider.htm" 		id="NM_Slider" 					image="Nemo\NM_Slider.png" />
+			<button label="ClosedQuiz" 			name="ClosedQuiz" 	file="Nemo\NM_ClosedQuiz.htm" 	id="NM_ClosedQuiz" 				image="Nemo\NM_ClosedQuiz.png" />		
+		</menubutton>
+		<menubutton label="Comments" name="NM_CommentsGroup" folder="NM_CommentsGroup" id="NM_CommentsGroup" image="Nemo\NM_Comment.png">
+			<button label="Comment" 			name="Comment" 		file="Nemo\NM_Comment.htm"		id="NM_Comment" 				image="Nemo\NM_Comment.png" />
+			<button label="Comment Green" 		name="CommentGreen"	file="Nemo\NM_CommentGreen.htm"	id="NM_CommentGreen"			image="Nemo\NM_CommentGreen.png" />
+		</menubutton>
 	</category>
 	
 	<category MMString:name="insertbar/category/layout" folder="Layout" id="DW_Insertbar_Layout">

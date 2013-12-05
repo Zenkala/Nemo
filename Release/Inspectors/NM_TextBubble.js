@@ -43,17 +43,17 @@ function setPointer(){
 	var theObj = dom.getSelectedNode(); 		
 	if(theObj.getAttribute("class")) {
 		var classList = theObj.getAttribute("class").split(" ");
-		if(contains(classList, "top-left"))    {	POINTER = "top-left";		HE_POINTER.selectedIndex = 0; return; }
-		if(contains(classList, "top-middle"))  {	POINTER = "top-middle"; 	HE_POINTER.selectedIndex = 1; return; }
-		if(contains(classList, "top-right"))   {	POINTER = "top-right"; 		HE_POINTER.selectedIndex = 2; return; }
-		if(contains(classList, "middle-left")) { 	POINTER = "middle-left"; 	HE_POINTER.selectedIndex = 3; return; }
-		if(contains(classList, "middle-right")){ 	POINTER = "middle-right"; 	HE_POINTER.selectedIndex = 4; return; }
-		if(contains(classList, "bottom-left")) { 	POINTER = "bottom-left"; 	HE_POINTER.selectedIndex = 5; return; }
-		if(contains(classList, "bottom-middle")){ 	POINTER = "bottom-middle"; 	HE_POINTER.selectedIndex = 6; return; }
-		if(contains(classList, "bottom-right")){ 	POINTER = "bottom-right"; 	HE_POINTER.selectedIndex = 7; return; }
-		HE_POINTER.selectedIndex = 7; POINTER = "bottom-right";
+		if(contains(classList, "top-left"))    {	POINTER = "top-left";		HE_POINTER.selectedIndex = 1; return; }
+		if(contains(classList, "top-middle"))  {	POINTER = "top-middle"; 	HE_POINTER.selectedIndex = 2; return; }
+		if(contains(classList, "top-right"))   {	POINTER = "top-right"; 		HE_POINTER.selectedIndex = 3; return; }
+		if(contains(classList, "middle-left")) { 	POINTER = "middle-left"; 	HE_POINTER.selectedIndex = 4; return; }
+		if(contains(classList, "middle-right")){ 	POINTER = "middle-right"; 	HE_POINTER.selectedIndex = 5; return; }
+		if(contains(classList, "bottom-left")) { 	POINTER = "bottom-left"; 	HE_POINTER.selectedIndex = 6; return; }
+		if(contains(classList, "bottom-middle")){ 	POINTER = "bottom-middle"; 	HE_POINTER.selectedIndex = 7; return; }
+		if(contains(classList, "bottom-right")){ 	POINTER = "bottom-right"; 	HE_POINTER.selectedIndex = 8; return; }
+		HE_POINTER.selectedIndex = 0; POINTER = "None";
 	} else {
-		HE_POINTER.selectedIndex = 7; POINTER = "bottom-right";
+		HE_POINTER.selectedIndex = 0; POINTER = "None";
 	}
 }
 
@@ -94,15 +94,24 @@ function updateTag(attrib) {
 		switch (attrib) {
 			case "pointer":
 				POINTER = HE_POINTER.options[HE_POINTER.selectedIndex].value;
-				if(COLOR == "white") {
-					if (theObj.getAttribute("class") != ("nm_TextBubble " + POINTER) && POINTER != "") {						
-						theObj.setAttribute("class", "nm_TextBubble " + POINTER);
-					} 
+				if(POINTER != "none") {
+					if(COLOR == "white") {
+						if (theObj.getAttribute("class") != ("nm_TextBubble " + POINTER) && POINTER != "") {						
+							theObj.setAttribute("class", "nm_TextBubble " + POINTER);
+						} 
+					} else {
+						if (theObj.getAttribute("class") != ("nm_TextBubble " + POINTER + " " + COLOR) && POINTER != "") {						
+							theObj.setAttribute("class", "nm_TextBubble " + POINTER + " " + COLOR);
+						} 
+					}
 				} else {
-					if (theObj.getAttribute("class") != ("nm_TextBubble " + POINTER + " " + COLOR) && POINTER != "") {						
-						theObj.setAttribute("class", "nm_TextBubble " + POINTER + " " + COLOR);
-					} 
+					if(COLOR == "white") {
+						theObj.setAttribute("class", "nm_TextBubble");
+					} else {
+						theObj.setAttribute("class", "nm_TextBubble " + COLOR);
+					}
 				}
+	
 				break;
 			case "id":
 				ID = HE_ID.value;
