@@ -11,8 +11,14 @@ function isAsset() {
 	return true;
 }
 
-function objectTag(assetArgs) {
-  	var theDOM = dw.getDocumentDOM();
-	theDOM.wrapTag('<div class="commentGreen" style="position: absolute; left: 100px; top:300px;">');
-}
+function insertObject() {
+	var dom = dw.getDocumentDOM();
+	var uniqueId = dwscripts.getUniqueId("nm_CommentGreen");
 
+	var activeSlide = nm.getActiveSlideNode();
+	var inner = activeSlide.innerHTML;
+	inner += '<div class="commentGreen" style="position: absolute; left: 350px; top:300px;">Comment</div>';
+	activeSlide.innerHTML = inner;
+
+	return;
+}
