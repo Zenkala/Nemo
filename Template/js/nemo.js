@@ -180,13 +180,24 @@ function startNemoScript(){
 	log("configure MathJax");
 	//jax initializes slow. So there is a change it's not yet done when we get here.
 	if(typeof MathJax == 'undefined') {
-		console.log("jax undefined! trying again over 200 ms");		
-		window.setTimeout("startNemoScript()",200);//try again
-		return null; //quick this function for now.
-	}//else: jax is defined. we can continue!
+		console.log("jax undefined! trying again over 200 ms " + (jaxTimeout+1) + "/10");		
+		if(jaxTimeout<=10){
+			jaxTimeout++;
+			window.setTimeout("startNemoScript()", 200);//try again
+			return null; //quick this function for now.
+		} else {
+			//jax times out, continue anyway
+			parseComponents();
+			console.log('%c' + "MathJax is unable to load!", 'background: #ff0000;');
+			throw new Error("MathJax is unable to load!");
+			return null;
+		}
+	}//else: jax is defined. we can continue! 
 
 	MathJax.Hub.Configured();
-	MathJax.Hub.Register.StartupHook("End", function () {
+	MathJax.Hub.Register.StartupHook("End", function () { parseComponents(); });
+
+	function parseComponents() {
 		progress("MathJax ended");			
 
 		//parse all text to set begrippen (eindtermen, begrippen, terms, units)
@@ -409,7 +420,7 @@ function startNemoScript(){
 				doTextBubbles();
 			}
 		}]);
-	});
+	}
 }
 
 function doTextBubbles() {
