@@ -93,8 +93,11 @@ function nemoInit(extrascripts){
 			enableProgressBar = true;
 			progress("enable ProgressBar");
 
-			additionalscripts = extrascripts;
-			totalProgress += extrascripts.length;
+			if(extrascripts) {
+				additionalscripts = extrascripts;
+				totalProgress += extrascripts.length;				
+			}
+
 			loadLibs();
 		});
 
