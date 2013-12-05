@@ -10,10 +10,10 @@ var isTitleMoved = false;
 var blockSliding = false;
 var swipeTimer;
 
+
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
-var scripts = [	'js/jquery.transit.min.js',
+var core_scripts = [	'js/jquery.transit.min.js',
 				'js/jquery-ui-1.10.3.custom.min.js',
-				'js/functions.js',
 				'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',/*,
 				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.js",
 				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.logAxisRenderer.min.js",
@@ -27,8 +27,11 @@ var scripts = [	'js/jquery.transit.min.js',
 				"js/jquery.event.move.js",
 				"js/jquery.event.swipe.js",
 				"js/jquery.timer.js",
-				"js/jquery.nm_slider.js"
+				"js/jquery.nm_slider.js",
+				"js/jquery.nm_closedquiz.js",
+				"js/jquery.nm_experimentpane.js"
 			];
+var additionalscripts;
 var animations;	
 var animationNames;	
 
@@ -50,7 +53,7 @@ function progress(msg) {
 	}
 }
 		
-function nemoInit(){
+function nemoInit(extrascripts){
 	console.log("%c-----------NemoInit-----------", 'background: #f0e269;');
 	//first thing: load jquery
 	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
@@ -72,7 +75,7 @@ function nemoInit(){
 			$('body').append(loader);
 
 			//calculate totalProgress
-			totalProgress = scripts.length + 7; //script length and 7 other steps.
+			totalProgress = core_scripts.length + 7; //script length and 7 other steps.
 
 			//check for animations we have to load 
 			animations = new Array();
@@ -90,6 +93,8 @@ function nemoInit(){
 			enableProgressBar = true;
 			progress("enable ProgressBar");
 
+			additionalscripts = extrascripts;
+			totalProgress += extrascripts.length;
 			loadLibs();
 		});
 
@@ -102,16 +107,36 @@ function loadLibs(){
 	$(function() {
 		log("loading libraries");
 		yepnope([{
-			load: scripts,
+			load: core_scripts,
 			callback: function (url, result, key) {
 				progress("loaded: " + url);
 			},
 			complete: function(){
-				log("yepnope complete"); 
-				loadAnims();		
+				loadAdditionalLibs();	
 			}
 		}]);
 	});
+}
+
+function loadAdditionalLibs() {
+	$(function() {
+		if(additionalscripts) {
+			log("loading additional libraries");
+			yepnope([{
+				load: additionalscripts,
+				callback: function (url, result, key) {
+					progress("loaded: " + url);
+				},
+				complete: function(){
+					log("yepnope complete"); 
+					loadAnims();		
+				}
+			}]);
+		} else {
+			log("yepnope complete"); 
+			loadAnims();	
+		}
+	});	
 }
 
 //load the EDGE animations
@@ -165,7 +190,7 @@ function startNemoScript(){
 		progress("MathJax ended");			
 
 		//parse all text to set begrippen (eindtermen, begrippen, terms, units)
-		$(".nm_Text, .nm_TextField, .nm_TextBubble, .nm_Exclamation, .nm_InfoBlock").each(function() {
+		$(".nm_Text, .nm_TextField, .nm_TextBubble, .nm_InfoBlock").each(function() {
 			//replace with: #[\w\d ]*?# ?[\d]*
 			var patt = /#[^#]*?# ?[\d]*/g;
 			var strPatt = /[^#][^#]*(?=#)/; //weirdness
@@ -221,50 +246,46 @@ function startNemoScript(){
 			$(this).find(".nm_qItem").each(function() {
 				var tip = $(this).attr("tip");
 				if(tip) {
-					$("#" + tip).addClass("nm_Explanation");
+					$("#" + tip).addClass("close");
 					$("#" + tip).transition({ scale: 0 }, 0);
 				}
 				$(this).children("label").prepend("<span><span></span></span>");
 			});
 
 			var id = $(this).attr("id");
-			log("Parse Closed Quiz " + id);
+			console.log("Parse Closed Quiz " + id);
 			var type = "closed";
 			if($(this).attr("type")) type = $(this).attr("type");
 
 			// Give all elements inside group the same name 
 			$(this).find("input").attr("name", id);
 
-			if(type == "closed") {
-				countCorrectItems = $(this).children(".nm_qItem[answer='true']").length;
-				if(countCorrectItems == 1) {
-					/* 	MULTIPLY CHOICE 
-						An closed question with only one correct answer
-					*/
-					$(this).find("input").attr("type", "radio");
-					$(this).find("input").each(function() {
-						$(this).attr("onclick", " checkQuiz('" + id + "', '" + type + "', '" + $(this).parent().attr("id") + "'); ");
-					});
+			countCorrectItems = $(this).children(".nm_qItem[answer='true']").length;
+			if(countCorrectItems == 1) {
+				/* 	MULTIPLY CHOICE 
+					An closed question with only one correct answer
+				*/
+				$(this).find("input").attr("type", "radio");
+				$(this).find("input").each(function() {
+					$(this).attr("onclick", " checkQuiz('" + id + "', '" + type + "', '" + $(this).parent().attr("id") + "'); ");
+				});
 
-				} else if(countCorrectItems > 1) {
-					/* 	TRUE FALSE
-						An closed question with multiply correct answers
-					*/
-					$(this).find("input").attr("type", "checkbox");
-					$(this).find("input").attr("onclick", " $( this ).parent().toggleClass( 'selected' );");
+			} else if(countCorrectItems > 1) {
+				/* 	TRUE FALSE
+					An closed question with multiply correct answers
+				*/
+				$(this).find("input").attr("type", "checkbox");
+				$(this).find("input").attr("onclick", " $( this ).parent().toggleClass( 'selected' );");
 
-					// Render button
-					$(this).append(checkButton(id, type));
-				} else {
-					// An closed question with zero answers; incorrect!
-					log("The quiz with id " + id + " has no correct answers. Quiz could not be parsed.");
-				}
-
-			} else if(type == "open") {
 				// Render button
-				$(this).append(checkButton(id, type));
+				$(this).append('<div class="nm_Button" id="btn_' + id +'">Controleren</div>');
+				$("#contentDiv").on("click", "#btn_" + id, function() {
+					checkQuiz(id, type, id);
+				});
+
 			} else {
-				log("The quiz with id " + id + " has no type specified. Quiz could not be parsed.")
+				// An closed question with zero answers; incorrect!
+				console.log("The quiz with id " + id + " has no correct answers. Quiz could not be parsed.");
 			}
 		});
 
@@ -326,9 +347,6 @@ function startNemoScript(){
 		console.log("element origins set");
 		progress("Slides and content positioned");
 
-		// Add experiment slide
-		if(!document.getElementById("contentDiv_bg")) $("#contentDiv").prepend('<div id="contentDiv_bg" class="default"></div>');
-
 		// Move title if experiment pane is on slide
 		$(".nm_ExperimentPane").each(function() {
 			if($(this).parent().hasClass("slide")) {
@@ -380,6 +398,10 @@ function startNemoScript(){
 		$("#slideIndex").html("1/"+totalPages);
 		progress("Made nm_InfoBlock and nm_Slider");
 
+		$("#contentDiv").css("visibility", "hidden");
+		$("#contentDiv").css("display", "block");
+		progress("Load slide content");
+
 		//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
 		yepnope([{
 			load: ["js/finished.js"],
@@ -395,13 +417,8 @@ function doTextBubbles() {
 	//make nm_TextBubbleContent & nm_Explanation divs.
 	var divBuffer;		
 	$(".nm_TextBubble").each(function(){
-		divBuffer = $("<div>").html($(this).html()).addClass("nm_TextBubbleContent");
+		divBuffer = $("<div>").html($(this).html()).addClass("content");
 		$(this).empty(); 
-		$(this).append(divBuffer);
-	});
-	$(".nm_Explanation").each(function(){
-		divBuffer = $("<div>").html($(this).html()).addClass("nm_ExplanationContent");
-		$(this).empty();
 		$(this).append(divBuffer);
 	});
 	console.log("content divs for bubbles made");
@@ -418,48 +435,55 @@ function doTextBubbles() {
 	$(".nm_TextBubble").each(function(){
 		var h = $(this).attr("rHeight");
 		if(($(this).hasClass("middle-left") || $(this).hasClass("middle-right")) && (h <55)) {
-			$(this).append('<div class="nm_TextBubblePointer small"></div>');
+			$(this).append('<div class="pointer small"></div>');
 		} else {
-			$(this).append('<div class="nm_TextBubblePointer"></div>');
+			$(this).append('<div class="pointer"></div>');
 		}
 	});
 
 	//attach bubbels to their targets if any And change them to explanations
 	$(".nm_TextBubble[target]").each(function(){
-		$(this).addClass("nm_Explanation");
-		var target = $("#" + $(this).attr("target"));
-		var bubble = $(this);
-		bubble.transition({ scale: 0 }, 0);
-		if(!target.hasClass("nm_qItem")) {
-			var leftOffset = 0;
-			var topOffset = 0;
-			if(bubble.hasClass("bottom-left")){		topOffset = -parseInt(bubble.attr("rHeight")) - 58; }
-			if(bubble.hasClass("bottom-middle")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
-			if(bubble.hasClass("bottom-right")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58;									leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}
-			if(bubble.hasClass("middle-left")){		topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset = parseInt(target.css("width")); }
-			if(bubble.hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset -= parseInt(bubble.attr("rWidth")); }
-			if(bubble.hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
-			if(bubble.hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
-			if(bubble.hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}	
-			bubble.css("left", (parseInt(target.css("left")) + leftOffset) + "px");
-			bubble.css("top", (parseInt(target.css("top")) + topOffset) + "px");
-			//make the target clickable
-			target.on("click", function(event){ bubble.transition({ scale: 1 }, 200); bubble.attr("clicked", "true")});
-			target.mouseenter(function(event){ bubble.transition({ scale: 1 }, 100)});
-			target.mouseleave(function(event){ if(bubble.attr("clicked") != "true") bubble.transition({ scale: 0 }, 100)});
-			target.addClass("hoverable");
+		if($(this).attr("target") != "") {
+			var target = $("#" + $(this).attr("target"));
+			var bubble = $(this);
+			bubble.addClass("close");
 			bubble.transition({ scale: 0 }, 0);
+			if(!target.hasClass("nm_qItem")) {
+				var leftOffset = 0;
+				var topOffset = 0;
+				if(bubble.hasClass("bottom-left")){		topOffset = -parseInt(bubble.attr("rHeight")) - 58; }
+				if(bubble.hasClass("bottom-middle")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58; 								leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
+				if(bubble.hasClass("bottom-right")){	topOffset = -parseInt(bubble.attr("rHeight")) - 58;									leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}
+				if(bubble.hasClass("middle-left")){		topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset = parseInt(target.css("width")); }
+				if(bubble.hasClass("middle-right")){	topOffset = (parseInt(target.css("height")) - parseInt(bubble.attr("rHeight")))/2; 	leftOffset -= parseInt(bubble.attr("rWidth")); }
+				if(bubble.hasClass("top-left")){		topOffset = parseInt(target.css("height")); }
+				if(bubble.hasClass("top-middle")){		topOffset = parseInt(target.css("height")); 										leftOffset = (parseInt(target.css("width"))-parseInt(bubble.attr("rWidth")))/2;}
+				if(bubble.hasClass("top-right")){		topOffset = parseInt(target.css("height"));											leftOffset = parseInt(target.css("width"))-parseInt(bubble.attr("rWidth"));}	
+				bubble.css("left", (parseInt(target.css("left")) + leftOffset) + "px");
+				bubble.css("top", (parseInt(target.css("top")) + topOffset) + "px");
+				//make the target clickable
+				target.on("click", function(event){ bubble.transition({ scale: 1 }, 200); bubble.attr("clicked", "true")});
+				target.mouseenter(function(event){ bubble.transition({ scale: 1 }, 100)});
+				target.mouseleave(function(event){ if(bubble.attr("clicked") != "true") bubble.transition({ scale: 0 }, 100)});
+				target.addClass("hoverable");
+				bubble.transition({ scale: 0 }, 0);
+			}
+		}
+	});
+
+	$(".nm_TextBubble").each(function() {
+		var b = $(this);
+		if(b.hasClass("close")) {
+	    	b.append('<span class="close">x</span>');
+	    	$('> .close', this).on({
+		  		click: function(){
+		    		b.transition({ scale: 0 }, 200);
+		    		b.removeAttr("clicked");
+		  		}
+			});
 		}
 	});
 	
-	$(".nm_Explanation").append('<span class="close">x</span>');
-	$(".nm_Explanation .close").on({
-	  click: function(){
-	    $(this).closest(".nm_Explanation").transition({ scale: 0 }, 200);
-	    $(this).closest(".nm_Explanation").removeAttr("clicked");
-	  }
-	});
-
 	progress("nm_TextBubble and nm_Explanation");
 
 	//continue work
@@ -498,7 +522,7 @@ function endNemoScript(){
 
 	    //removing preloader
 	    $("#loader").remove();
-	    $("#contentDiv").show();
+	    $("#contentDiv").css("visibility", "visible");
 	    $("#navigation").show();
 	    $("#title").toggle("slide");
 
@@ -630,4 +654,11 @@ function doSlide(){
 			});
 		}//end of currentpage==0
 	}//end of next/prev if.
+}
+
+function toggleNavigation(currentPage, totalPages) {
+	if((currentPage+1) == totalPages) { $("#navigation #next").prop('disabled', true);
+	} else { $("#navigation #next").prop('disabled', false);}
+	if(currentPage == 0) { $("#navigation #prev").prop('disabled', true);
+	} else { $("#navigation #prev").prop('disabled', false);}
 }

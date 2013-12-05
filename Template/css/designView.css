@@ -111,6 +111,11 @@ ul {
 .nm_TextBubble.middle-left.red{		background-image: url("designView/point-design-red_middle-left.png"); 	background-position: left 50%; padding-left: 59px; }
 .nm_TextBubble.middle-right.red{	background-image: url("designView/point-design-red_middle-right.png"); 	background-position: right 50%; padding-right: 59px; }
 
+.nm_TextBubble {	   background: #fff;}
+.nm_TextBubble.white { background: #fff;}
+.nm_TextBubble.red {   background: #f55f73;}
+.nm_TextBubble.green { background: #54cc78;}
+.nm_TextBubble.blue {  background: #5bb8e8;}
 
  .nm_Explanation{
 	background-image: 		url("point-design.png");
@@ -249,8 +254,12 @@ ul {
 	position: absolute;
 	top: 20px;
 	left: 20px;
-	width: 300px;
-	height: 600px;
-	border: 1px;
+	padding: 20px;
+	height: 560px;
+	width: 260px;
 	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.nm_ExperimentPane p {
+	color: #F5F5F5;
 }
