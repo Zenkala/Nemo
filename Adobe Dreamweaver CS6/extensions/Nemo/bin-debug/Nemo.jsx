@@ -123,7 +123,8 @@ function createGhosts(givenIndex) {
                 }
             }
         }
-        ghostDiv.innerHTML += '<div id="ghostDivCover"> </div>'
+        ghostDiv.innerHTML += '<div id="ghostDivCover"> </div>';
+        theDOM.setSelectedNode(nodes[givenIndex], false, true);
     }
 
     if(stays.length>0) {
@@ -140,6 +141,25 @@ function getDocumentPath() {
 }
 
 function getCurrentSlide() {
+    var dom = dw.getDocumentDOM();
+    var i = 0;
+    if(dom) {
+        var slide = dom.getElementById("slide"+i);
+        while(slide) {
+            if(slide.class == "slide activeSlide") {
+                // found!
+                return toXML([{'name':'currentSlide', 'val':i}]);
+                break;
+            }
+            i++;
+            slide = dom.getElementById("slide"+i);
+        }
+    }
+    return toXML([{'name':'currentSlide', 'val':i}]);
+ }
+
+/*
+   //The old long function
     var theDOM = dw.getDocumentDOM();
     if(theDOM != null) {
         var allNodes = theDOM.getElementById("contentDiv").childNodes;
@@ -152,7 +172,11 @@ function getCurrentSlide() {
             }
         }
     }
+   
+    return toXML([{'name':'currentSlide', 'val':'2'}]);
+
 }
+ */
 
 function gotoSlide(newSlide, oldSlide) {
 	var theDOM = dw.getDocumentDOM();
@@ -163,6 +187,7 @@ function gotoSlide(newSlide, oldSlide) {
     			if(oldSlide >= 0) {
     				theDOM.getElementById("slide" + oldSlide).className = "slide";
     				theDOM.getElementById("slide" + newSlide).className = "slide activeSlide";
+                    
     			} else {
     				theDOM.getElementById("commentslide").className = "slide";
     				theDOM.getElementById("slide" + newSlide).className = "slide activeSlide";
@@ -270,7 +295,27 @@ function addASlide(givenCurrentSlide) {
            
         var node = theDOM.getElementById("slide" + c);
         theDOM.setSelectedNode(node);
-        theDOM.insertHTML('<div class="slide" id="slide' + j + '"><div class="comment slideNumber">'+(j+1)+ '</div></div>', false);
+        theDOM.insertHTML('<div class="slide" id="slide' + j + '">&nbsp;</div>', false);
+        
+        // Reset slide numbering
+        var slides = getSlideNodes (false);
+        for(i = 0; i < slides.length; i++) {
+            var id = ("slide"+i);
+            slides[i].setAttribute("id", id);
+        }
+    }
+}
+
+function duplicateSlide(givenCurrentSlide) {
+    var theDOM = dw.getDocumentDOM();
+    
+    if(theDOM != null) {
+        var j = getTotalSlides(true);
+        var c = parseInt(givenCurrentSlide);
+           
+        var node = theDOM.getElementById("slide" + c);
+        theDOM.setSelectedNode(node);
+        theDOM.insertHTML('<div class="slide" id="slide' + j + '">&nbsp;</div>', false);
         
         // Reset slide numbering
         var slides = getSlideNodes (false);
@@ -348,10 +393,119 @@ function remSlide(givenIndex){
     }
 }
 
+function updateStayAddSlide(givenIndex) {
+	var index = parseInt(givenIndex);
+	var nodes = getSlideNodes(false);
+
+	if(nodes != null) {
+		var elList = [];
+		//	Which elements are on the selected slide?
+
+			// First, do the 'real' elements on the previous slide
+			elList = nodes[index].childNodes; // The nodes that are certainly on this slide
+			for(var i = 0; i < elList.length; ++i) {
+				if(elList[i].stay) {
+					if(elList[i].stay > 0) {
+                        elList[i].stay++;
+					}
+				}
+			}
+
+			// Second, look out for ghost element on theSlide
+			var k = 0;
+			for(var j = (index-1); j >= 0; --j) {
+				elList = nodes[j].childNodes;
+				for(var i = 0; i < elList.length; ++i) {
+					if(elList[i].stay) {
+						if(elList[i].stay > (1+k)) {
+                            elList[i].stay++;
+						}
+					}
+				}
+				k++;
+			}
+
+	}
+}
+
+function updateStayRemoveSlide(givenIndex) {
+	var index = parseInt(givenIndex);
+	var nodes = getSlideNodes(false);
+	if(nodes != null) {
+		var elList = [];
+			// Second, look out for ghost element on theSlide
+			var k = 0;
+			for(var j = (index-1); j >= 0; --j) {
+				elList = nodes[j].childNodes;
+				for(var i = 0; i < elList.length; ++i) {
+					if(elList[i].stay) {
+						if(elList[i].stay > (k)) {
+							elList[i].stay--;
+						}
+					}
+				}
+				k++;
+			}
+	}
+ }
+
+function updateStayDuplicateSlide(givenIndex) {
+	var index = parseInt(givenIndex);
+	var nodes = getSlideNodes(false);
+
+	if(nodes != null) {
+		var elList = [];
+		//	Which elements are on the previous slide, before inserting new slide?
+            var k = 0;
+			for(var j = (index-1); j >= 0; --j) {
+				elList = nodes[j].childNodes;
+				for(var i = 0; i < elList.length; ++i) {
+					if(elList[i].stay) {
+						if(elList[i].stay > (k)) {
+                            elList[i].stay++;
+						}
+					}
+				}
+				k++;
+			}
+			// First, do the 'real' elements on the previous slide
+			elList = nodes[index].childNodes; // The nodes that are certainly on this slide
+			for(var i = 0; i < elList.length; ++i) {
+                    if(elList[i].stay) {
+                        elList[i].stay++;
+                    } else {
+                        elList[i].setAttribute("stay", "1");
+                    }   
+			}
+        
+                // Second, look out for ghost element on theSlide
+			
+     } 
+}
+
+function updateSlideLook(givenIndex) {
+    // The given index of the new slide
+    var index = parseInt(givenIndex);
+    var nodes = getSlideNodes(false);
+    
+    var prevSlide = nodes[index-1];
+    var curSlide = nodes[index];
+    
+    if(prevSlide.type) {
+        if(prevSlide.getAttribute("type") == "experiment") {
+            curSlide.setAttribute("type", "experiment");
+        }    
+    }
+    
+
+}
+
+/*
 function updateStay(givenIndex, action) {
     
     var index = parseInt(givenIndex);
   
+   
     var nodes = getSlideNodes(false);
     if(nodes != null) {
         var i;
@@ -362,7 +516,7 @@ function updateStay(givenIndex, action) {
                 //for each node in a slide
                 if(nodes[i].childNodes[j].stay) { //node has a stay!
                     if(nodes[i].childNodes[j].stay != 0) {
-                        if((i + nodes[i].childNodes[j].stay) >= index) {
+                        if((i + nodes[i].childNodes[j].stay) > index) {
                             if(action == 'add') {
                                 nodes[i].childNodes[j].stay++;
                             } else {
@@ -375,7 +529,7 @@ function updateStay(givenIndex, action) {
         }
     }
 }
-
+*/
 //////======== Animation functions ==========================//////////
 var pathpatt = /^(.*[\\\/])/
 
@@ -436,7 +590,7 @@ function addAnimation(givenName, givenPath){
     var updateUrlStore;
     if(givenPath == "none") { //new animation
         //ask use to select a folder
-        fileURL = dreamweaver.browseForFileURL("select", "Select a '_edgePreload.js' File", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath);
+        fileURL = dreamweaver.browseForFileURL("select", "Select a '_edgePreload.js' File", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath + "/../../animations_src/");
     } else { //updating an existing animation
         if (DWfile.exists(givenPath)){ //lets do this!
             fileURL = givenPath;

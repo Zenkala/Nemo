@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.3.8"
+<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.4.0"
 		ExtensionBundleName="Nemo-Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[Willem van Vliet and Tjibbe van der Laan]]>
@@ -10,7 +10,11 @@
 		<![CDATA[Made by the OLO 2013.
 For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[Changelog delta since 0.3.7
+		<![CDATA[Changelog delta since 0.3.8
+	Create duplicate function
+	Bug fixes in updateStay()
+
+Changelog delta since 0.3.7
 	Bug fixes in addASlide() and setStay()
 	setStay does only work for a select set of elements
 
@@ -38,7 +42,7 @@ Changelog delta since 0.3.1:
 	Added Stay-Ghosting
 	Added go to Comment Slide button to extension]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.3.8" />
+		<Extension Id="com.OLO.Nemo.extension" Version="0.4.0" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>

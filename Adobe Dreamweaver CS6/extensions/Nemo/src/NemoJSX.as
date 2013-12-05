@@ -36,6 +36,7 @@ package
 		private static var logBook:Array = new Array();
 		private static var statusIsOpen:Boolean = false;
 		
+		
 		public static function initNemo(givenExtension: CSExtension, _nrSlides: NumericStepper, _stay: NumericStepper, _slideContainer: List, _animationContainer: List): void {
 			if(givenExtension) extension = givenExtension;
 			state = "Initializing"
@@ -50,7 +51,7 @@ package
 			//reset to slider 1
 			callDW("forceGotoSlide", String(0));
 			currentSlide = 0;
-			slideContainer.selectedIndex = 0;
+			slideContainer.selectedIndex = -1;
 			updateGUI();
 
 			//set timer
@@ -84,7 +85,6 @@ package
 					slideContainer.dataProvider.addItem("Slide " + (i+1));
 				}
 
-				//currentSlide = requestDW("getCurrentSlide");
 				slideContainer.selectedIndex = currentSlide;
 				
 				//fill animationsContainer
@@ -153,8 +153,7 @@ package
 		public static function removeSlide(givenIndex:int):void 
 		{
 			// substract the stay of all elements on this slide by one  
-			CSXSInterface.instance.evalScript("updateStay", String(currentSlide), String("remove")); 
-			
+			CSXSInterface.instance.evalScript("updateStayRemoveSlide", String(currentSlide)); 
 			CSXSInterface.instance.evalScript("remSlide", String(givenIndex));
 			//select proper slide now
 			
@@ -167,8 +166,22 @@ package
 		
 		public static function addASlide(event:MouseEvent):void
 		{
+			CSXSInterface.instance.evalScript("updateStayAddSlide", String(currentSlide)); 
+			CSXSInterface.instance.evalScript("addASlide", String(currentSlide)); 			
+			addToLog("change slide selection from " + currentSlide + " to " + (currentSlide+1));
+			callDW("gotoSlide", String(currentSlide+1), String(currentSlide)); 
+			
+			currentSlide++;
+			//setGhosts();
+			callDW("createGhosts", String(currentSlide));
+			updateGUI();
+		}
+		
+		public static function duplicateSlide(event:MouseEvent):void
+		{
+			CSXSInterface.instance.evalScript("updateStayDuplicateSlide", String(currentSlide)); 
 			CSXSInterface.instance.evalScript("addASlide", String(currentSlide)); 
-			CSXSInterface.instance.evalScript("updateStay", String(currentSlide+1), String("add")); 
+			CSXSInterface.instance.evalScript("updateSlideLook", String(currentSlide+1)); 
 			addToLog("change slide selection from " + currentSlide + " to " + (currentSlide+1));
 			callDW("gotoSlide", String(currentSlide+1), String(currentSlide)); 
 			
