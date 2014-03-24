@@ -1,6 +1,6 @@
 ﻿<macromedia-extension
 	 name="Nemo-Components"
-	 version="0.4.0"
+	 version="0.4.1"
 	 type="command"
 	 locked="false"
 	 requires-restart="True"
@@ -18,6 +18,9 @@
 	<![CDATA[
 	Installs the OLO development enviornment for Dreamweaver and HTML5: Nemo.
 	Less Jesus praising; more fish.
+	Changelog delta since 0.4.0
+    		Image import check; is cursor placed inside <P>? Insert image after this block
+    		(to prevent stay failures) 
 
 	Changelog delta since 0.3.9
 		Improved insert check for all components

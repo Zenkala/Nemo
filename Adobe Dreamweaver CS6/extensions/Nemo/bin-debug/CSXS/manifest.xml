@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.4.0" Version="3.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.4.3" Version="3.0">
 	<Author>
 		<![CDATA[Willem van Vliet and Tjibbe van der Laan]]>
 	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
@@ -7,7 +7,21 @@
 		<![CDATA[Made by the OLO 2013.
 For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[Changelog delta since 0.3.8
+		<![CDATA[Changelog delta since  0.4.2
+	Fixed animation bug
+	Animation update; check if the user made changes in animation; no changes? do nothing
+
+Changelog delta since 0.4.1
+	Fixed animation import bug
+	Improved animation import; file has not to be the preloadfile
+
+Changelog delta since 0.4.0
+	Added checks for Assign animation (is everything selected)
+	Added checks for Add animation (is the selected file a preload file?)
+	Support for multiple animations in one module
+	Improved import of animation (change URL of edge library in edge preload file to js/ instead of animations/../
+
+Changelog delta since 0.3.8
 	Create duplicate function
 	Bug fixes in updateStay()
 
@@ -39,7 +53,7 @@ Changelog delta since 0.3.1:
 	Added Stay-Ghosting
 	Added go to Comment Slide button to extension]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.4.0"/>
+		<Extension Id="com.OLO.Nemo.extension" Version="0.4.3"/>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>

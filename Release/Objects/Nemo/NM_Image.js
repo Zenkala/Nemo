@@ -144,7 +144,15 @@ function insertObject(assetArgs) {
 
         // Insert the IMG tag!
         if(selType > 0) {
-          dom.insertHTML('<img src="' + imageURL + '" class="nm_Image" id="' + uniqueId + '" ' + blockStr + ' ' + sizeStr + ' />', false);
+          
+          var selectedNode = dom.getSelectedNode();
+          if(selectedNode.tagName == "P") {
+            // No images in paragraph verdomme! Select outside this node
+            var offsets = dom.nodeToOffsets(selectedNode);
+            dom.setSelection(offsets[0], offsets[1]);
+          }
+
+          dom.insertHTML('<img src="' + imageURL + '" class="nm_Image" selType="' + selType + '" id="' + uniqueId + '" ' + blockStr + ' ' + sizeStr + ' />', false);
         } else {
           var activeSlide = nm.getActiveSlideNode();
           var inner = activeSlide.innerHTML;

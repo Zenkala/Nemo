@@ -179,6 +179,8 @@ function getCurrentSlide() {
  */
 
 function gotoSlide(newSlide, oldSlide) {
+    forceGotoSlide(newSlide);
+    /*
 	var theDOM = dw.getDocumentDOM();
     if (theDOM != null) {
     	var slideCount = getTotalSlides(true);    	
@@ -200,6 +202,7 @@ function gotoSlide(newSlide, oldSlide) {
     		}
     	}	
     }
+    */
 }
 
 function forceGotoSlide(newSlide) {
@@ -295,7 +298,7 @@ function addASlide(givenCurrentSlide) {
            
         var node = theDOM.getElementById("slide" + c);
         theDOM.setSelectedNode(node);
-        theDOM.insertHTML('<div class="slide" id="slide' + j + '">&nbsp;</div>', false);
+        theDOM.insertHTML('<div class="slide" id="slide' + j + '"><p>&nbsp;</p></div>', false);
         
         // Reset slide numbering
         var slides = getSlideNodes (false);
@@ -315,7 +318,7 @@ function duplicateSlide(givenCurrentSlide) {
            
         var node = theDOM.getElementById("slide" + c);
         theDOM.setSelectedNode(node);
-        theDOM.insertHTML('<div class="slide" id="slide' + j + '">&nbsp;</div>', false);
+        theDOM.insertHTML('<div class="slide" id="slide' + j + '"><p>&nbsp;</p></div>', false);
         
         // Reset slide numbering
         var slides = getSlideNodes (false);
@@ -587,7 +590,7 @@ ability to fill the current selected animation-object with the selected animatio
 function addAnimation(givenName, givenPath){
     var folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
     var fileURL;
-    var updateUrlStore;
+
     if(givenPath == "none") { //new animation
         //ask use to select a folder
         fileURL = dreamweaver.browseForFileURL("select", "Select a '_edgePreload.js' File", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath + "/../../animations_src/");
@@ -601,151 +604,233 @@ function addAnimation(givenName, givenPath){
         }
         
     }
-    if(fileURL){
+    
+    if(fileURL == false) {
+        fileURL = "";
+        return toXML([{'name':'animation', 'val':"none"},{'name':'path', 'val':"none"}]);
+    } else {
         if(fileURL[0] == "f"){
             //fixed. do nothing
         }else{
             //reletive. add our root
             fileURL = folderpath + fileURL;
         }
-        updateUrlStore = fileURL; //safe path, for later use.
 
-        //get name & source folder
-        //Assumed is that, when a user selects a file, you get the path including the filename.
-        //If you get a path from the extension, this is a folder, without the _preload.js file in it.
-        var animationName;
-        var sourceFolderURL
-        if(givenPath == "none"){
-            animationName = /[\w\_ ]*(?=_edgePreload.js)/.exec(fileURL); //extract the name from the url
-            sourceFolderURL = /.*(?=\/)/.exec(fileURL); //extract the path from the url
+        var error = false;
+        var animationName = "";
+        var sourceFolderURL = "";
+
+        //
+        //  Retrieve animation name and location from URL
+        //
+        if(givenPath == "none") {
+            animationName = /[^\/]+(?=_edge)/.exec(fileURL);
+            sourceFolderURL = /.*(?=\/)/.exec(fileURL);
         } else {
             animationName = givenName; //else, get name from givenName
             sourceFolderURL = givenPath; //else, get path from givenPath
         }
 
-        //make animations and images folders
-        if (!DWfile.exists(folderpath + "animations")) DWfile.createFolder(folderpath + "animations");
-        if (!DWfile.exists(folderpath + "images")) DWfile.createFolder(folderpath + "images");
-
-        //on to the target folder    
-
-        var folderURL = folderpath + "animations/" + animationName;
-
-        //check if preload exists. if it does, remove it and notify the user that we're updating an older animation
-        if(DWfile.exists(folderURL + "/" + animationName + "_edgePreload.js")){
-            alert("updating an older version of " + animationName + "!");
-            DWfile.remove(folderURL + "/" + animationName + "_edgePreload.js");
-        } else { //not updating, create the folder
-            DWfile.createFolder(folderURL);
+        if((animationName == "") || (sourceFolderURL == "")) {
+            error = "Failed to import animation. This is not a correct file.";
         }
-        //copy all the Js files to that place
-        DWfile.copy(sourceFolderURL + "/" + animationName + "_edge.js", folderURL + "/" + animationName + "_edge.js");
-        DWfile.copy(sourceFolderURL + "/" + animationName + "_edgeActions.js", folderURL + "/" + animationName + "_edgeActions.js");
-        DWfile.copy(sourceFolderURL + "/" + animationName + "_edgePreload.js", folderURL + "/" + animationName + "_edgePreload.js");
-        DWfile.createFolder(folderURL + "/edge_includes");
-        DWfile.copy(sourceFolderURL + "/edge_includes/edge.1.5.0.min.js", folderURL + "/edge_includes/edge.1.5.0.min.js");
 
-        //copy all the images to root/images
-        var list = DWfile.listFolder(sourceFolderURL + "/images");
-        if (list){
-            for(var j=0; j<list.length; j++){
-                DWfile.copy(sourceFolderURL + "/images/" + list[j], folderpath + "/images/" + list[j]);
+        //
+        //  Check if sourceFolderURL is published folder
+        //
+        if(!error) {
+            isPublishedSourceFolderURL = /publish\/web/.test(sourceFolderURL);
+            if(!isPublishedSourceFolderURL) {
+                sourceFolderURL = sourceFolderURL + "/publish/web";
+            }
+        
+        //
+        //  Check if the edge files exists (from directory)
+        //
+            if(!DWfile.exists(sourceFolderURL + "/" + animationName + "_edgePreload.js")) {
+                error = "Please publish your animation first. Could not find published files.";
+            }
+         }
+
+        //
+        //  Create animations and images folder inside _web directory (if not exists)
+        //
+        if(!error) {
+            if (!DWfile.exists(folderpath + "animations")) DWfile.createFolder(folderpath + "animations");
+            if (!DWfile.exists(folderpath + "images")) DWfile.createFolder(folderpath + "images");
+
+        //
+        //  Generate target folder
+        //
+            var folderURL = folderpath + "animations/" + animationName;
+
+
+        //
+        //  Check if the to directory already exists. That means that we're updating an older animation
+        //
+            if(DWfile.exists(folderURL + "/" + animationName + "_edgePreload.js")){
+                // Check if the file includes the text NEMO. Yes? User should first Publish his file 
+                var sourcePreloadURL = sourceFolderURL + "/" + animationName + "_edgePreload.js";
+                //open a file
+                var sourcePreloadFile = DWfile.read(sourcePreloadURL); 
+                if(/Imported by Nemo/.test(sourcePreloadFile)) {
+                    error = "Koekwous! Update failed. Please re-publish your animation first.";
+                } else {
+                    alert("Updating an older version of " + animationName + "!");
+                    DWfile.remove(folderURL + "/" + animationName + "_edgePreload.js");    
+                }
+
+            } else { //not updating, create the folder
+                DWfile.createFolder(folderURL);
             }
         }
 
-        //switch fileURL to the preLoad one we've copied
-        fileURL = folderURL + "/" + animationName + "_edgePreload.js";
 
-        //open a file
-        var str         = DWfile.read(fileURL); 
-        //var patt    = /[\w\.\-\/]*\.js/g; //match any js file. (not handy, since there are more then we need to change)
-        var pattAction  = /[\w\_%\/]*\.\d\.\d\.\d\.min\.js|[\w\_%]*_edge\.js|[\w\_%]*_edgeActions\.js/g; //match the three js files we want
-        var pattEdge    = /\{load:\"http:\/\/(.|\n)*edge\.1\.5\.0\.min\.js\"\},/; //part where it loads edge
-        var pattJquery  = /http:\/\/ajax\.googleapis\.com\/ajax\/libs\/jquery\/\d\.\d\.\d\/jquery\.min\.js/; //part where it loads edge
-        var pattJquery2 = /edge_includes\/jquery-\d\.\d\.\d\.min\.js/; //part where it loads edge
-        var pattJquery3 = /\{load:\"http.*true;}\},/; //part where it loads jquery
-        var pattLoad    = /preContent={dom:/; //after the loading statement
-
-        var result      = pattAction.exec(str)
-        var results     = new Array();
-        var oldresult   = "";
-        while( result && result!=oldresult){
-            oldresult   = result;
-            results.push(result);
-            result      = pattAction.exec(str);
-        }
-
-        for(var i=0; i<results.length; i++){
-            str = str.replace(results[i], "animations/" + animationName + "/" + results[i]);
-        }
-        //str = str.replace("Do Not Edit this file", "Do Not Edit this file. (Oh, we did! --Nemo)");
-        
-        //str = str.replace(pattEdge, ""); //remove edge loading
-        //str = str.replace(pattJquery, ""); //remove jquery loading
-        //str = str.replace(pattJquery2, ""); //remove jquery loading
-        str = str.replace(pattJquery3, ""); //remove jquery loading
-        str = str.replace(pattLoad, "onDocLoaded();preContent={dom:"); //add onDocLoaded event that would otherwise never be called
-        str = str + "\/\/updatePath:" + updateUrlStore + "*";//end with the updatePath
-        //write the altered preloader   
-
-        if (DWfile.write(fileURL, ("/* Edited by Nemo */" + str))){ // start by announching it is edited.
-            //document.getElementById("status").innerHTML = "Loaded " + animationName;
-            //all is succesful. notify the extension
-            return toXML([{'name':'animation', 'val':animationName},{'name':'path', 'val':sourceFolderURL}]);
-        } else {
-            //weird stuff happened
+        //
+        //  It's time to copy the files!
+        //
+        if(error) {
+            alert(error);
             return toXML([{'name':'animation', 'val':"none"},{'name':'path', 'val':"none"}]);
+        } else {
+            //copy all the Js files to that place
+            DWfile.copy(sourceFolderURL + "/" + animationName + "_edge.js", folderURL + "/" + animationName + "_edge.js");
+            DWfile.copy(sourceFolderURL + "/" + animationName + "_edgeActions.js", folderURL + "/" + animationName + "_edgeActions.js");
+            DWfile.copy(sourceFolderURL + "/" + animationName + "_edgePreload.js", folderURL + "/" + animationName + "_edgePreload.js");
+
+
+             //copy all the images to root/images
+            var list = DWfile.listFolder(sourceFolderURL + "/images");
+            if (list){
+                for(var j=0; j<list.length; j++){
+                    DWfile.copy(sourceFolderURL + "/images/" + list[j], folderpath + "/images/" + list[j]);
+                }
+            }
+
+
+        //
+        // Edit the preload file! Get the edgePreloadFile
+        //
+
+            //switch fileURL to the preLoad one we've copied
+            edgePreloadURL = folderURL + "/" + animationName + "_edgePreload.js";
+            //open a file
+            var edgePreloadFile = DWfile.read(edgePreloadURL); 
+
+        //
+        //  Define regex patterns
+        //
+            var pattAction = /[\w\_%]*_edge\.js|[\w\_%]*_edgeActions\.js/g; //match the composition specific files
+            var pattEdgeLibLocation = /[\w\_%\/]*\.\d\.\d\.\d\.min\.js/g;
+            var pattEdgeLibName = /[^\/]+$/;
+            var pattJquery3 = /\{load:\"http.*true;}\},/; //part where it loads jquery
+            var pattLoad    = /preContent={dom:/; //after the loading statement
+
+        //
+        //  Reallocate links in edgePreloadFile
+        //
+            var result      = pattAction.exec(edgePreloadFile);
+            var results     = new Array();
+            var oldresult   = "";
+            while( result && result!=oldresult){
+                oldresult   = result;
+                results.push(result);
+                result      = pattAction.exec(edgePreloadFile);
+            }
+
+            for(var i=0; i<results.length; i++){
+                edgePreloadFile = edgePreloadFile.replace(results[i], "animations/" + animationName + "/" + results[i]);
+            }
+
+        //
+        //  Reallocate link to edge library
+        //
+            var edgeLibLocation = pattEdgeLibLocation.exec(edgePreloadFile);
+            var libraryFileName = pattEdgeLibName.exec(edgeLibLocation);
+            edgePreloadFile = edgePreloadFile.replace(pattEdgeLibLocation, "js/" + libraryFileName);
+
+        //
+        //  Flag the animation source file that we've imported it. T
+        //
+            var sourcePreloadURL = sourceFolderURL + "/" + animationName + "_edgePreload.js";
+            var sourcePreloadFile = DWfile.read(sourcePreloadURL);
+            DWfile.write(sourcePreloadURL, (" \/* Imported by Nemo *\/ " + sourcePreloadFile));
+
+
+        //
+        //  Remove some bullshit
+        //
+            edgePreloadFile = edgePreloadFile.replace(pattJquery3, ""); //remove jquery loading
+            edgePreloadFile = edgePreloadFile.replace(pattLoad, "onDocLoaded();preContent={dom:"); //add onDocLoaded event that would otherwise never be called
+            edgePreloadFile = edgePreloadFile + "\/\/updatePath:" + sourceFolderURL + "*"; 
+
+            if (DWfile.write(edgePreloadURL, (" \/* Edited by Nemo *\/ " + edgePreloadFile) )) { 
+                // start by announching it is edited.
+                //document.getElementById("status").innerHTML = "Loaded " + animationName;
+                //all is succesful. notify the extension
+                return toXML([{'name':'animation', 'val':animationName},{'name':'path', 'val':sourceFolderURL}]);
+            } else {
+                //weird stuff happened
+                alert("Failed to import animation. Could not write the file.");
+                return toXML([{'name':'animation', 'val':"none"},{'name':'path', 'val':"none"}]);
+            }
+
+        
+
         }
-    }else{
-        //no file selected. (or dialog canceled) do nothing.
-        return toXML([{'name':'animation', 'val':"none"},{'name':'path', 'val':"none"}]);
     }
 }
 
 function assignAnimation(givenAnimation) {
-    var folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
-    var theDOM = dw.getDocumentDOM();
-    var widthPatt = /\.P\(w,[0-9]{3,4}\)/g;
-    var heightPatt = /\.P\(h,[0-9]{3,4}\)/g;
-    var numPatt = /[0-9]{3,4}/;
-    if (theDOM != null) {
-        var theNode   = theDOM.getSelectedNode();
-        var oldAssign = theNode.id;
-        var classList = theNode.class.split(" ");
-        if(contains(classList, "nm_Animation")){ //select an animation container
-            theNode.setAttribute("url",encodeURIComponent(givenAnimation) );
-            theNode.class = "" + givenAnimation.replace(/^[_\d]*| /g, "") + " nm_Animation";
-            theNode.id = "" + givenAnimation.replace(/^[_\d]*| /g, ""); //remove any digits and underscores in front of the first proper character. And any spaces.
-            //open <givenAnimation>_edge.js, extract the height and width of the stage and assign it to the animationContainer
-            var str = DWfile.read(folderpath + "animations/" + givenAnimation + "/" +givenAnimation + "_edge.js"); 
-            var maxWidth  = 0;
-            var maxHeight = 0;
-            var result    = numPatt.exec(widthPatt.exec(str));
-            var oldresult = "";
-            while( result && result!=oldresult){
-                oldresult = result;
-                if(parseInt(result) > maxWidth) maxWidth = parseInt(result);
-                result    = numPatt.exec(widthPatt.exec(str));
-            }
-            result    = numPatt.exec(heightPatt.exec(str));
-            while( result && result!=oldresult){
-                oldresult = result;
-                if(parseInt(result) > maxHeight) maxHeight = parseInt(result);
+    if(givenAnimation != "none") {
+        var folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+        var theDOM = dw.getDocumentDOM();
+        var widthPatt = /\.P\(w,[0-9]{3,4}\)/g;
+        var heightPatt = /\.P\(h,[0-9]{3,4}\)/g;
+        var numPatt = /[0-9]{3,4}/;
+        if (theDOM != null) {
+            var theNode   = theDOM.getSelectedNode();
+            var oldAssign = theNode.id;
+            var classList = theNode.class.split(" ");
+            if(contains(classList, "nm_Animation")){ //select an animation container
+                theNode.setAttribute("url",encodeURIComponent(givenAnimation) );
+                theNode.class = "" + givenAnimation.replace(/^[_\d]*| /g, "") + " nm_Animation";
+                theNode.id = "" + givenAnimation.replace(/^[_\d]*| /g, ""); //remove any digits and underscores in front of the first proper character. And any spaces.
+                //open <givenAnimation>_edge.js, extract the height and width of the stage and assign it to the animationContainer
+                var str = DWfile.read(folderpath + "animations/" + givenAnimation + "/" +givenAnimation + "_edge.js"); 
+                var maxWidth  = 0;
+                var maxHeight = 0;
+                var result    = numPatt.exec(widthPatt.exec(str));
+                var oldresult = "";
+                while( result && result!=oldresult){
+                    oldresult = result;
+                    if(parseInt(result) > maxWidth) maxWidth = parseInt(result);
+                    result    = numPatt.exec(widthPatt.exec(str));
+                }
                 result    = numPatt.exec(heightPatt.exec(str));
-            }            
+                while( result && result!=oldresult){
+                    oldresult = result;
+                    if(parseInt(result) > maxHeight) maxHeight = parseInt(result);
+                    result    = numPatt.exec(heightPatt.exec(str));
+                }            
 
-            theNode.style.width = maxWidth   + "px";
-            theNode.style.height = maxHeight + "px";
-            //done
-            return toXML([{'name':'success', 'val':"true"}]);
+                theNode.style.width = maxWidth   + "px";
+                theNode.style.height = maxHeight + "px";
+                //done
+                return toXML([{'name':'success', 'val':"true"}]);
+            }else{
+                alert("Please select an animation container from the stage.");
+                return toXML([{'name':'success', 'val':"false"}]);
+            }
         }else{
-            alert("no animationContainer selected. Select/Add one first!");
+            alert("open a file first!");
             return toXML([{'name':'success', 'val':"false"}]);
         }
-    }else{
-        alert("open a file first!");
-        return toXML([{'name':'success', 'val':"false"}]);
+    } else {
+         alert("Please select an animation from the list.");
+         return toXML([{'name':'success', 'val':"false"}]);
     }
+   
 }
 
 

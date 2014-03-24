@@ -244,15 +244,19 @@ package
 		
 		public static function assignAnimation(event:MouseEvent):void
 		{
+			var theSelection:String = "none";
 			if(animationContainer.selectedIndex >= 0) {
-				addToLog("assign animation: " + animations[animationContainer.selectedIndex] + " - " + animationContainer.selectedIndex);
-				var rstr:String = requestDW("assignAnimation", animations[animationContainer.selectedIndex]).success;
-				if(rstr == "true") {
-					//
-				} else { 
-					addToLog("meh");
-				}
+				theSelection = animations[animationContainer.selectedIndex];
 			}
+			
+			addToLog("assign animation: " + theSelection);
+			var rstr:String = requestDW("assignAnimation", theSelection).success;
+			if(rstr == "true") {
+				//
+			} else { 
+				addToLog("meh");
+			}
+			
 		}
 		
 		public static function removeAnimation(event:ItemClickEvent):void
