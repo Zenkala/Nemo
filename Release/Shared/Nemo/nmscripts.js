@@ -49,6 +49,7 @@ function nemo_getSelectionType() {
 	
 }
 
+
 function nemo_getActiveSlideNode() {
 	var dom = dw.getDocumentDOM();
 	var i = 0; // Counter to loop thtrouhg slides

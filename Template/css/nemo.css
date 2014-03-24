@@ -54,8 +54,6 @@ header#title span {
 
 #contentDiv {
 	position:				absolute;
-	top:					0px;
-	left:					0px;
 	width:					1024px;
 	height:					672px;
 	overflow:				hidden;
@@ -66,8 +64,9 @@ header#title span {
 	background-color: 		rgb(255, 255, 255);
 	border: 				2px solid black;
 	padding:				8px 10px 15px 10px;
-	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
-	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+	-moz-box-shadow:    	3px 3px 5px rgba(0,0,0,0.66);
+	-webkit-box-shadow: 	3px 3px 5px rgba(0,0,0,0.66);
+	box-shadow:				3px 3px 5px rgba(0,0,0,0.66);
 }
 
 .nm_Text {
@@ -80,8 +79,9 @@ header#title span {
 	background-color: 		rgb(255, 255, 255);
 	border: 				2px solid black;
 	padding:				15px;
-	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
-	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+-moz-box-shadow:    	3px 3px 5px rgba(0,0,0,0.66);
+	-webkit-box-shadow: 	3px 3px 5px rgba(0,0,0,0.66);
+	box-shadow:				3px 3px 5px rgba(0,0,0,0.66);
 }
 
 .nm_Input_range, .nm_Input_text{
@@ -90,8 +90,9 @@ header#title span {
 	background-color: 		rgb(255, 255, 255);
 	border: 				2px solid black;
 	padding:				12px 15px 15px 15px;
-	-webkit-filter: 		drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
-	filter: 				drop-shadow(3px 3px 5px rgba(0,0,0,0.66));
+-moz-box-shadow:    	3px 3px 5px rgba(0,0,0,0.66);
+	-webkit-box-shadow: 	3px 3px 5px rgba(0,0,0,0.66);
+	box-shadow:				3px 3px 5px rgba(0,0,0,0.66);
 }
 .nm_Input_range{
 	background-color: 		#20af4b;
@@ -440,8 +441,13 @@ header#title span {
 
 .nm_Slider .sliderTitle {
 	top:					-75px;
-	left:					8px;
+	left:					4px;
 	width:					auto;
+}
+
+.nm_ExperimentPane .nm_Slider .sliderTitle {
+	font-weight: bold; 
+	color: #009ec2;
 }
 
 .nm_Slider .sliderHandleLabel {
@@ -458,6 +464,7 @@ header#title span {
 	width:					1024px;
 	height:					672px;
 	z-index: 				2;
+	display:				none;
 }
 
 .nm_Experiment {
@@ -476,20 +483,48 @@ header#title span {
 	border-radius: 20px;
 	height: 560px;
 	width: 260px;
-	border: 1px;
+	border: 2px solid white;
 	top: 20px;
 	left: 20px;
+	box-shadow: 2px;
 	padding: 20px;
-	background-color: rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 3px 3px 5px rgba(0,0,0,0.66);
+	/* -webkit-box-shadow: 3px 3px 5px rgba(0,0,0,0.2); */
+	/* box-shadow: 3px 3px 5px rgba(0,0,0,0.66); */
+	background-color: rgba(255, 255,255,0.75);
+	background-size: 100px 101px, 101px 100px, 20px 20px, 20px, 20px;
+	background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+	background-image: -webkit-linear-gradient(white 2px, transparent 2px), -webkit-linear-gradient(0, white 2px, transparent 2px), -webkit-linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), -webkit-linear-gradient(0, rgba(255,255,255,.3) 1px, transparent 1px);
+	background-image: -moz-linear-gradient(white 2px, transparent 2px), -moz-linear-gradient(0, white 2px, transparent 2px), -moz-linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), -moz-linear-gradient(0, rgba(255,255,255,.3) 1px, transparent 1px);
+	background-image: linear-gradient(white 2px, transparent 2px), linear-gradient(90deg, white 2px, transparent 2px), linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+	-pie-background: linear-gradient(white 2px, transparent 2px) -2px -2px / 100px, linear-gradient(90deg, white 2px, transparent 2px) -2px -2px / 100px, linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px) -1px -1px / 20px, linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px) -1px -1px / 20px, #269;
 }
 
-.nm_ExperimentPane p {
-	color: #F5F5F5;
+#contentDiv.default { 
+	background: #f3f9eb; /* Old browsers */
+	background: -moz-linear-gradient(top, #f3f9eb 60%, #cbe5a8 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(60%,#f3f9eb), color-stop(100%,#cbe5a8)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #f3f9eb 60%,#cbe5a8 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #f3f9eb 60%,#cbe5a8 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #f3f9eb 60%,#cbe5a8 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #f3f9eb 60%,#cbe5a8 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f9eb', endColorstr='#cbe5a8',GradientType=0 ); /* IE6-9 */
+}
+#contentDiv.experiment { 
+	background: #e5f5f9; /* Old browsers */
+	background: -moz-linear-gradient(top, #e5f5f9 0%, #8ad2e3 79%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5f5f9), color-stop(79%,#8ad2e3)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #e5f5f9 0%,#8ad2e3 79%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #e5f5f9 0%,#8ad2e3 79%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #e5f5f9 0%,#8ad2e3 79%); /* IE10+ */
+	background: linear-gradient(to bottom, #e5f5f9 0%,#8ad2e3 79%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5f5f9', endColorstr='#8ad2e3',GradientType=0 ); /* IE6-9 */
 }
 
-#contentDiv.default { background-image: url("bg_default.svg"); }
-#contentDiv.experiment { background-image: url("bg_experiment.svg"); }
-
+#navigation {
+	position: absolute;
+	top: 700px;
+}
 
 /* Backwards compatible until the next release */ 
 

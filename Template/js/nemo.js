@@ -35,6 +35,10 @@ var additionalscripts;
 var animations;	
 var animationNames;	
 
+// Adobe Edge configuration
+window.AdobeEdge = window.AdobeEdge || {};    	 
+window.AdobeEdge.bootstrapLoading = true;
+
 function log(msg) {
 	if (console.timeStamp) {
 		console.timeStamp(msg);
@@ -65,6 +69,7 @@ function nemoInit(extrascripts){
 			//hide and delete comment/ghosting stuff
 			$("#contentDiv").hide();
 			$("#navigation").hide();
+			$("#slide").hide();
 			$("#title").hide();
 			$(".comment").remove();
 			$("#commentslide").remove();
@@ -81,7 +86,7 @@ function nemoInit(extrascripts){
 			animations = new Array();
 			animationNames = new Array();
 			var animUrl = "";
-			//$(".loaderAnimation").each(function(){
+
 			$(".nm_Animation").each(function(){
 				animUrl = $(this).attr("url").replace(/%20/g, " ");
 				console.log("found animation: " + $(this).attr("id"));
@@ -97,6 +102,17 @@ function nemoInit(extrascripts){
 				additionalscripts = extrascripts;
 				totalProgress += extrascripts.length;				
 			}
+
+			// Do a fix for images. Absolute postioned images should not be placed inside a <p> container
+			// but Dreamweaver does, because of the necessary <p> hack in every slide (otherwise the 
+			// program crashes)
+			$("img").each(function() {
+				if(($(this).css("position") == "absolute") && ($(this).parents("p").length == 1)) {
+					$(this).parents("p").each(function() {
+						$(this).replaceWith($(this).children());
+					});
+				}
+			});
 
 			loadLibs();
 		});
@@ -154,6 +170,9 @@ function loadAnims(){
 			complete: function(){
 				log("loading animations complete"); 
 				attachBootLoaders();
+				AdobeEdge.loadResources();
+				AdobeEdge.playWhenReady();
+				
 			}
 		}]);
 	}else{
@@ -233,16 +252,16 @@ function startNemoScript(){
 		var sliderObject;
 		$(".nm_Slider.autoGenerate").each(function() {
 			sliderObject = {range: (typeof $(this).attr("range") == 'undefined') ? false: true};
-    		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseInt($(this).attr("min"));
-    		if(typeof $(this).attr("max") != 'undefined') sliderObject.max = parseInt($(this).attr("max"));
-    		if(typeof $(this).attr("stepping") != 'undefined') sliderObject.step = parseInt($(this).attr("stepping"));
+    		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseFloat($(this).attr("min"));
+    		if(typeof $(this).attr("max") != 'undefined') sliderObject.max = parseFloat($(this).attr("max"));
+    		if(typeof $(this).attr("stepping") != 'undefined') sliderObject.step = parseFloat($(this).attr("stepping"));
     		if(sliderObject.range) {
     			sliderObject.values = [ 
-    				sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 30,
-    				sliderObject.value = (typeof $(this).attr("value2") != 'undefined') ?  parseInt($(this).attr("value2")) : 70
+    				sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseFloat($(this).attr("value1")) : 30,
+    				sliderObject.value = (typeof $(this).attr("value2") != 'undefined') ?  parseFloat($(this).attr("value2")) : 70
     			];
     		} else {
-    			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseInt($(this).attr("value1")) : 50;
+    			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseFloat($(this).attr("value1")) : 50;
     		}
     		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
     		$(this).nm_slider( sliderObject );
@@ -309,21 +328,6 @@ function startNemoScript(){
 			return cButton;
 		}
 		progress("Parsed quiz");
-
-
-		/* This is Willem's experimental slide functionality. Sorry Willem, we have to discuss which functionality is better 
-		//parse experiemental sections
-		$(".nm_Experiment").each(function() {
-			$(this).children().each(function() {
-				$(this).css("position", "relative");
-				$(this).css("left", "");
-				$(this).css("top", "");
-				//$(this).css("margin-top", "50px");
-				//$(this).css("border", "solid 0px black");
-				console.log(this);
-			});
-		});
-		*/
 		
 		//set contentDiv width and innerHeight
 		$("#contentDiv").css("width", "1024px");
@@ -363,6 +367,16 @@ function startNemoScript(){
 
 		// Move title if experiment pane is on slide
 		$(".nm_ExperimentPane").each(function() {
+			console.log($(this).prop("disabled") + " kees!");
+			if($(this).prop("disabled") == "disabled") {
+				$(this).find(".ui-slider").each(function() {
+					$(this).slider('disable');
+				});
+				$(this).find(".ui-button").each(function() {
+					$(this).button('disable');
+				});
+			}
+
 			if($(this).parent().hasClass("slide")) {
 				var nr = $(this).parent().attr("id");
 				nr = nr.replace("slide","");
@@ -413,6 +427,7 @@ function startNemoScript(){
 		progress("Made nm_InfoBlock and nm_Slider");
 
 		$("#contentDiv").css("visibility", "hidden");
+		$("#slide"+gotoSlide).css("display", "block");
 		$("#contentDiv").css("display", "block");
 		progress("Load slide content");
 
@@ -588,6 +603,9 @@ function prev(){
 }
 
 function doSlide(){
+
+	var transSpeed = 350;
+
 	if(slideBuffer.length<=0){
 		console.log("stop");
 		sliding = false;
@@ -602,6 +620,7 @@ function doSlide(){
 		}else{
 			var elementbuffer = [];		
 			currentPage++;
+			$("#slide"+currentPage).css("display", "block");
 			console.log("%cnext to " + currentPage, 'background: #cacef6;');	
 			$("#slideIndex").html(""+(currentPage+1)+"/" + totalPages);
 
@@ -619,11 +638,12 @@ function doSlide(){
 			});
 			moveTitle(currentPage, quick);
 			//move all slides
-			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
-			$("html").transition({}, quick?0:350, function() {		
+			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:transSpeed, 'easeOutExpo');
+			$("html").transition({}, quick?0:transSpeed, function() {		
 				elementbuffer.reverse().forEach(function(entry){
 					$(entry).prependTo($('#slide' + currentPage));
 				});
+				$("#slide" + (currentPage-1)).css("display", "none");
 				if(!suppresEvents)newSlideStopHdl(currentPage, false);
 				slideBuffer.shift(); //rem first element
 				doSlide(); //recursive
@@ -636,6 +656,7 @@ function doSlide(){
 		}else{
 			var elementbuffer = [];
 			currentPage--;
+			$("#slide"+currentPage).css("display","block");
 			console.log("%cprev to " + currentPage, 'background: #cacef6;');
 			$("#slideIndex").html(""+(currentPage+1)+"/"+totalPages);
 
@@ -657,11 +678,12 @@ function doSlide(){
 			});	
 			moveTitle(currentPage, quick);	
 			//move all slides
-			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:350, 'easeOutExpo');
-			$("html").transition({}, quick?0:350, function() {			
+			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:transSpeed, 'easeOutExpo');
+			$("html").transition({}, quick?0:transSpeed, function() {			
 				elementbuffer.reverse().forEach(function(entry){
 					$(entry).prependTo($('#slide' + currentPage));
 				});
+				$("#slide"+ (currentPage+1)).css("display", "none");
 				if(!suppresEvents)newSlideStopHdl(currentPage, true);
 				slideBuffer.shift(); //rem first element
 				doSlide(); //recursive
