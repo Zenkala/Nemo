@@ -12,6 +12,8 @@ var HE_STEPPING;
 var HE_VALUE1;
 var HE_VALUE2;
 var HE_TITLE;
+var HE_HANDLER;
+var HE_EVENT;
 
 var ID;
 var AG;
@@ -22,6 +24,8 @@ var STEPPING;
 var VALUE1;
 var VALUE2;
 var TITLE;
+var HANDLER;
+var EVENT;
 // ******************** API ****************************
 
 function canInspectSelection() {
@@ -45,7 +49,16 @@ function initializeUI() {
 	HE_VALUE1 = dwscripts.findDOMObject("theValue1");
 	HE_VALUE2 = dwscripts.findDOMObject("theValue2");
 	HE_TITLE = dwscripts.findDOMObject("theTitle");
+	if(!HE_HANDLER) {
+ 		HE_HANDLER = new ListControl("theHandler");
+ 		HE_HANDLER.setAll(["None"], []);
+ 	}
+ 	if(!HE_EVENT) {
+ 		HE_EVENT = new ListControl("theEvent");
+ 		HE_EVENT.setAll(["change", "create", "slide", "start", "stop"], ["change", "create", "slide", "start", "stop"]);
+ 	}
 }
+
 
 
 function inspectSelection() {
@@ -72,7 +85,6 @@ function setGUI(){
 		}
 	}
 
-	//hasAttribute is not supported. sigh.
 	if(typeof theObj.getAttribute("range") == 'undefined'){
 		RANGE = false;
 		HE_RANGE.checked = false;
@@ -82,7 +94,7 @@ function setGUI(){
 	}
 
 	if(typeof theObj.getAttribute("min") == 'undefined'){
-		MIN = 0;
+		MIN = '';
 		HE_MIN.value = MIN;
 	} else {
 		MIN = theObj.getAttribute("min");
@@ -90,7 +102,7 @@ function setGUI(){
 	}
 
 	if(typeof theObj.getAttribute("max") == 'undefined'){
-		MAX = 0;
+		MAX = '';
 		HE_MAX.value = MAX;
 	} else {
 		MAX = theObj.getAttribute("max");
@@ -98,7 +110,7 @@ function setGUI(){
 	}
 
 	if(typeof theObj.getAttribute("stepping") == 'undefined'){
-		STEPPING = 0;
+		STEPPING = '';
 		HE_STEPPING.value = STEPPING;
 	} else {
 		STEPPING = theObj.getAttribute("stepping");
@@ -106,7 +118,7 @@ function setGUI(){
 	}	
 
 	if(typeof theObj.getAttribute("value1") == 'undefined'){
-		VALUE1 = 10;
+		VALUE1 = '';
 		HE_VALUE1.value = VALUE1;
 	} else {
 		VALUE1 = theObj.getAttribute("value1");
@@ -114,7 +126,7 @@ function setGUI(){
 	}	
 
 	if(typeof theObj.getAttribute("value2") == 'undefined'){
-		VALUE2 = 0;
+		VALUE2 = '';
 		HE_VALUE2.value = VALUE2;
 	} else {
 		VALUE2 = theObj.getAttribute("value2");
@@ -128,6 +140,46 @@ function setGUI(){
 		TITLE = theObj.getAttribute("title");
 		HE_TITLE.value = TITLE;
 	}	
+
+	
+	var functionList = new Array();
+	functionList.push("None");
+	var input = dom.URL;
+	var jsURL = (input.substr(0, input.lastIndexOf('.')) || input) + ".js";
+	if(DWfile.exists(jsURL)) {
+		var theJS = DWfile.read(jsURL);
+		if(theJS) {
+			var patt = /(function\s+)(.*?)(?=\()/g;
+			var theFunctions = theJS.match(patt);
+			for(i=0; i < theFunctions.length; i++) {
+
+				// Why? Because the appropriate regex patt doesn't work in Dreamweaver
+				theFunctions[i] = theFunctions[i].replace("function", "");
+				theFunctions[i] = theFunctions[i].replace(/\s+/g, "");
+				functionList.push(theFunctions[i]);
+			}
+		} else {
+			// Error occured while reading file
+		}
+	}
+	HE_HANDLER.setAll(functionList, functionList);
+
+	if(theObj.getAttribute("handler")) {
+		var handler = theObj.getAttribute("handler");
+		HANDLER = handler;
+		HE_HANDLER.pickValue(handler);
+	} else {
+		// Select nothing. I don't no how to do that
+		HE_HANDLER.pickValue("None");
+	}
+
+	if(theObj.getAttribute("event")) {
+		var getevent = theObj.getAttribute("event");
+		EVENT = getevent;
+		HE_EVENT.pickValue(getevent);
+	} else {
+		HE_EVENT.pickValue("stop");
+	}
 }
 
 function updateTag(attrib) {	
@@ -160,40 +212,40 @@ function updateTag(attrib) {
 				break;		
 
 			case "min":
-				MIN = parseInt(HE_MIN.value);
-				if(MIN){
+				MIN = parseFloat(HE_MIN.value);
+				if(typeof MIN != 'undefined'){
 					theObj.setAttribute("min", MIN);
 				} else {
 					theObj.removeAttribute("min");					
 				}
 				break;	
 			case "max":
-				MAX = parseInt(HE_MAX.value);
-				if(MAX){
+				MAX = parseFloat(HE_MAX.value);
+				if(typeof MAX != 'undefined'){
 					theObj.setAttribute("max", MAX);
 				} else {
 					theObj.removeAttribute("max");					
 				}
 				break;	
 			case "stepping":
-				STEPPING = parseInt(HE_STEPPING.value);
-				if(STEPPING){
+				STEPPING = parseFloat(HE_STEPPING.value);
+				if(typeof STEPPING != 'undefined'){
 					theObj.setAttribute("stepping", STEPPING);
 				} else {
 					theObj.removeAttribute("stepping");					
 				}
 				break;	
 			case "value1":
-				VALUE1 = parseInt(HE_VALUE1.value);
-				if(VALUE1){
+				VALUE1 = parseFloat(HE_VALUE1.value);
+				if(typeof VALUE1 != 'undefined'){
 					theObj.setAttribute("value1", VALUE1);
 				} else {
 					theObj.removeAttribute("value1");					
 				}
 				break;				
 			case "value2":
-				VALUE2 = parseInt(HE_VALUE2.value);
-				if(VALUE2){
+				VALUE2 = parseFloat(HE_VALUE2.value);
+				if(typeof VALUE2 != 'undefined'){
 					theObj.setAttribute("value2", VALUE2);
 				} else {
 					theObj.removeAttribute("value2");					
@@ -208,7 +260,26 @@ function updateTag(attrib) {
 				} else {
 					theObj.removeAttribute("title");					
 				}
-				break;						
+				break;
+			case "handler":
+				HANDLER = HE_HANDLER.get();
+
+				if ((theObj.getAttribute("handler") != HANDLER)) {
+					if(HANDLER == "None") {
+						theObj.removeAttribute("handler");
+					} else {
+						theObj.setAttribute("handler", HANDLER);
+					}
+				}
+				break;		
+			case "event":
+				EVENT = HE_EVENT.get();
+				if(EVENT){
+					if (theObj.getAttribute("event") != EVENT) {
+						theObj.setAttribute("event", EVENT);
+					} 					
+				}
+				break;				
 		}
 	}	
 }

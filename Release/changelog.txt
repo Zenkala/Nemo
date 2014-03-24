@@ -1,4 +1,8 @@
 Changelog
+0.4.1
+    Fixed import slider position. It's now possible to choose event handler
+    Button has now an autogenerate option. It's also possible to choose a handler 
+    for on-click actions	
 0.4.0
     Image import check; is cursor placed inside <P>? Insert image after this block
     (to prevent stay failures)  

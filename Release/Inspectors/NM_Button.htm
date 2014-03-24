@@ -3,9 +3,9 @@
 <!-- Copyright 2000, 2001, 2002, 2003 Macromedia, Inc. All rights reserved. -->
 <html xmlns:MMString="http://www.macromedia.com/schemes/data/string/">
 <head>
-<title>Nemo Slider</title>
+<title>Nemo Button</title>
 
-<script src="NM_Slider.js"></script>
+<script src="NM_Button.js"></script>
 <SCRIPT SRC="../Shared/Common/Scripts/dwscripts.js"></SCRIPT>
 <SCRIPT SRC="../Shared/MM/Scripts/CMN/docInfo.js"></SCRIPT>
 <SCRIPT SRC="../Shared/MM/Scripts/CMN/dateID.js"></SCRIPT>
@@ -24,7 +24,6 @@
 </script>
 
 <style>
-
 	.piBody{ margin: 0px; }
 	/* the upper and lower halves of the inspector */				
 	#topLayer, 
@@ -58,13 +57,12 @@
 		font-size: 		9%;
 		font-family:	Sans-serif;
 		padding-bottom:	3px;
-		width: 			100px;
 	}
 	TD INPUT {
-		width: 			113px;
+		width: 			150px;
 	}
 	TD{
-		width: 			30px;
+		width: 			10px;
 		height:			17px;
 		padding-right:	5px;
 	}
@@ -74,7 +72,7 @@
 <body class="piBody">
 <!-- Specify the image that will appear in the Property inspector -->
 	<SPAN ID="image" STYLE="position:absolute; width:54px; height:36px; z-index:16; left: 3px; top: 2px;">
-		<IMG SRC="NM_Slider_2x.png" WIDTH="54" HEIGHT="36" NAME="marqueeImage" style="margin:3px;">
+		<IMG SRC="NM_Button_2x.png" WIDTH="54" HEIGHT="36" NAME="marqueeImage" style="margin:3px;">
 	</SPAN>
 	<!-- If your form fields are in different AP elements, you must ¬
 	create a separate form inside each AP element and reference it as ¬
@@ -84,40 +82,14 @@
 			<TR>
 				<TD>ID:</TD>
 				<TD><INPUT NAME="theID" ID="theID" onChange="updateTag('id')" /></TD>
-
-				<TD>Min:</TD>
-				<TD><INPUT NAME="theMin" ID="theMin" onChange="updateTag('min')" style="width: 50px;"/></TD>
-
-				<TD>Value1:</TD>
-				<TD><INPUT NAME="theValue1" ID="theValue1" onChange="updateTag('value1')" style="width: 50px;" /></TD>
 			</TR>
 			<TR>
 				<TD>AutoGenerate:</TD>
 				<TD><INPUT NAME="theAG" ID="theAG" onclick="updateTag('ag')" type="checkbox" /></TD>
-
-				<TD>Max:</TD>
-				<TD><INPUT NAME="theMax" ID="theMax" onChange="updateTag('max')" style="width: 50px;" /></TD>
-
-				<TD>Value2:</TD>
-				<TD><INPUT NAME="theValue2" ID="theValue2" onChange="updateTag('value2')" style="width: 50px;" /></TD>				
 			</TR>
 			<TR>
-				<TD>Range:</TD>
-				<TD><INPUT NAME="theRange" ID="theRange" onclick="updateTag('range')" type="checkbox"/></TD>
-
-				<TD>Stepping:</TD>
-				<TD><INPUT NAME="theStepping" ID="theStepping" onChange="updateTag('stepping')" style="width: 50px;" /></TD>
-				
-				<TD>Event:</TD>
-				<TD><SELECT NAME="theEvent" editable="false" onBlur="updateTag('event')">
-					</SELECT>
-				</TD>
-			</TR>
-			<TR>
-				<TD>Title:</TD>
-				<TD colspan= 3><INPUT NAME="theTitle" ID="theTitle" onChange="updateTag('title')" style="width: 259px;"/></TD>	
-				<TD>Handler:</TD>
-				<TD><SELECT NAME="theHandler" editable="true" onBlur="updateTag('handler')">
+				<TD>onClick:</TD>
+				<TD><SELECT NAME="theHandler" editable="false" onBlur="updateTag('handler')">
 					</SELECT>
 				</TD>
 			</TR>

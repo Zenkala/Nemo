@@ -22,7 +22,7 @@ function insertObject() {
 		dom.insertHTML('<div class="nm_Slider autoGenerate" id="' + uniqueId + '" style="position: absolute; width: 200px; height: 100px; top: 200px; left: 350px;"></div>');
 	} else if (selType == 2) {
 		errMsg = "";
-		dom.insertHTML('<div class="nm_Slider autoGenerate" id="' + uniqueId + '" style="position: relative; width: 260px; height: 100px;"></div>');
+		dom.insertHTML('<div class="nm_Slider autoGenerate" id="' + uniqueId + '" style="width: 240px;"></div>');
 	} else {
 		errMsg = "";
 		var activeSlide = nm.getActiveSlideNode();
