@@ -1,4 +1,8 @@
 Changelog
+0.4.0
+    Image import check; is cursor placed inside <P>? Insert image after this block
+    (to prevent stay failures)  
+
 0.3.9
     Improved insert check for all components
     Grouped components
