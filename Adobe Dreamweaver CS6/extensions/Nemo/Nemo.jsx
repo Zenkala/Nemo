@@ -722,9 +722,10 @@ function addAnimation(givenName, givenPath){
         //
             var pattAction = /[\w\_%]*_edge\.js|[\w\_%]*_edgeActions\.js/g; //match the composition specific files
             var pattEdgeLibName = /[^\/]+$/; //name of edge lib
-            var pattEdgeLibLocation = /[\w\_%\/]*\.\d\.\d\.\d\.min\.js/g;//entire edge lib path
-            //var pattJquery3 = /\{load:\"http.*true;}\},/; //part where it loads jquery
-            var pattJqueryLibLocation = /{load:"[\w\/]*jquery[-\d\.\w]*js"},/; //entire jquery path
+            var pattEdgeLibLocation = /[\w\_%\/]*edge\.\d\.\d\.\d\.min\.js/g;//entire edge lib path
+            var pattJquery3 = /\{load:\"http.*true;}\},/; //part where it loads jquery 1.5 only. This line doesn't exist in 2.0 and 3.0 animore. Pretty sure at least
+            var pattJqueryOld = /edge_includes\/jquery/; //part where it loads jquery 1.5 only. This line doesn't exist in 2.0 and 3.0 animore. Pretty sure at least
+            var pattJqueryLibLocation = /{load:"[\w\/]*jquery[-\d\.\w]*js"},/; //entire jquery path for 2.0 and 3.0
             var pattLoad    = /preContent={dom:/; //after the loading statement
 
         //
@@ -754,9 +755,10 @@ function addAnimation(givenName, givenPath){
         //  Remove an instance of jquery loading
         //
 
-            var jqueryLibLocation = pattJqueryLibLocation.exec(edgePreloadFile);
-            edgePreloadFile = edgePreloadFile.replace(jqueryLibLocation, "");    
-            //edgePreloadFile = edgePreloadFile.replace(pattJquery3, ""); //remove jquery loading        
+            //var jqueryLibLocation = pattJqueryLibLocation.exec(edgePreloadFile);
+            edgePreloadFile = edgePreloadFile.replace(pattJqueryLibLocation, "");  //remove jquery loading in 2.0 and 3.0 
+            edgePreloadFile = edgePreloadFile.replace(pattJquery3, ""); //remove a jquery loading mention in 1.5      
+            edgePreloadFile = edgePreloadFile.replace(pattJqueryOld, "js/jquery"); //alter jquery link in 1.5       
 
         //
         //  Flag the animation source file that we've imported it. T

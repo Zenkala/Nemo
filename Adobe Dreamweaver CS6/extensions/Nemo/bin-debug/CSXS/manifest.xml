@@ -1,13 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.4.3" Version="3.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.4.4" Version="3.0">
 	<Author>
 		<![CDATA[Willem van Vliet and Tjibbe van der Laan]]>
 	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
 		<![CDATA[Or shout over the table]]>
 	</Contact>	<Legal>
-		<![CDATA[Made by the OLO 2013.
+		<![CDATA[Made by the OLO 2014.
 For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[Changelog delta since  0.4.2
+		<![CDATA[Changelog delta since 0.4.3 (Beta)
+	Added support for importing animations from Adobe Edge Animate CC 2.x.x and 3.x.x
+	to due so: Updated jQuery to v2.0.3
+
+Changelog delta since  0.4.2
 	Fixed animation bug
 	Animation update; check if the user made changes in animation; no changes? do nothing
 
@@ -53,7 +57,7 @@ Changelog delta since 0.3.1:
 	Added Stay-Ghosting
 	Added go to Comment Slide button to extension]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.4.3"/>
+		<Extension Id="com.OLO.Nemo.extension" Version="0.4.4"/>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
