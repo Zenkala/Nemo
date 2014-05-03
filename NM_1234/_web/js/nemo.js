@@ -60,8 +60,8 @@ function progress(msg) {
 function nemoInit(extrascripts){
 	console.log("%c-----------NemoInit-----------", 'background: #f0e269;');
 	//first thing: load jquery
-	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
-		console.log("loaded: jquery-1.9.1.min.js");	
+	yepnope.injectJs("js/jquery-2.0.3.min.js", function () {
+		console.log("loaded: jquery-2.0.3.min.js");	
 		$(function() {
 
 			log("Making preloader");
