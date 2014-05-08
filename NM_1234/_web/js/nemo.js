@@ -168,7 +168,7 @@ function loadAnims(){
 				progress("loaded: " + url);
 			},
 			complete: function(){
-				log("loading animations complete"); 
+				log("initiating animation loading complete"); 
 				attachBootLoaders();
 				AdobeEdge.loadResources();
 				AdobeEdge.playWhenReady();
@@ -264,7 +264,10 @@ function startNemoScript(){
     			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseFloat($(this).attr("value1")) : 50;
     		}
     		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
-    		$(this).nm_slider( sliderObject );
+    		console.log("git this?");
+    		console.log($(this));
+    		//console.log($.nm_slider());
+    		//$(this).nm_slider( sliderObject );
 		});
 		progress("Parsed sliders");
 
@@ -407,7 +410,7 @@ function startNemoScript(){
 			}
 		});
 		//$(".nm_InfoBlock").width('200px');
-		$(".nm_InfoBlock").height('auto');
+//		$(".nm_InfoBlock").height('auto');
 		//remove position absolute and attempt to place on the right position for it's children.
 		$(".nm_InfoBlock .paragraph").children().each(function(){
 			$(this).css("position", ""); 

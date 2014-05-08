@@ -4,7 +4,7 @@
 function newSlideHdl(index, backwards){
 	console.log("newSlideHdl called " + index + " backwards: " + backwards);	
 	if(index==0){ //are we at the first slide?
-		
+		//$.Edge.getComposition( "zerglingv2" ).getStage().stop(0);
 	}
 }
 
@@ -13,7 +13,13 @@ function newSlideStopHdl(index, backwards){
 	console.log("newSlideStopHdlcalled " + index + " backwards: " + backwards);
 	
 	if(index==0){ //are we at the first slide?
-	
+		//$.Edge.getComposition( "zerglingv2" ).getStage().stop(200);
+		$.Edge.getComposition( "zerglingv2" ).getStage().play(500);
+		console.log("whispers in the dark");
+	}
+	if(index==0){ //are we at the first slide?
+		//$.Edge.getComposition( "starcrafts2" ).getStage().play(200);
+		console.log("screaming out");
 	}
 
 }

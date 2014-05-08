@@ -3,6 +3,10 @@
 //Edge symbol: 'stage'
 (function(symbolName){Symbol.bindTimelineAction(compId,symbolName,"Default Timeline","play",function(sym,e){});
 //Edge binding end
+Symbol.bindTriggerAction(compId,symbolName,"Default Timeline",2000,function(sym,e){sym.play(0);});
+//Edge binding end
+Symbol.bindTriggerAction(compId,symbolName,"Default Timeline",0,function(sym,e){console.log("whelp!");});
+//Edge binding end
 })("stage");
 //Edge symbol end:'stage'
 
