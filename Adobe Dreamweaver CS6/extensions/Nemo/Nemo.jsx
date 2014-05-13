@@ -723,7 +723,7 @@ function addAnimation(givenName, givenPath){
             var pattAction = /[\w\_%]*_edge\.js|[\w\_%]*_edgeActions\.js/g; //match the composition specific files
             var pattActionName = /[^\/]+$/; //name of edge lib
             var pattEdgeInclude = /edge_includes/g;//entire edge lib path
-            var pattJquery3 = /\{load:\"http.*true;}\},/; //part where it loads jquery 1.5 only. This line doesn't exist in 2.0 and 3.0 animore. Pretty sure at least
+            var pattJquery = /load:"[\w_\/\.\d-]*jquery[\w_\/\.\d-]*"/g; //entire jquery loading statements.
             var pattLoad    = /preContent={dom:/; //after the loading statement
 
         //
@@ -745,13 +745,18 @@ function addAnimation(givenName, givenPath){
         //
         //  Reallocate link to edge library
         //
-            edgePreloadFile = edgePreloadFile.replace(pattEdgeInclude, "js"); //all edge_include to js
+            result      = pattJquery.exec(edgePreloadFile);
+            results     = new Array();
+            oldresult   = "";
+            while( result && result!=oldresult){
+                oldresult   = result;
+                results.push(result);
+                result      = pattJquery.exec(edgePreloadFile);
+            }
 
-        //
-        //  Remove an instance of jquery loading
-        //
-
-            edgePreloadFile = edgePreloadFile.replace(pattJquery3, ""); //remove a jquery loading mention in 1.5    
+            for(i=0; i<results.length; i++){
+                edgePreloadFile = edgePreloadFile.replace(results[i], 'load:""');
+            }
 
         //
         //  Flag the animation source file that we've imported it. T
