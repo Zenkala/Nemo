@@ -1,10 +1,7 @@
 (function ( $ ) {
-	$.fn.nm_slider = function( options ) {
-		console.log("there's this whispering of jokers doing flesh by the pound.");
-		/*
+	$.fn.nm_slider = function( options ) {		
+		console.log("And who are you, tr proud lord said,");
 		return this.each(function() {
-
-			console.log(options);
 			var settings = $.extend({
 			    // These are the defaults.
 			    value: 50,
@@ -14,13 +11,16 @@
 			    title: "Een Slider",
 			    slide: function(event, ui) { $(ui.handle).find('span').html(ui.value); } //slider handle update function
 			}, options );
-
+			console.log("that I must bow so low.");
 				$(this).css("height", ""); //remove height
 				//wrap in container
 				$(this).wrap( "<div class='nm_SliderContainer' style='position: " + $(this).css("position") + "; height: 20px; top: " + $(this).css("top") + "; left: " + $(this).css("left") + ";'></div>" );
 				$(this).css("left", "");
 				$(this).css("top", "");
-			$(this).slider(settings); //make the default slider
+			console.log("Only a cat, on a different coat,");
+			//$(this).slider(settings); //make the default slider
+			$(this).slider(); //make the default slider
+			console.log("is all the truth I know.")
 
 			//make slider touch friendly
 			//$('.ui-slider-handle').draggable();
@@ -50,8 +50,6 @@
 			} else {
 			    $($(this).find(".ui-slider-handle:first")).append($('<span class="sliderHandleLabel sliderHandleMin">' + settings.value + '</span>'));
 			}
-		}); 
-		*/
+		}); 		
 	};
 }( jQuery ));
-//console.log($.nm_slider());
