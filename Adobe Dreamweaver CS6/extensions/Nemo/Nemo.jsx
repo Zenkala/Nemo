@@ -723,7 +723,7 @@ function addAnimation(givenName, givenPath){
             var pattAction = /[\w\_%]*_edge\.js|[\w\_%]*_edgeActions\.js/g; //match the composition specific files
             var pattActionName = /[^\/]+$/; //name of edge lib
             var pattEdgeInclude = /edge_includes/g;//entire edge lib path
-            var pattJquery = /load:"[\w_\/\.\d-]*jquery[\w_\/\.\d-]*"/g; //entire jquery loading statements.
+            var pattJquery = /load:"[\w_\/\.\d\-\:]*jquery[\w_\/\.\d\-\:]*"/g; //entire jquery loading statements.
             var pattLoad    = /preContent={dom:/; //after the loading statement
 
         //
