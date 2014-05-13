@@ -759,6 +759,22 @@ function addAnimation(givenName, givenPath){
             }
 
         //
+        //  Relocate edge library
+        //
+            result      = pattEdgeInclude.exec(edgePreloadFile);
+            results     = new Array();
+            oldresult   = "";
+            while( result && result!=oldresult){
+                oldresult   = result;
+                results.push(result);
+                result      = pattEdgeInclude.exec(edgePreloadFile);
+            }
+
+            for(i=0; i<results.length; i++){
+                edgePreloadFile = edgePreloadFile.replace(results[i], 'js');
+            }
+
+        //
         //  Flag the animation source file that we've imported it. T
         //
             var sourcePreloadURL = sourceFolderURL + "/" + animationName + "_edgePreload.js";
