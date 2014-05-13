@@ -721,13 +721,9 @@ function addAnimation(givenName, givenPath){
         //  Define regex patterns
         //
             var pattAction = /[\w\_%]*_edge\.js|[\w\_%]*_edgeActions\.js/g; //match the composition specific files
-            var pattEdgeLibName = /[^\/]+$/; //name of edge lib
-            var pattEdgeLibLocation = /[\w\_%\/]*edge\.\d\.\d\.\d\.min\.js/g;//entire edge lib path
-            var pattEdgeFallback = /js":"[\/\w\d\.]*edge[\.\d]*\.min.js"/
+            var pattActionName = /[^\/]+$/; //name of edge lib
+            var pattEdgeInclude = /edge_includes/g;//entire edge lib path
             var pattJquery3 = /\{load:\"http.*true;}\},/; //part where it loads jquery 1.5 only. This line doesn't exist in 2.0 and 3.0 animore. Pretty sure at least
-            var pattJqueryOld = /edge_includes\/jquery/; //part where it loads jquery 1.5 only. This line doesn't exist in 2.0 and 3.0 animore. Pretty sure at least
-            var pattJqueryLibLocation = /{load:"[\w\/]*jquery[-\d\.\w]*js"},/; //entire jquery path for 2.0 and 3.0
-            var pattjQueryRemote = /{load:"[\w\/]*jquery[-\d\.\w]*js"},/; //entire jquery path for 2.0 and 3.0's remote lookup
             var pattLoad    = /preContent={dom:/; //after the loading statement
 
         //
@@ -749,20 +745,13 @@ function addAnimation(givenName, givenPath){
         //
         //  Reallocate link to edge library
         //
-            var edgeLibLocation = pattEdgeLibLocation.exec(edgePreloadFile);
-            var libraryFileName = pattEdgeLibName.exec(edgeLibLocation);
-            edgePreloadFile = edgePreloadFile.replace(pattEdgeLibLocation, "js/" + libraryFileName);
-            edgePreloadFile = edgePreloadFile.replace(pattEdgeFallback, 'js"'); //remote remote fallback if any
+            edgePreloadFile = edgePreloadFile.replace(pattEdgeInclude, "js"); //all edge_include to js
 
         //
         //  Remove an instance of jquery loading
         //
 
-            //var jqueryLibLocation = pattJqueryLibLocation.exec(edgePreloadFile);
-            edgePreloadFile = edgePreloadFile.replace(pattJqueryLibLocation, "");  //remove jquery loading in 2.0 and 3.0 
-            edgePreloadFile = edgePreloadFile.replace(pattJquery3, ""); //remove a jquery loading mention in 1.5      
-            edgePreloadFile = edgePreloadFile.replace(pattJqueryOld, "js/jquery"); //alter jquery link in 1.5       
-            edgeProloadFile = edgeProloadFile.replace(pattjQueryRemote, "js/jquery-2.0.3.min.js"); //remote jquery references STATIC version number! TODO: meh
+            edgePreloadFile = edgePreloadFile.replace(pattJquery3, ""); //remove a jquery loading mention in 1.5    
 
         //
         //  Flag the animation source file that we've imported it. T
