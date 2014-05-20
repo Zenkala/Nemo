@@ -13,8 +13,7 @@ var swipeTimer;
 
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
 var core_scripts = [
-	'js/jquery.transit.min.js',
-	'js/jquery-ui-1.10.4.min.js',
+	'js/jquery.transit.min.js',	
 	'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',/*,
 	"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.js",
 	"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.logAxisRenderer.min.js",
@@ -23,16 +22,18 @@ var core_scripts = [
 	"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
 	"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
 	"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
-	"css/custom-theme/jquery-ui-1.10.3.custom.css",
-	"js/jquery.ui.touch-punch.min.js",
 	"js/jquery.event.move.js",
 	"js/jquery.event.swipe.js",
-	"js/jquery.timer.js",
-	//"js/jquery.nm_slider.js",
+	"js/jquery.timer.js",	
+	'js/jquery-ui-1.10.4.min.js',
+	"css/custom-theme/jquery-ui-1.10.3.custom.css",
+	"js/jquery.ui.touch-punch.min.js",
+	"js/jquery.nm_slider.js",
 	"js/jquery.nm_closedquiz.js",
 	"js/jquery.nm_experimentpane.js"
 ];
-var additionalscripts;
+
+var additional_scripts;
 var animations;	
 var animationNames;	
 
@@ -100,7 +101,7 @@ function nemoInit(extrascripts){
 			progress("enable ProgressBar");
 
 			if(extrascripts) {
-				additionalscripts = extrascripts;
+				additional_scripts = extrascripts;
 				totalProgress += extrascripts.length;				
 			}
 
@@ -139,24 +140,22 @@ function loadLibs(){
 }
 
 function loadAdditionalLibs() {
-	$(function() {
-		if(additionalscripts) {
-			log("loading additional libraries");
-			yepnope([{
-				load: additionalscripts,
-				callback: function (url, result, key) {
-					progress("loaded: " + url);
-				},
-				complete: function(){
-					log("yepnope complete"); 
-					loadAnims();		
-				}
-			}]);
-		} else {
-			log("yepnope complete"); 
-			loadAnims();	
-		}
-	});	
+	if(additional_scripts) {
+		log("loading additional libraries");
+		yepnope([{
+			load: additional_scripts,
+			callback: function (url, result, key) {
+				progress("loaded: " + url);
+			},
+			complete: function(){
+				log("yepnope complete"); 
+				loadAnims();		
+			}
+		}]);
+	} else {
+		log("yepnope complete"); 
+		loadAnims();	
+	}
 }
 
 //load the EDGE animations
@@ -177,7 +176,6 @@ function loadAnims(){
 			}
 		}]);
 	}else{
-		animationsReadyFlag = true;
 		startNemoScript();
 	}
 }
@@ -199,8 +197,6 @@ function attachBootLoaders(){
 
 function startNemoScript(){		
 	//apply MathJax
-	$("#loaderImage").slider();
-
 	log("configure MathJax");
 	//jax initializes slow. So there is a change it's not yet done when we get here.
 	if(typeof MathJax == 'undefined') {
@@ -254,7 +250,6 @@ function startNemoScript(){
 		var sliderObject;
 
 		$(".nm_Slider.autoGenerate").each(function() {
-			/*
 			sliderObject = {range: (typeof $(this).attr("range") == 'undefined') ? false: true};
     		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseFloat($(this).attr("min"));
     		if(typeof $(this).attr("max") != 'undefined') sliderObject.max = parseFloat($(this).attr("max"));
@@ -268,17 +263,8 @@ function startNemoScript(){
     			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseFloat($(this).attr("value1")) : 50;
     		}
     		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
-    		console.log("git this?");
-    		console.log($(this));
-    		*/
-    		//$(this).slider();
-    		/*
-    		yepnope.injectJs("js/jquery.nm_slider.js", function () {
-    			console.log("wooop!");
-    			//this.nm_slider( sliderObject );
-    			//$(this).nm_slider( );
-    		});
-			*/
+    		$(this).nm_slider(sliderObject);
+
 		});
 		progress("Parsed sliders");
 
