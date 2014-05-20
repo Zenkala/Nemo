@@ -10,7 +10,7 @@
 		<![CDATA[Made by the OLO 2014.
 For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[Changelog delta since 0.4.3 (Beta)
+		<![CDATA[Changelog delta since 0.4.3
 	Added support for importing animations from Adobe Edge Animate CC 2.x.x and 3.x.x
 	to due so: Updated jQuery to v2.0.3
 
