@@ -135,45 +135,45 @@ header#title span {
 /*normal and white*/
 .nm_TextBubble.bottom-left .pointer { 			left:20px;   bottom:-54px; 						background-image:url("points/point_bottom-left.svg"); }
 .nm_TextBubble.bottom-middle .pointer { 		left:50%;    bottom:-54px; margin-left:-21px; 	background-image:url("points/point_bottom-middle.svg"); }
-.nm_TextBubble.bottom-right .pointer { 		right:20px;  bottom:-54px; 						background-image:url("points/point_bottom-right.svg"); }
-.nm_TextBubble.top-left .pointer { 			left: 20px;  top:-59px;  						background-image:url("points/point_top-left.svg"); }
+.nm_TextBubble.bottom-right .pointer { 			right:20px;  bottom:-54px; 						background-image:url("points/point_bottom-right.svg"); }
+.nm_TextBubble.top-left .pointer { 				left: 20px;  top:-59px;  						background-image:url("points/point_top-left.svg"); }
 .nm_TextBubble.top-middle .pointer { 			left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point_top-middle.svg"); }
 .nm_TextBubble.top-right .pointer { 			right:20px;  top:-59px;  						background-image:url("points/point_top-right.svg"); }
 .nm_TextBubble.middle-left .pointer { 			left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point_middle-left.svg"); }
-.nm_TextBubble.middle-left .pointer.small{ 	left:-59px;  top:50%;      					 	background-image:url("points/point_middle-left_small.svg"); }
-.nm_TextBubble.middle-right .pointer { 		right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point_middle-right.svg"); }
+.nm_TextBubble.middle-left .pointer.small{ 		left:-59px;  top:50%;      					 	background-image:url("points/point_middle-left_small.svg"); }
+.nm_TextBubble.middle-right .pointer { 			right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point_middle-right.svg"); }
 .nm_TextBubble.middle-right .pointer.small { 	right:-59px; top:50%;      					 	background-image:url("points/point_middle-right_small.svg"); }
 /* red */
 .nm_TextBubble.bottom-left.red .pointer { 		left:20px;   bottom:-54px; 						background-image:url("points/point-red_bottom-left.svg"); }
 .nm_TextBubble.bottom-middle.red .pointer { 	left:50%;    bottom:-54px; margin-left:-21px; 	background-image:url("points/point-red_bottom-middle.svg"); }
-.nm_TextBubble.bottom-right.red .pointer { 	right:20px;  bottom:-54px; 						background-image:url("points/point-red_bottom-right.svg"); }
-.nm_TextBubble.top-left.red .pointer { 		left: 20px;  top:-59px;  						background-image:url("points/point-red_top-left.svg"); }
+.nm_TextBubble.bottom-right.red .pointer { 		right:20px;  bottom:-54px; 						background-image:url("points/point-red_bottom-right.svg"); }
+.nm_TextBubble.top-left.red .pointer { 			left: 20px;  top:-59px;  						background-image:url("points/point-red_top-left.svg"); }
 .nm_TextBubble.top-middle.red .pointer { 		left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point-red_top-middle.svg"); }
 .nm_TextBubble.top-right.red .pointer { 		right:20px;  top:-59px;  						background-image:url("points/point-red_top-right.svg"); }
 .nm_TextBubble.middle-left.red .pointer { 		left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point-red_middle-left.svg"); }
-.nm_TextBubble.middle-left.red .pointer.small{ left:-59px;  top:50%;      					 	background-image:url("points/point-red_middle-left_small.svg"); }
-.nm_TextBubble.middle-right.red .pointer { 	right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point-red_middle-right.svg"); }
-.nm_TextBubble.middle-right.red .pointer.small{right:-59px; top:50%;      					 	background-image:url("points/point-red_middle-red_small.svg"); }
+.nm_TextBubble.middle-left.red .pointer.small{ 	left:-59px;  top:50%;      					 	background-image:url("points/point-red_middle-left_small.svg"); }
+.nm_TextBubble.middle-right.red .pointer { 		right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point-red_middle-right.svg"); }
+.nm_TextBubble.middle-right.red .pointer.small{	right:-59px; top:50%;      					 	background-image:url("points/point-red_middle-red_small.svg"); }
 /*blue*/
-.nm_TextBubble.bottom-left.blue .pointer { 	left:20px;   bottom:-54px; 						background-image:url("points/point-blue_bottom-left.svg"); }
+.nm_TextBubble.bottom-left.blue .pointer { 		left:20px;   bottom:-54px; 						background-image:url("points/point-blue_bottom-left.svg"); }
 .nm_TextBubble.bottom-middle.blue .pointer { 	left:50%;    bottom:-54px; margin-left:-21px; 	background-image:url("points/point-blue_bottom-middle.svg"); }
 .nm_TextBubble.bottom-right.blue .pointer { 	right:20px;  bottom:-54px; 						background-image:url("points/point-blue_bottom-right.svg"); }
 .nm_TextBubble.top-left.blue .pointer { 		left: 20px;  top:-59px;  						background-image:url("points/point-blue_top-left.svg"); }
 .nm_TextBubble.top-middle.blue .pointer { 		left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point-blue_top-middle.svg"); }
 .nm_TextBubble.top-right.blue .pointer { 		right:20px;  top:-59px;  						background-image:url("points/point-blue_top-right.svg"); }
-.nm_TextBubble.middle-left.blue .pointer { 	left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point-blue_middle-left.svg"); }
-.nm_TextBubble.middle-left.blue .pointer.small{left:-59px;  top:50%;      					 	background-image:url("points/point-blue_middle-left_small.svg"); }
+.nm_TextBubble.middle-left.blue .pointer { 		left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point-blue_middle-left.svg"); }
+.nm_TextBubble.middle-left.blue .pointer.small{	left:-59px;  top:50%;      					 	background-image:url("points/point-blue_middle-left_small.svg"); }
 .nm_TextBubble.middle-right.blue .pointer { 	right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point-blue_middle-right.svg"); }
-.nm_TextBubble.middle-right.blue .pointer.small{right:-59px; top:50%;      					background-image:url("points/point-blue_middle-right_small.svg"); }
+.nm_TextBubble.middle-right.blue .pointer.small{right:-59px; top:50%;      						background-image:url("points/point-blue_middle-right_small.svg"); }
 
 .nm_TextBubble.bottom-left.green .pointer { 	left:20px;   bottom:-54px; 						background-image:url("points/point-green_bottom-left.svg"); }
 .nm_TextBubble.bottom-middle.green .pointer { 	left:50%;    bottom:-54px; margin-left:-21px; 	background-image:url("points/point-green_bottom-middle.svg"); }
 .nm_TextBubble.bottom-right.green .pointer { 	right:20px;  bottom:-54px; 						background-image:url("points/point-green_bottom-right.svg"); }
 .nm_TextBubble.top-left.green .pointer { 		left: 20px;  top:-59px;  						background-image:url("points/point-green_top-left.svg"); }
-.nm_TextBubble.top-middle.green .pointer { 	left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point-green_top-middle.svg"); }
+.nm_TextBubble.top-middle.green .pointer { 		left:50%;    top:-59px;    margin-left:-21px; 	background-image:url("points/point-green_top-middle.svg"); }
 .nm_TextBubble.top-right.green .pointer { 		right:20px;  top:-59px;  						background-image:url("points/point-green_top-right.svg"); }
 .nm_TextBubble.middle-left.green .pointer { 	left:-59px;  top:50%;      margin-top:-21px; 	background-image:url("points/point-green_middle-left.svg"); }
-.nm_TextBubble.middle-left.green .pointer.small{left:-59px;  top:50%;      					background-image:url("points/point-green_middle-left_small.svg"); }
+.nm_TextBubble.middle-left.green .pointer.small{left:-59px;  top:50%;      						background-image:url("points/point-green_middle-left_small.svg"); }
 .nm_TextBubble.middle-right.green .pointer { 	right:-59px; top:50%;      margin-top:-21px; 	background-image:url("points/point-green_middle-right.svg"); }
 .nm_TextBubble.middle-right.green .pointer.small {right:-59px; top:50%;      					background-image:url("points/point-green_middle-right_small.svg"); }
 
