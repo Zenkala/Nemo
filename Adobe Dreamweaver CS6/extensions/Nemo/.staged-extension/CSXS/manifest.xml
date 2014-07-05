@@ -10,7 +10,10 @@
 		<![CDATA[Made by the OLO 2013.
 For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[Changelog delta since  0.4.2
+		<![CDATA[Changelog delta since 0.4.3
+	Fixed bug in Nemo.jsx while deleting experiment pane. Delete slide means swapping content; program didn't check for type attribute of slide
+
+Changelog delta since  0.4.2
 	Fixed animation bug
 	Animation update; check if the user made changes in animation; no changes? do nothing
 

@@ -384,6 +384,14 @@ function remSlide(givenIndex){
         //swap to bottom
         for(var i=index; i<lastSlide; i++){
             theDOM.getElementById("slide" + i).innerHTML = theDOM.getElementById("slide" + (i+1)).innerHTML;
+            
+            // check for experiment pane
+            if(theDOM.getElementById("slide" + (i+1)).getAttribute("type") == "experiment") {
+                theDOM.getElementById("slide" + i).setAttribute("type", "experiment");
+            } else {
+                theDOM.getElementById("slide" + i).removeAttribute("type");
+            }
+            
             //fix comment slide number
             var nodes = theDOM.getElementById("slide" + (i)).childNodes;
             for (var j = 0; j < nodes.length; j++) {
