@@ -721,9 +721,9 @@ function addAnimation(givenName, givenPath){
         //  Define regex patterns
         //
             var pattAction = /[\w\_%]*_edge\.js|[\w\_%]*_edgeActions\.js/g; //match the composition specific files
-            var pattEdgeLibLocation = /[\w\_%\/]*\.\d\.\d\.\d\.min\.js/g;
-            var pattEdgeLibName = /[^\/]+$/;
-            var pattJquery3 = /\{load:\"http.*true;}\},/; //part where it loads jquery
+            var pattActionName = /[^\/]+$/; //name of edge lib
+            var pattEdgeInclude = /edge_includes/g;//entire edge lib path
+            var pattJquery = /load:"[\w_\/\.\d\-\:]*jquery[\w_\/\.\d\-\:]*"/g; //entire jquery loading statements.
             var pattLoad    = /preContent={dom:/; //after the loading statement
 
         //
@@ -745,9 +745,34 @@ function addAnimation(givenName, givenPath){
         //
         //  Reallocate link to edge library
         //
-            var edgeLibLocation = pattEdgeLibLocation.exec(edgePreloadFile);
-            var libraryFileName = pattEdgeLibName.exec(edgeLibLocation);
-            edgePreloadFile = edgePreloadFile.replace(pattEdgeLibLocation, "js/" + libraryFileName);
+            result      = pattJquery.exec(edgePreloadFile);
+            results     = new Array();
+            oldresult   = "";
+            while( result && result!=oldresult){
+                oldresult   = result;
+                results.push(result);
+                result      = pattJquery.exec(edgePreloadFile);
+            }
+
+            for(i=0; i<results.length; i++){
+                edgePreloadFile = edgePreloadFile.replace(results[i], 'load:""');
+            }
+
+        //
+        //  Relocate edge library
+        //
+            result      = pattEdgeInclude.exec(edgePreloadFile);
+            results     = new Array();
+            oldresult   = "";
+            while( result && result!=oldresult){
+                oldresult   = result;
+                results.push(result);
+                result      = pattEdgeInclude.exec(edgePreloadFile);
+            }
+
+            for(i=0; i<results.length; i++){
+                edgePreloadFile = edgePreloadFile.replace(results[i], 'js');
+            }
 
         //
         //  Flag the animation source file that we've imported it. T
@@ -758,9 +783,8 @@ function addAnimation(givenName, givenPath){
 
 
         //
-        //  Remove some bullshit
+        //  Add some usefull info
         //
-            edgePreloadFile = edgePreloadFile.replace(pattJquery3, ""); //remove jquery loading
             edgePreloadFile = edgePreloadFile.replace(pattLoad, "onDocLoaded();preContent={dom:"); //add onDocLoaded event that would otherwise never be called
             edgePreloadFile = edgePreloadFile + "\/\/updatePath:" + sourceFolderURL + "*"; 
 

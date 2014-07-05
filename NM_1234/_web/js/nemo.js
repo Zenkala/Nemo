@@ -12,26 +12,28 @@ var swipeTimer;
 
 
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
-var core_scripts = [	'js/jquery.transit.min.js',
-				'js/jquery-ui-1.10.3.custom.min.js',
-				'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',/*,
-				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.js",
-				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.logAxisRenderer.min.js",
-				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasTextRenderer.min.js",
-				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js",
-				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
-				"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
-				"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
-				"css/custom-theme/jquery-ui-1.10.3.custom.css",
-				"js/jquery.ui.touch-punch.min.js",
-				"js/jquery.event.move.js",
-				"js/jquery.event.swipe.js",
-				"js/jquery.timer.js",
-				"js/jquery.nm_slider.js",
-				"js/jquery.nm_closedquiz.js",
-				"js/jquery.nm_experimentpane.js"
-			];
-var additionalscripts;
+var core_scripts = [
+	'js/jquery.transit.min.js',	
+	'http://uitlegapp.allyne.net/js-libs/jax/MathJax.js?config=AM_HTMLorMML-full&delayStartupUntil=configured',/*,
+	"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.js",
+	"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.logAxisRenderer.min.js",
+	"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasTextRenderer.min.js",
+	"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js",
+	"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.canvasOverlay.min.js",
+	"http://uitlegapp.allyne.net/js-libs/jqplot/plugins/jqplot.pointLabels.min.js",
+	"http://uitlegapp.allyne.net/js-libs/jqplot/jquery.jqplot.min.css",*/
+	"js/jquery.event.move.js",
+	"js/jquery.event.swipe.js",
+	"js/jquery.timer.js",	
+	'js/jquery-ui-1.10.4.min.js',
+	"css/custom-theme/jquery-ui-1.10.3.custom.css",
+	"js/jquery.ui.touch-punch.min.js",
+	"js/jquery.nm_slider.js",
+	"js/jquery.nm_closedquiz.js",
+	"js/jquery.nm_experimentpane.js"
+];
+
+var additional_scripts;
 var animations;	
 var animationNames;	
 
@@ -60,8 +62,8 @@ function progress(msg) {
 function nemoInit(extrascripts){
 	console.log("%c-----------NemoInit-----------", 'background: #f0e269;');
 	//first thing: load jquery
-	yepnope.injectJs("js/jquery-1.9.1.min.js", function () {
-		console.log("loaded: jquery-1.9.1.min.js");	
+	yepnope.injectJs("js/jquery-2.0.3.min.js", function () {
+		console.log("loaded: jquery-2.0.3.min.js");	
 		$(function() {
 
 			log("Making preloader");
@@ -99,7 +101,7 @@ function nemoInit(extrascripts){
 			progress("enable ProgressBar");
 
 			if(extrascripts) {
-				additionalscripts = extrascripts;
+				additional_scripts = extrascripts;
 				totalProgress += extrascripts.length;				
 			}
 
@@ -138,24 +140,22 @@ function loadLibs(){
 }
 
 function loadAdditionalLibs() {
-	$(function() {
-		if(additionalscripts) {
-			log("loading additional libraries");
-			yepnope([{
-				load: additionalscripts,
-				callback: function (url, result, key) {
-					progress("loaded: " + url);
-				},
-				complete: function(){
-					log("yepnope complete"); 
-					loadAnims();		
-				}
-			}]);
-		} else {
-			log("yepnope complete"); 
-			loadAnims();	
-		}
-	});	
+	if(additional_scripts) {
+		log("loading additional libraries");
+		yepnope([{
+			load: additional_scripts,
+			callback: function (url, result, key) {
+				progress("loaded: " + url);
+			},
+			complete: function(){
+				log("yepnope complete"); 
+				loadAnims();		
+			}
+		}]);
+	} else {
+		log("yepnope complete"); 
+		loadAnims();	
+	}
 }
 
 //load the EDGE animations
@@ -168,7 +168,7 @@ function loadAnims(){
 				progress("loaded: " + url);
 			},
 			complete: function(){
-				log("loading animations complete"); 
+				log("initiating animation loading complete"); 
 				attachBootLoaders();
 				AdobeEdge.loadResources();
 				AdobeEdge.playWhenReady();
@@ -176,7 +176,6 @@ function loadAnims(){
 			}
 		}]);
 	}else{
-		animationsReadyFlag = true;
 		startNemoScript();
 	}
 }
@@ -198,7 +197,6 @@ function attachBootLoaders(){
 
 function startNemoScript(){		
 	//apply MathJax
-
 	log("configure MathJax");
 	//jax initializes slow. So there is a change it's not yet done when we get here.
 	if(typeof MathJax == 'undefined') {
@@ -250,6 +248,7 @@ function startNemoScript(){
 
 		// Parse Sliders
 		var sliderObject;
+
 		$(".nm_Slider.autoGenerate").each(function() {
 			sliderObject = {range: (typeof $(this).attr("range") == 'undefined') ? false: true};
     		if(typeof $(this).attr("min") != 'undefined') sliderObject.min = parseFloat($(this).attr("min"));
@@ -281,7 +280,8 @@ function startNemoScript(){
 			}
 
     		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
-    		$(this).nm_slider( sliderObject );
+    		$(this).nm_slider(sliderObject);
+
 		});
 		progress("Parsed sliders");
 
@@ -438,7 +438,7 @@ function startNemoScript(){
 			}
 		});
 		//$(".nm_InfoBlock").width('200px');
-		$(".nm_InfoBlock").height('auto');
+//		$(".nm_InfoBlock").height('auto');
 		//remove position absolute and attempt to place on the right position for it's children.
 		$(".nm_InfoBlock .paragraph").children().each(function(){
 			$(this).css("position", ""); 

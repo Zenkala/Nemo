@@ -4,7 +4,6 @@
 function newSlideHdl(index, backwards){
 	console.log("newSlideHdl called " + index + " backwards: " + backwards);	
 	if(index==0){ //are we at the first slide?
-		
 	}
 }
 
@@ -13,11 +12,11 @@ function newSlideStopHdl(index, backwards){
 	console.log("newSlideStopHdlcalled " + index + " backwards: " + backwards);
 	
 	if(index==0){ //are we at the first slide?
-	
+	}
+	if(index==0){ //are we at the first slide?
 	}
 
 }
-
 		
 //this function will be called once the module is fully realy and all libraries and assets are loaded and available
 function onLoad(){	
