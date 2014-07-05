@@ -263,10 +263,42 @@ function startNemoScript(){
     		} else {
     			sliderObject.value = (typeof $(this).attr("value1") != 'undefined') ? parseFloat($(this).attr("value1")) : 50;
     		}
+
+    		if(typeof $(this).attr("handler") != 'undefined') {
+    			
+    			var fnevent;
+    			if(typeof $(this).attr("event") != 'undefined') {
+    				fnevent = $(this).attr("event");
+    			} else {
+    				fnevent = "stop";
+    			}
+				
+				var fnstring = $(this).attr("handler");
+				var fn = window[fnstring];
+				if(typeof fn === "function") {
+					sliderObject[fnevent] = fn;
+				}
+			}
+
     		if(typeof $(this).attr("title") != 'undefined') sliderObject.title = $(this).attr("title");
     		$(this).nm_slider( sliderObject );
 		});
 		progress("Parsed sliders");
+
+		// Parse Buttons
+		$(".nm_Button.autoGenerate").each(function() {
+			$(this).button();
+			if(typeof $(this).attr("handler") != 'undefined') {
+				var fnstring = $(this).attr("handler");
+				var fn = window[fnstring];
+				if(typeof fn === "function") {
+					$(this).on("click", fn);
+				}
+			}
+			
+		});
+		progress("Parsed buttons");
+
 
 		// Parse quiz elements
 		$(".nm_ClosedQuiz").each(function() {
@@ -367,8 +399,7 @@ function startNemoScript(){
 
 		// Move title if experiment pane is on slide
 		$(".nm_ExperimentPane").each(function() {
-			console.log($(this).prop("disabled") + " kees!");
-			if($(this).prop("disabled") == "disabled") {
+			if($(this).attr("disabled") == "disabled") {
 				$(this).find(".ui-slider").each(function() {
 					$(this).slider('disable');
 				});
