@@ -1,0 +1,5 @@
+Changelog delta since 0.4.1
+Fixed decimal option in slider
+Fixed slide 'from zero' in slider
+Fixed position problems in experiment pane
+Add autogenerate function for button
