@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.4.4"
+		ExtensionBundleName="Nemo-Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Author>
+		<![CDATA[Willem van Vliet and Tjibbe van der Laan]]>
+	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
+		<![CDATA[Or shout over the table]]>
+	</Contact>	<Legal>
+		<![CDATA[Made by the OLO 2014.
+For internal use withing Twente Acadamy only.]]>
+	</Legal>	<Abstract>
+		<![CDATA[Changelog delta since 0.4.3
+	Added support for importing animations from Adobe Edge Animate CC 2.x.x and 3.x.x
+	to due so: Updated jQuery to v2.0.3
+
+Changelog delta since  0.4.2
+	Fixed animation bug
+	Animation update; check if the user made changes in animation; no changes? do nothing
+
+Changelog delta since 0.4.1
+	Fixed animation import bug
+	Improved animation import; file has not to be the preloadfile
+
+Changelog delta since 0.4.0
+	Added checks for Assign animation (is everything selected)
+	Added checks for Add animation (is the selected file a preload file?)
+	Support for multiple animations in one module
+	Improved import of animation (change URL of edge library in edge preload file to js/ instead of animations/../
+
+Changelog delta since 0.3.8
+	Create duplicate function
+	Bug fixes in updateStay()
+
+Changelog delta since 0.3.7
+	Bug fixes in addASlide() and setStay()
+	setStay does only work for a select set of elements
+
+Changelog delta since 0.3.6
+	Bug fixes animation import
+	Added simple debug console 
+
+Changelog delta since 0.3.5:
+	Fixed assign animation bug.
+	Fixed add animation function not crating the aniamtions and images directory if they don't exist yet.
+
+Changelog delta since 0.3.4:
+	Fixed bug with animation which have a space in the name.
+
+Changelog delta since 0.3.3:
+	Delete button in the slideContainer instead of a context-menu.
+
+Changelog delta since 0.3.2:
+	Added the Animation tab to the exension.
+		User can add, update and delete animations.
+	Renamed the "Nemo" tab to "Slides"
+ 	 Assigning aniamtions now actually works. Dynamically loading them when viewing in the browser as well!
+
+Changelog delta since 0.3.1:
+	Added Stay-Ghosting
+	Added go to Comment Slide button to extension]]>
+	</Abstract>	<ExtensionList>
+		<Extension Id="com.OLO.Nemo.extension" Version="0.4.4" />
+	</ExtensionList>
+	<ExecutionEnvironment>
+		<HostList>
+			<Host Name="DRWV" Version="[9.0,14.9]" />
+		</HostList>
+		<LocaleList>
+			<Locale Code="All" />
+		</LocaleList>
+		<RequiredRuntimeList>
+			<RequiredRuntime Name="CSXS" Version="3.0" />
+		</RequiredRuntimeList>
+	</ExecutionEnvironment>
+	<DispatchInfoList>
+		<Extension Id="com.OLO.Nemo.extension">
+			<DispatchInfo >
+				<Resources>
+					<SwfPath>./Nemo.swf</SwfPath>
+					<ScriptPath>./Nemo.jsx</ScriptPath>
+				</Resources>
+				<Lifecycle>
+					<AutoVisible>true</AutoVisible>
+				</Lifecycle>
+				<UI>
+					<Type>Panel</Type>
+					<Menu>Nemo</Menu>
+					<Geometry>
+						<Size>
+							<Height>400</Height>
+							<Width>232</Width>
+						</Size>
+					</Geometry>
+				</UI>
+			</DispatchInfo>
+		</Extension>
+	</DispatchInfoList>
+</ExtensionManifest>

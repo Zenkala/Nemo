@@ -1,0 +1,118 @@
+<!DOCTYPE HTML SYSTEM "-//Adobe//DWExtension layout-engine 10.0//pi">
+<!-- tag:DIV,priority:9,selection:exact,vline -->
+<!-- Copyright 2000, 2001, 2002, 2003 Macromedia, Inc. All rights reserved. -->
+<html xmlns:MMString="http://www.macromedia.com/schemes/data/string/">
+<head>
+<title>Nemo TextBubble</title>
+
+<script src="NM_TextBubble.js"></script>
+<SCRIPT SRC="../Shared/Common/Scripts/dwscripts.js"></SCRIPT>
+<SCRIPT SRC="../Shared/MM/Scripts/CMN/docInfo.js"></SCRIPT>
+<SCRIPT SRC="../Shared/MM/Scripts/CMN/dateID.js"></SCRIPT>
+<SCRIPT SRC="../Shared/Common/Scripts/ListControlClass.js"></SCRIPT>
+<SCRIPT SRC="../Shared/Common/Scripts/TagEditClass.js"></SCRIPT>
+<!-- Remove the following SCRIPT tag if you are modifying this file for your own use. -->
+<!-- End removal area. -->
+<SCRIPT SRC="_pi_common.js"></SCRIPT>
+<link href="_pi_common.css" rel="stylesheet" type="text/css">
+<link href="../Styles/date.css" rel="stylesheet" type="text/css" />
+<script>
+//--------------- LOCALIZEABLE GLOBALS---------------
+
+
+//--------------- END LOCALIZEABLE   ---------------
+</script>
+
+<style>
+	.piBody{ margin: 0px; }
+	/* the upper and lower halves of the inspector */				
+	#topLayer, 
+	.topLayer,
+	#errorLayer, 
+	.errorLayer {
+		position: absolute;
+		visibility: visible;
+		left: 140px;
+		width: 480px;
+		height: 40px;
+		z-index: 30;
+		padding: 0px;
+	}
+		
+	#bottomLayer, 
+	.bottomLayer{	position: absolute;
+					left: 5px;
+					top: 50px;
+					z-index: 22;
+					width: 595px;
+					height: 24px;
+					margin-top: 3px;}
+
+	TD, TD INPUT{
+		font-size: 		small;
+		font-family:	Sans-serif;
+	}
+	TD SELECT{
+		margin-left: 	2px;
+		font-size: 		9%;
+		font-family:	Sans-serif;
+		padding-bottom:	3px;
+	}
+	TD INPUT {
+		width: 			113px;
+	}
+	TD{
+		width: 			10px;
+		height:			17px;
+		padding-right:	5px;
+	}
+</style>
+
+</head>
+<body class="piBody">
+<!-- Specify the image that will appear in the Property inspector -->
+	<SPAN ID="image" STYLE="position:absolute; width:54px; height:36px; z-index:16; left: 3px; top: 2px;">
+		<IMG SRC="NM_TextBubble_2x.png" WIDTH="54" HEIGHT="36" NAME="marqueeImage" style="margin:3px;">
+	</SPAN>
+	<!-- If your form fields are in different AP elements, you must ¬
+	create a separate form inside each AP element and reference it as ¬
+	shown in the inspectSelection() and setInterjectionTag() functions. -->
+	<div id="topLayer" class="cls_cf_textarea_div_topLayer" >
+	  	<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<TR>
+				<TD>ID:</TD>
+				<TD><INPUT NAME="theID" ID="theID" onChange="updateTag('id')"></TD>
+			</TR>
+			<TR>
+				<TD>Location of pointer:</TD>
+				<TD>
+					<SELECT NAME="thePointer" onChange="updateTag('pointer')">
+						<OPTION VALUE="none" id="none">None</OPTION>
+						<OPTION VALUE="top-left" id="TopLeft">top-left</OPTION>
+						<OPTION VALUE="top-middle" id="TopMiddle">top-middle</OPTION>
+						<OPTION VALUE="top-right" id="TopRight">top-right</OPTION>
+						<OPTION VALUE="middle-left" id="MiddleLeft">middle-left</OPTION>
+						<OPTION VALUE="middle-right" id="MiddleRight">middle-right</OPTION>
+						<OPTION VALUE="bottom-left" id="BottomLeft">bottom-left</OPTION>
+						<OPTION VALUE="bottom-middle" id="BottomMiddle">bottom-middle</OPTION>
+						<OPTION VALUE="bottom-right" id="BottomRight">bottom-right</OPTION>
+					</SELECT>
+				</TD>
+			</TR>
+			<TR>
+				<TD>target:</TD>
+				<TD><INPUT NAME="theTarget" ID="theTarget" onChange="updateTag('target')"></TD>
+			</TR>
+			<TR>
+				<TD>color:</TD>
+				<TD><SELECT NAME="theColor" onChange="updateTag('color')">
+					<OPTION VALUE="white" id="White">white</OPTION>
+					<OPTION VALUE="blue" id="Blue">blue</OPTION>
+					<OPTION VALUE="green" id="Green">green</OPTION>
+					<OPTION VALUE="red" id="Red">red</OPTION>
+				</SELECT></TD>
+			</TR>
+  		</table>
+	</div>
+</body>
+</html>

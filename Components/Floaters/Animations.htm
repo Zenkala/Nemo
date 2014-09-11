@@ -1,0 +1,316 @@
+!DOCTYPE HTML SYSTEM "-//Adobe//DWExtension layout-engine 10.0//floater">
+<html xmlns:MMString="http://www.macromedia.com/schemes/data/string/">
+	<head>
+		<title>Animations</title>
+		<script language="JavaScript">
+			//CS6 Version!
+
+			var pathpatt = /^(.*[\\\/])/
+			var folderpath;
+
+			//sigh, dreamweaver. get a proper javascript engine!
+			Array.prototype.contains = function(obj) {
+			    var i = this.length;
+			    while (i--) {
+			        if (this[i] === obj) {
+			            return true;
+			        }
+			    }
+			    return false;
+			}
+
+			var block = true;
+			var animations = new Array();
+
+			function canShow(platform) {
+				return 'true';
+			}
+
+			function initialSize() {
+				return '60,60';
+			}
+
+			function selectionChanged() {
+				
+				if (!block) {
+					//get the selected node
+					var theDOM3 = dw.getDocumentDOM();
+					if (theDOM3 != null) {
+						var theNode = theDOM3.getSelectedNode();
+						document.getElementById("selected").innerHTML = "selected: " + theNode.tagName + "-" + theNode.id;
+					} else {
+						document.getElementById("selected").innerHTML = "nothing selected"
+					}					
+				} else {
+					document.body.style.background = "#939393";
+				}
+			}
+
+			// update the document with any changes made by	the user in the textarea
+			function updateScript() {
+				block = true;
+				var theDOM4 = dw.getDocumentDOM();
+				if (theDOM4 != null) {
+					document.body.style.background = "#d4d4d4";
+					var theNode = theDOM4.getSelectedNode();
+					//theNode.stay = document.getElementById("stayInput").value;
+				}
+				block = false;
+
+			}
+
+			function isResizable() {
+				return true;
+			}
+
+
+			/*
+			user selects the path to the web export
+			floater copies the image folder content to the image folder in the site root
+			floater copies the js files to the aniamtionJS folder in the site root
+			floater copies content of the edgePreload.js file to memory
+			floater edits the urls to the js files.
+			floater writes the edited content back to the edgeProload.js file.
+
+			display a list of animations and their name.
+			Ability to add and remove aniamtiosn
+			abiliy to update them
+			ability to fill the current selected animation-object with the selected animation
+			  -loads the container div with the prober id and class
+			  -adds the right call to the OLO loader
+			  */
+
+			function addAnimation(){
+				folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+				//ask use to select a folder
+				var fileURL = dreamweaver.browseForFileURL("select", "Select a '_edgePreload.js' File", false, true, new Array("Javascript Files (*.js)|*.js"), folderpath);
+
+				if(fileURL){
+					if(fileURL[0] == "f"){
+						//fixed. do nothing
+					}else{
+						//reletive. add our root
+						fileURL = folderpath + fileURL;
+					}
+
+					//get name
+					var animationName = /[\w\_]*(?=_edgePreload.js)/.exec(fileURL); //extract the name from the url
+					document.getElementById("status").innerHTML = "Loading " + animationName;
+
+					//make a folder for the animation
+					var folderURL = folderpath + "animations/" + animationName;
+					var sourceFolderURL = /.*(?=\/)/.exec(fileURL); //extract the path from the url
+					DWfile.createFolder(folderURL);
+
+					//copy all the Js files to that place
+					DWfile.copy(sourceFolderURL + "/" + animationName + "_edge.js", folderURL + "/" + animationName + "_edge.js");
+					DWfile.copy(sourceFolderURL + "/" + animationName + "_edgeActions.js", folderURL + "/" + animationName + "_edgeActions.js");
+					DWfile.copy(sourceFolderURL + "/" + animationName + "_edgePreload.js", folderURL + "/" + animationName + "_edgePreload.js");
+					DWfile.createFolder(folderURL + "/edge_includes");
+					DWfile.copy(sourceFolderURL + "/edge_includes/edge.1.5.0.min.js", folderURL + "/edge_includes/edge.1.5.0.min.js");
+
+					//copy all the images to root/images
+					var list = DWfile.listFolder(sourceFolderURL + "/images");
+					if (list){
+						for(var j=0; j<list.length; j++){
+							DWfile.copy(sourceFolderURL + "/images/" + list[j], folderpath + "/images/" + list[j]);
+						}
+					}
+
+					//switch fileURL to the preLoad one we've copied
+					fileURL = folderURL + "/" + animationName + "_edgePreload.js";
+
+					alert("parsing " + fileURL);
+
+					//open a file
+					var str = DWfile.read(fileURL); 
+					//var patt= /[\w\.\-\/]*\.js/g; //match any js file. (not handy, since there are more then we need to change)
+					var patt= /[\w\_\/]*\.\d\.\d\.\d\.min\.js|[\w\_]*_edge\.js|[\w\_]*_edgeActions\.js/g; //match the three js files we want
+					var pattRem = /\{load:\"http:\/\/(.|\n)*edge\.1\.5\.0\.min\.js\"\},/; //part where it loads jquery
+					var pattRem2 = /\{load\:\"edge_includes\/jquery-\d\.\d\.\d\.min\.js\"\},/; //fallback for pattRem
+
+					
+					var result = patt.exec(str)
+					var results = new Array();
+					var oldresult = "";
+					while( result && result!=oldresult){
+						oldresult = result;
+						results.push(result);
+						result = patt.exec(str);
+					}
+
+					for(var i=0; i<results.length; i++){
+						str = str.replace(results[i], "animations/" + animationName + "/" + results[i]);
+					}
+					//str = str.replace("Do Not Edit this file", "Do Not Edit this file. (Oh, we did! --Nemo)");
+					
+					str = str.replace(pattRem, ""); //remove jquery loading
+					str = str.replace(pattRem2, ""); //remove jquery loading fallback
+
+					//write the altered preloader	
+					if (DWfile.write(fileURL, ("/* Edited by Nemo */" + str))){
+						document.getElementById("status").innerHTML = "Loaded " + animationName;
+					};
+
+					//done importing the animation. Adding it to the menu
+					animations = new Array();
+					animations.push(animationName);
+					updateAnimationList();
+				}//no file selected. (or dialog canceled) do nothing.
+			}
+
+			function updateAnimationList(){
+				document.getElementById("animationsContainer").innerHTML = "";
+				for(var i=0; i<animations.length; i++) {
+					document.getElementById("animationsContainer").innerHTML += '<li id="animation'+i+'" class="animationContent">' + animations[i] + '<input type="button" value="Assign" onclick="assignAnimation('+i+');"></li>';
+				}
+				document.getElementById("animationsContainer").innerHTML += '<li id="addButton" class="animationContent"><input type="button" value="Add an animation" onclick="addAnimation()" /></li>';
+			}
+
+			function assignAnimation(givenIndex) {
+				folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+				var theDOM = dw.getDocumentDOM();
+				var widthPatt = /\.P\(w,[0-9]{3,4}\)/;
+				var heightPatt = /\.P\(h,[0-9]{3,4}\)/;
+				var numPatt = /[0-9]{3,4}/;
+				if (theDOM != null) {
+					var theNode = theDOM.getSelectedNode();
+					var classList = theNode.class.split(" ");
+						if(classList.contains("nm_Animation")){ //select an animation container
+							var animationName = animations[givenIndex];
+							theNode.class = "" + animationName + " nm_Animation";
+							theNode.id = "" + animationName;
+							//open <name>_edge.js, extract the height and width of the stage and assign it to the animationContainer
+							var str = DWfile.read(folderpath + "animations/" + animationName + "/" +animationName + "_edge.js"); 
+							theNode.style.width = numPatt.exec(widthPatt.exec(str)) + "px";
+							theNode.style.height = numPatt.exec(heightPatt.exec(str)) + "px";
+						}else{
+							alert("no animationContainer selected. Add one first!");
+						}
+				}else{
+					alert("open a file first!");
+				}
+			}
+
+			function checkForAnimations(){
+				folderpath = pathpatt.exec(dreamweaver.getDocumentPath("document"))[0];
+				alert("looking in: " + folderpath + "animations");
+				if(DWfile.exists(folderpath + "animations")){
+					//var list = DWfile.listFolder(dreamweaver.getDocumentPath("document") + "animations", "directories");					
+					
+					var list = DWfile.listFolder(folderpath + "animations", "directories");
+					//fill animations from named of the folders
+					alert("" + folderpath + " contains:\n" + list.join("\n"));
+					if (list){
+						animations = list;
+						updateAnimationList();
+					}
+				}else{
+					alert("no animations folder exists!");
+				}
+			}
+
+			function setInclude(){
+				var theDOM = dw.getDocumentDOM();
+				var scriptPatt = /oloInit/;
+				var oloInit = 'oloInit([';
+					
+				for(var j=0; j<animations.length; j++) {
+					if(j>0)oloInit +=",";
+					oloInit += '"animations/' + animations[j] + '/' + animations[j] + '_edgePreload.js"';
+				}				
+				oloInit += ']);';
+				
+				var scriptRef = theDOM.getElementsByTagName("script");
+				for(var i=0; i<scriptRef.length; i++){
+					if(scriptRef[i] && scriptPatt.exec(scriptRef[i].innerHTML)){
+						alert("change to:\n" + oloInit);
+						scriptRef[i].innerHTML = oloInit;
+					}
+				}
+			}
+			document.getElementById("status").innerHTML = "Started";
+		</script>
+
+		<style>
+			html, body, div {
+				padding: 0px;
+				margin: 0px;
+				font-size: 12px;
+				font-family: arial;
+			}
+
+			body {
+				background-color: #bdbdbd;
+			}
+
+			input {
+				width: 		100px;
+			}
+
+			#slidesDiv{
+				border:		1px solid #AAA;
+			}
+			#animationsContainer{
+				width: 		100%;
+				height:		300px;
+				overflow: 	scroll;
+				border:		1px solid #777;
+				margin:		0px;
+				padding:	1px;
+			}
+
+			.animation{
+				height:		20px;
+				width:		100%;
+				background-color: #bdbdbd;
+				border:		1px solid #AAA;
+				padding:	0px;
+				margin:		0px;
+			}
+			.slideButton{
+				height:		18px;
+				width:		18px;
+				margin:		0px;
+				padding:	0px;
+				position: 	absolute;
+				margin-top:	-9px;
+			}
+			.remButton{
+				right:		0px;
+			}
+			.downButton{
+				right:		20px;
+			}
+			.upButton{
+				right:		40px;
+			}
+			.AddButton{
+				width:		60px;
+				right:		0px;
+			}
+			#maindiv {
+			}
+		</style>
+
+	</head>
+	<body>
+		<div id="status">
+			Loading...
+		</div>
+		<div id="selected">
+			Selected:
+		</div>
+		<input type="button" value="Check for Imported Animations" style="width: 200px;" onclick="checkForAnimations();">
+		<div id="maindiv">
+			Animations:
+			<ul id="animationsContainer">
+				<li><input type="button" value="Add an animation" onclick="addAnimation()" /></li>
+			</ul>
+		</div>
+		<input type="button" value="get script" onclick="setInclude()" />
+		<script>
+			block = false;
+		</script>
+	</body>
+</html>
