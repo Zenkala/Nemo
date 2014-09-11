@@ -10,7 +10,7 @@
 			    title: "Een Slider",
 			    animate: true,
 			    _animateOff: false,
-			    slide: function(event, ui) { $(ui.handle).find('span').html(ui.value); } //slider handle update function
+			    slide: function(event, ui) { $(ui.handle).find('span').html(ui.value.toLocaleString()); } //slider handle update function
 			}, options );
 				$(this).css("height", ""); //remove height
 				//wrap in container
@@ -31,21 +31,21 @@
 					var vals = settings.max - settings.min;
 					var firstStepAdjust = settings.min == 1 ? true : false;
 					for (var i = 0; i <= vals; i+=(firstStepAdjust && i==0?settings.labelStep-1:settings.labelStep)) {
-						var el = $('<label>'+(i+settings.min)+'</label>').css('left',(i/vals*100)+'%');
+						var el = $('<label>'+(i+settings.min.toLocaleString())+'</label>').css('left',(i/vals*100)+'%');
 						$( this ).append(el);
 					}
 				}
 			} else {
-				$( this ).append($('<label>'+(settings.min)+'</label>').css('left',(0)+'%'));
-				$( this ).append($('<label>'+(settings.max)+'</label>').css('left',(100)+'%'));
+				$( this ).append($('<label>'+(settings.min.toLocaleString())+'</label>').css('left',(0)+'%'));
+				$( this ).append($('<label>'+(settings.max.toLocaleString())+'</label>').css('left',(100)+'%'));
 			}
 
 			//make handle labels
 			if(settings.range){
-				$($(this).find(".ui-slider-handle:first")).append($('<span class="sliderHandleLabel sliderHandleMin">' + settings.values[0] + '</span>'));
-				$($(this).find(".ui-slider-handle:nth-child(3)")).append($('<span class="sliderHandleLabel sliderHandleMax">' + settings.values[1] + '</span>'));
+				$($(this).find(".ui-slider-handle:first")).append($('<span class="sliderHandleLabel sliderHandleMin">' + settings.values[0].toLocaleString() + '</span>'));
+				$($(this).find(".ui-slider-handle:nth-child(3)")).append($('<span class="sliderHandleLabel sliderHandleMax">' + settings.values[1].toLocaleString() + '</span>'));
 			} else {
-			    $($(this).find(".ui-slider-handle:first")).append($('<span class="sliderHandleLabel sliderHandleMin">' + settings.value + '</span>'));
+			    $($(this).find(".ui-slider-handle:first")).append($('<span class="sliderHandleLabel sliderHandleMin">' + settings.value.toLocaleString() + '</span>'));
 			}
 		}); 		
 	};
