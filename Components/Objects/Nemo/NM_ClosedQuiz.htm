@@ -1,0 +1,84 @@
+<!-- MENU-LOCATION=NONE -->
+<html xmlns:MMString="http://www.macromedia.com/schemes/data/string/">
+<head>
+<!-- Copyright 2000, 2001, 2002, 2003 Macromedia, Inc. All rights reserved. -->
+<title>NM_ClosedQuiz</title>
+<script type="text/javascript" src="../../Shared/Common/Scripts/dwscripts.js"></script>
+<script>
+// Copyright 2000, 2001, 2002, 2003, 2004 Macromedia, Inc. All rights reserved.
+
+function isDOMRequired() {
+	return true;
+}
+
+function insertObject(){
+  // We're keeping this a separate command, as we want to use the
+  // "buttons at the bottom" style.
+
+  var errMsg = "";
+  var defaultErr = "Please select a component for text to insert the closed quiz.";
+  errMsg = defaultErr;
+
+  var dom = dw.getDocumentDOM();
+  var curSel = dom.getSelection();
+  var curSelNode = dom.getSelectedNode();
+  var isCursor = (curSel[0] == curSel[1]) ? true : false;
+    
+  var patt = new RegExp("nm_Text|nm_Box|nm_Exclamation|paragraph");
+
+  if(curSelNode.class && isCursor) {
+    // This is not possible. But DW thinks it can! So filter this shit out
+  } else {
+    while (curSelNode) {
+      if(curSelNode.class) {
+        if(patt.test(curSelNode.class)) {
+          errMsg = "";
+          break;
+        } 
+      }
+      
+      if(curSelNode.id) {
+        if(curSelNode.id == "contentDiv") break;
+      }
+
+      curSelNode = curSelNode.parentNode;
+    }
+  }
+
+  if(!errMsg) {
+    var appendSomeWhiteSpace = false;
+    var offsets = dom.nodeToOffsets(curSelNode);
+    if((offsets[0] == curSel[0]) && (offsets[1] == curSel[1])) {
+      // Oops! User selected hole component. Move cursor to innerHTML
+      appendSomeWhiteSpace = true;
+      dom.setSelectedNode(curSelNode, true, true);
+    }
+
+    var cmdFile = dreamweaver.getConfigurationPath() + "/Commands/NM_ClosedQuiz.htm";
+    var cmdDOM = dreamweaver.getDocumentDOM(cmdFile);
+    if ( dw.getShowDialogsOnInsert() )
+    {
+       dreamweaver.popupCommand("NM_ClosedQuiz.htm");
+   
+    } 
+    else
+    {
+       // Import default
+    }
+
+    if(appendSomeWhiteSpace) {
+      dom.insertHTML("<p>&nbsp;</p>\n" + cmdDOM.parentWindow.createComponentStr() + "<p>&nbsp;</p>\n");
+    } else {
+      dom.insertHTML(cmdDOM.parentWindow.createComponentStr());
+    }
+  }
+
+  return errMsg;
+
+
+}
+</script>
+</head>
+<body>
+</body>
+</html>

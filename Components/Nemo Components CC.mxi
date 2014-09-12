@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<macromedia-extension id="com.OLO.Nemo" name="Nemo" version="0.5.0" icon="nemo.png">
+
+<description><![CDATA[
+Installs the OLO development environment for Dreamweaver and HTML5: Nemo.
+Less Jesus praising; more fish.
+
+Changelog delta since 0.4.2:
+	Repackaged for CC 2014 (and CC 2014 only)
+
+Changelog delta since 0.4.1
+	Fixed import slider position. It's now possible to choose event handler
+	Button has now an autogenerate option. It's also possible to choose a handler 
+	for on-click actions
+
+Changelog delta since 0.4.0
+		Image import check; is cursor placed inside <P>? Insert image after this block
+		(to prevent stay failures) 
+
+Changelog delta since 0.3.9
+	Improved insert check for all components
+	Grouped components
+	Removed unnecessary components nm_explanation and nm_exclamation
+	Improved image import with a kind of SVG support
+
+Changelog delta since 0.3.8
+	Added the unique id components to the release (oops!)
+	Transformed the quiz component to a closed quiz component. Not backwards compatible! Quiz makers should use Nemo-Components 0.3.9
+	Added an experiment pane component. The component checks if the slide is a experiment slide
+
+Changelog delta since 0.3.7
+	Fixed Nemo workspace
+	Add objects to insertbar.xml / menu.xml instead of replace the file
+	Improved quiz inspector and quiz objects
+
+Changelog delta since 0.3.6:
+	Added NM_Highlight
+	NM_TextBubble can be assigned to target an other element. That element becomes hoverable, showing and hiding the textbubble
+	Added NM_qGroup and NM_qItem. Added inspector for quiz item editing
+	Added Nemo workspace
+
+Changelog delta since 0.3.5:
+	Replaced classList.contains("nm_Animation") from nemo.jsx in assignAnimation. Since it apparantly is randomly unsupported. Made our own contains function.
+	addAnimation now maked the animation and images folder if it doesn't already exists.
+
+Changelog delta since 0.3.4:
+	Added NM_TextBubble inspector for pointer control
+	Added NM_Box
+	New and improved components icons.
+	Fixed bug when adding and assigning an animation that had a space in the name. Old aniamtions will have to be re-imported and reassigned.
+
+Changelog delta since 0.2.4:
+	Added NM_Text
+	Changed the css a bit. (no more rounded cornors in textfield, and ragged_right)
+	Improved the preloader (to not bug with Edge)
+	Removed the old Nemo and Animation floaters
+]]></description>
+
+	<license-agreement><![CDATA[For internal use within Twente Academy only.]]></license-agreement>
+
+	<author name="Willem van Vliet and Tjibbe van der Laan"/>
+
+	<products>
+		<product version="14.0" primary="true" name="Dreamweaver"/>
+	</products>
+
+	<files>
+		<file source="nemo.png" destination="$ExtensionSpecificEMStore" />
+
+		<file source="Shared\Nemo\nmscripts.js" destination="$dreamweaver\Configuration\Shared\Nemo" />
+
+		<file source="Inspectors\NM_Input.htm" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_Input.js" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_Input_2x.png" destination="$dreamweaver\Configuration\Inspectors" />
+
+		<file source="Inspectors\NM_Slider.htm" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_Slider.js" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_Slider_2x.png" destination="$dreamweaver\Configuration\Inspectors" />
+
+		<file source="Inspectors\NM_Button.htm" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_Button.js" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_Button_2x.png" destination="$dreamweaver\Configuration\Inspectors" />
+
+		<file source="Inspectors\NM_TextBubble.htm" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_TextBubble.js" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_TextBubble_2x.png" destination="$dreamweaver\Configuration\Inspectors" />
+
+		<file source="Inspectors\NM_qItem.htm" destination="$dreamweaver\Configuration\Inspectorsm" />
+		<file source="Inspectors\NM_qItem.js" destination="$dreamweaver\Configuration\Inspectors" />
+		<file source="Inspectors\NM_qItem_2x.png" destination="$dreamweaver\Configuration\Inspectors" />
+
+		<file source="Objects\Nemo\NM_Comment.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Comment.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Comment.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_CommentGreen.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_CommentGreen.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_CommentGreen.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Ground.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Ground.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Ground.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Highlight.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Highlight.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Highlight.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Hatching.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Hatching.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Hatching.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Image.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Image.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Image.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Box.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Box.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Box.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Input.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Input.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Input.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Button.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Button.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Button.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Slider.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Slider.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Slider.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_TextBubble.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_TextBubble.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_TextBubble.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_InfoBlock.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_InfoBlock.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_InfoBlock.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_TextField.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_TextField.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_TextField.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		
+		<file source="Objects\Nemo\NM_Text.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Text.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Text.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_Animation.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Animation.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_Animation.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_ExperimentPane.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_ExperimentPane.js" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_ExperimentPane.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Objects\Nemo\NM_ClosedQuiz.htm" destination="$dreamweaver\Configuration\Objects\Nemo" />
+		<file source="Objects\Nemo\NM_ClosedQuiz.png" destination="$dreamweaver\Configuration\Objects\Nemo" />
+
+		<file source="Commands\NM_ClosedQuiz.htm" destination="$dreamweaver\Configuration\Commands" />
+
+		<file source="Menus\Nemo\NM_BringForward.htm" destination="$dreamweaver\Configuration\Menus\Nemo" />
+		<file source="Menus\Nemo\NM_BringForward.js" destination="$dreamweaver\Configuration\Menus\Nemo" />
+		<file source="Menus\Nemo\NM_BringToFront.htm" destination="$dreamweaver\Configuration\Menus\Nemo" />
+		<file source="Menus\Nemo\NM_BringToFront.js" destination="$dreamweaver\Configuration\Menus\Nemo" />
+		<file source="Menus\Nemo\NM_SendBackward.htm" destination="$dreamweaver\Configuration\Menus\Nemo" />
+		<file source="Menus\Nemo\NM_SendBackward.js" destination="$dreamweaver\Configuration\Menus\Nemo" />
+		<file source="Menus\Nemo\NM_SendToBack.htm" destination="$dreamweaver\Configuration\Menus\Nemo" />
+		<file source="Menus\Nemo\NM_SendToBack.js" destination="$dreamweaver\Configuration\Menus\Nemo" />
+
+		<file source="workspace\Nemo.xml" destination="$dreamweaver\Configuration\workspace" />
+
+		<file source="com.OLO.Nemo" destination="$dreamweaver/Configuration/CEP/Extensions" products="Dreamweaver"/>
+	</files>
+
+	<configuration-changes>
+	
+		<menu-insert insertAfter="DWContext_Layer" skipSeparator="true">
+			<menu name="Nemo-Arrange" id="NM_Arrange">
+				<menuitem name="Bring to Front" file="Menus/Nemo/NM_BringToFront.htm" arguments="" id="NM_BTF" />
+				<menuitem name="Bring Forward" file="Menus/Nemo/NM_BringForward.htm" arguments="" id="NM_BF" />
+				<menuitem name="Send Backward" file="Menus/Nemo/NM_SendBackward.htm" arguments="" id="NM_SB" />
+				<menuitem name="Send to Back" file="Menus/Nemo/NM_SendToBack.htm" arguments="" id="NM_STB" />
+			</menu>
+		</menu-insert>
+
+		<menu-insert appendTo="DWMenu_Window">
+			<menuitem name="Nemo" id="DWMenu_Window_Nemo" command="dw.toggleCSXSExtension('com.OLO.Nemo.extension');" checked="dw.getFloaterVisibility('Nemo');" />
+		</menu-insert>
+
+		<insertbar-changes>
+			<insertbar-insert insertAfter="DW_Insertbar_Common">
+				<category name="Nemo" folder="Nemo" id="DW_Insertbar_Nemo">
+					<button label="Text" 				name="Text" 			file="Nemo\NM_Text.htm" 		id="NM_Text" 				image="Nemo\NM_Text.png" />
+					<button label="TextField" 			name="TextField" 		file="Nemo\NM_TextField.htm" 	id="NM_TextField" 			image="Nemo\NM_TextField.png" />
+					<button label="Box" 					name="Box" 				file="Nemo\NM_Box.htm" 			id="NM_Box" 				image="Nemo\NM_Box.png" />
+					<button label="TextBubble" 			name="TextBubble" 		file="Nemo\NM_TextBubble.htm" 	id="NM_TextBubble" 			image="Nemo\NM_TextBubble.png" />
+					<button label="InfoBlock" 			name="InfoBlock" 		file="Nemo\NM_InfoBlock.htm" 	id="NM_InfoBlock" 			image="Nemo\NM_InfoBlock.png" />		
+					<button label="Image" 					name="Image" 			file="Nemo\NM_Image.htm" 		id="NM_Image" 				image="Nemo\NM_Image.png" />
+					<button label="Animation" 				name="Animation" 		file="Nemo\NM_Animation.htm" 	id="NM_Animation" 			image="Nemo\NM_Animation.png" />
+					
+					<menubutton label="Layout" name="NM_LayoutGroup" folder="NM_LayoutGroup" id="NM_LayoutGroup" image="Nemo\NM_Hatching.png">
+						<button label="Hatching" 			name="Hatching" 		file="Nemo\NM_Hatching.htm" 		id="NM_Hatching" 		image="Nemo\NM_Hatching.png" />
+						<button label="Highlight" 			name="Highlight" 		file="Nemo\NM_Highlight.htm" 		id="NM_Highlight" 		image="Nemo\NM_Highlight.png" />
+						<button label="Ground" 				name="Ground" 			file="Nemo\NM_Ground.htm"			id="NM_Ground" 			image="Nemo\NM_Ground.png" />
+					</menubutton>
+					<button label="ExperimentPane" 			name="ExperimentPane" 	file="Nemo\NM_ExperimentPane.htm" 	id="NM_ExperimentPane" 	image="Nemo\NM_ExperimentPane.png" />
+					<menubutton label="Interactive" name="NM_Interactive" folder="NM_Interactive" id="NM_Interactive" image="Nemo\NM_Slider.png">
+						<button label="Input" 				name="Input" 		file="Nemo\NM_Input.htm" 		id="NM_Input" 					image="Nemo\NM_Input.png" />
+						<button label="Button" 				name="Button" 		file="Nemo\NM_Button.htm" 		id="NM_Button" 					image="Nemo\NM_Button.png" />
+						<button label="Slider" 				name="Slider" 		file="Nemo\NM_Slider.htm" 		id="NM_Slider" 					image="Nemo\NM_Slider.png" />
+						<button label="ClosedQuiz" 			name="ClosedQuiz" 	file="Nemo\NM_ClosedQuiz.htm" 	id="NM_ClosedQuiz" 				image="Nemo\NM_ClosedQuiz.png" />		
+					</menubutton>
+					<menubutton label="Comments" name="NM_CommentsGroup" folder="NM_CommentsGroup" id="NM_CommentsGroup" image="Nemo\NM_Comment.png">
+						<button label="Comment" 			name="Comment" 		file="Nemo\NM_Comment.htm"		id="NM_Comment" 				image="Nemo\NM_Comment.png" />
+						<button label="Comment Green" 		name="CommentGreen"	file="Nemo\NM_CommentGreen.htm"	id="NM_CommentGreen"			image="Nemo\NM_CommentGreen.png" />
+					</menubutton>
+				</category>
+			</insertbar-insert>
+		</insertbar-changes>
+
+	</configuration-changes>
+
+</macromedia-extension>
