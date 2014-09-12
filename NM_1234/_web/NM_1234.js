@@ -1,4 +1,4 @@
-﻿//test.js. We do stuff external, to keep it tidy.
+//test.js. We do stuff external, to keep it tidy.
 
 //this function will be called every time a new slide is called
 function newSlideHdl(index, backwards){
@@ -11,8 +11,6 @@ function newSlideHdl(index, backwards){
 function newSlideStopHdl(index, backwards){
 	console.log("newSlideStopHdlcalled " + index + " backwards: " + backwards);
 	
-	if(index==0){ //are we at the first slide?
-	}
 	if(index==0){ //are we at the first slide?
 	}
 
