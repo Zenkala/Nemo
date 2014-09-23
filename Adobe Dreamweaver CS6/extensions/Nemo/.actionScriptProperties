@@ -4,11 +4,11 @@
     <compilerSourcePath/>
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
-      <libraryPathEntry kind="3" linkType="2" path="${CSLIBS}/2.0/4.5/release/apedelta.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="${CSAR}/release/CSXSLibrary-3.0-sdk-4.5-public.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${CSAR}/release/MXThemeSync.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="${CSLIBS}/2.0/4.5/release/csawlib.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="1" linkType="1" path="C:/Program Files (x86)/Adobe/Adobe Flash Builder 4.6/sdks/4.6.0"/>
+      <libraryPathEntry kind="3" linkType="1" path="${CSAR}/release/CSXSLibrary-4.0-sdk-4.5-public.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="2" path="${CSLIBS}/3.0/4.5/release/apedelta.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -19,4 +19,3 @@
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>
-

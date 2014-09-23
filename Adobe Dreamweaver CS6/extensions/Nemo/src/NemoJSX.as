@@ -39,7 +39,7 @@ package
 		
 		public static function initNemo(givenExtension: CSExtension, _nrSlides: NumericStepper, _stay: NumericStepper, _slideContainer: List, _animationContainer: List): void {
 			if(givenExtension) extension = givenExtension;
-			state = "Initializing"
+			state = "Initializing v0.5.1"
 			if(extension) addToLog(state);//extension.status = state;
 			
 			nrSlides = _nrSlides;

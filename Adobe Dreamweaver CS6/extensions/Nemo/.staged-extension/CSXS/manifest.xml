@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.4.4"
+<ExtensionManifest Version="3.0" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleVersion="0.5.1"
 		ExtensionBundleName="Nemo-Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[Willem van Vliet and Tjibbe van der Laan]]>
@@ -61,21 +61,22 @@ Changelog delta since 0.3.1:
 	Added Stay-Ghosting
 	Added go to Comment Slide button to extension]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.4.4" />
+		<Extension Id="com.OLO.Nemo.extension" Version="0.5.1" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
-			<Host Name="DRWV" Version="[12.0,12.9]" />
+			<Host Name="DRWV" Version="[13.0,14.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />
 		</LocaleList>
 		<RequiredRuntimeList>
-			<RequiredRuntime Name="CSXS" Version="3.0" />
+			<RequiredRuntime Name="CSXS" Version="5.0" />
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
 		<Extension Id="com.OLO.Nemo.extension">
+
 			<DispatchInfo >
 				<Resources>
 					<SwfPath>./Nemo.swf</SwfPath>

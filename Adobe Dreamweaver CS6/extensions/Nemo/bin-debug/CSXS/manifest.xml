@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.5.0" Version="5.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.5.1" Version="3.0">
 	<Author>
 		<![CDATA[Willem van Vliet and Tjibbe van der Laan]]>
 	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
@@ -7,10 +7,8 @@
 		<![CDATA[Made by the OLO 2014.
 For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[
-		Le Change
-
-		Changelog delta since 0.4.3
+		<![CDATA[Changelog delta since 0.4.4
+	Fixed bug in Nemo.jsx while deleting experiment pane. Delete slide means swapping content; program didn't check for type attribute of slide
 	Added support for importing animations from Adobe Edge Animate CC 2.x.x and 3.x.x
 	to due so: Updated jQuery to v2.0.3
 
@@ -60,11 +58,11 @@ Changelog delta since 0.3.1:
 	Added Stay-Ghosting
 	Added go to Comment Slide button to extension]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="com.OLO.Nemo.extension" Version="0.5.0"/>
+		<Extension Id="com.OLO.Nemo.extension" Version="0.5.1"/>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
-			<Host Name="DRWV" Version="[12.0,15.9]"/>
+			<Host Name="DRWV" Version="[13.0,14.9]"/>
 		</HostList>
 		<LocaleList>
 			<Locale Code="All"/>
@@ -75,6 +73,7 @@ Changelog delta since 0.3.1:
 	</ExecutionEnvironment>
 	<DispatchInfoList>
 		<Extension Id="com.OLO.Nemo.extension">
+
 			<DispatchInfo>
 				<Resources>
 					<SwfPath>./Nemo.swf</SwfPath>

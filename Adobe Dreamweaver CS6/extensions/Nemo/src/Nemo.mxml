@@ -24,14 +24,14 @@
 			
 			import spark.events.IndexChangeEvent;	
 			
-			var animationInited:Boolean = false;
-			var statusIsOpen:Boolean = false;
+			private var animationInited:Boolean = false;
+			private var statusIsOpen:Boolean = false;
 			
 			public function appComplete():void{
 				NemoJSX.initNemo(this, nrSlides, staySt, slideContainer, animationContainer);
 				
 				//this.status = "Ready";
-				NemoJSX.addToLog("Ready");
+				NemoJSX.addToLog("Ready v0.5.1");
 				this.statusText.maxDisplayedLines = 1;
 				
 				this.statusText.addEventListener(MouseEvent.CLICK, toggleLog);
