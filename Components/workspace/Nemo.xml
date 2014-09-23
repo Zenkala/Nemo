@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<panelset>
+
+  <!-- default to App and Document maximized, but don't hard code sizes (code will compute) -->
+  <application maximize="true"/>
+  <document maximize="true"/>
+
+  <!-- RIGHT - Insert, CSS, Code, Application, Tag Inspector, Files, Frames (hidden), History (hidden) -->
+  <panelframe dock="right">
+    <panelcontainer expanded="true">
+      <panel id="objects" showLabel="true" visibleTab="Nemo"/>
+    </panelcontainer>
+    <panelcontainer expanded="true">
+      <panel height="400" id="com.OLO.Nemo.extension" unconstrainedheight="400" unconstrainedwidth="232" width="232"/>
+    </panelcontainer>
+  </panelframe>
+
+  <!-- BOTTOM - Property Inspector, results (hidden) -->
+  <panelframe dock="bottom">
+    <panelcontainer>
+      <panel id="propertiesMfc"/>
+    </panelcontainer>
+    <panelcontainer visible="false">
+      <panel id="properties"/>
+    </panelcontainer>
+   </panelframe>
+
+  <!-- FLOATING, individuals don't need to be listed - default behavior...-->
+</panelset>
