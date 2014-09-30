@@ -115,8 +115,8 @@
 				if(mainTabs.selectedIndex == 0) {
 					mainVGroup.setActualSize(w-8, h-32);
 					//make list as big as possible
-					slideContainerH.height = h-(slideContainer.y+126+90+25);
-					slideContainer.height = h-(slideContainer.y+126+90+25);
+					slideContainerH.height = h-(slideContainer.y+126+90+45);
+					slideContainer.height = h-(slideContainer.y+126+90+45);
 					slideContainer.width = w-8;
 					//resize prev and next buttons
 					next.width = w/2-7;

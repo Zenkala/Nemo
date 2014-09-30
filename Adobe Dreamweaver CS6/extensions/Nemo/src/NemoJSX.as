@@ -36,6 +36,11 @@ package
 		private static var logBook:Array = new Array();
 		private static var statusIsOpen:Boolean = false;
 		
+		private static var lateTimer:Timer;
+		lateTimer = new Timer(50, 0);
+		lateTimer.addEventListener(TimerEvent.TIMER_COMPLETE, lateUpdate);
+		lateTimer.addEventListener("timer", lateUpdate);
+		
 		
 		public static function initNemo(givenExtension: CSExtension, _nrSlides: NumericStepper, _stay: NumericStepper, _slideContainer: List, _animationContainer: List): void {
 			if(givenExtension) extension = givenExtension;
@@ -85,7 +90,9 @@ package
 					slideContainer.dataProvider.addItem("Slide " + (i+1));
 				}
 
-				slideContainer.selectedIndex = currentSlide;
+				slideContainer.selectedIndex = currentSlide;	
+				lateTimer.reset();
+				lateTimer.start();
 				
 				//fill animationsContainer
 				if(animationContainer) {
@@ -95,7 +102,7 @@ package
 						animationContainer.dataProvider.addItem("" + animations[i]);
 					}
 				}
-				addToLog("done updateGUI. Slides: " + currentSlide + "/" + totalSlides + " and " + animations.length + " aniamtions.");
+				addToLog("UpdateGUI. Slides: " + currentSlide + "/" + totalSlides + " and " + animations.length + " aniamtions.");				
 			}
 		}
 		
@@ -115,7 +122,10 @@ package
 			addToLog("change slide selection from " + oldSlide + " to " + currentSlide);
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
 			//callDW("forceGotoSlide", String(currentSlide)); 
-			if(extension) slideContainer.selectedIndex = currentSlide;		
+			if(extension){
+				slideContainer.selectedIndex = currentSlide;
+				slideContainer.ensureIndexIsVisible(slideContainer.selectedIndex);
+			}
 			//setGhosts();
 			callDW("createGhosts", String(currentSlide));	
 		}
@@ -127,7 +137,10 @@ package
 			addToLog("change slide selection from " + oldSlide + " to " + currentSlide);	
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
 			//callDW("forceGotoSlide", String(currentSlide)); 
-			if(extension) slideContainer.selectedIndex = currentSlide;
+			if(extension){
+				slideContainer.selectedIndex = currentSlide;
+				slideContainer.ensureIndexIsVisible(slideContainer.selectedIndex);
+			}
 			//setGhosts();
 			callDW("createGhosts", String(currentSlide));
 		}	
@@ -137,6 +150,7 @@ package
 			callDW("gotoSlide", String(-1), String(currentSlide));
 			currentSlide = -1;
 			slideContainer.selectedIndex = -1;
+			slideContainer.ensureIndexIsVisible(slideContainer.selectedIndex);
 			//setGhosts();
 			callDW("createGhosts", String(currentSlide));
 		}
@@ -146,6 +160,7 @@ package
 			if(extension) addToLog("completed : " + slideContainer.selectedIndex);
 			var oldSlide: int = currentSlide;
 			currentSlide = slideContainer.selectedIndex;
+			slideContainer.ensureIndexIsVisible(slideContainer.selectedIndex);
 			callDW("moveSlide", String(oldSlide), String(currentSlide)); 
 			callDW("gotoSlide", String(currentSlide), String(oldSlide)); 
 		}	
@@ -318,6 +333,11 @@ package
 				//getNewStays(); //update internal stay storage.
 			}
 			
+		}
+		
+		private static function lateUpdate(event:TimerEvent):void {
+			lateTimer.stop();
+			slideContainer.ensureIndexIsVisible(slideContainer.selectedIndex);
 		}
 
 		private static function requestDW (givenFunctionName: String, param1: String = null, param2: String= null): * {
