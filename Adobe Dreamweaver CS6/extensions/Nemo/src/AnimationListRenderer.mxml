@@ -5,6 +5,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 			
 			private function updateButton():void {
@@ -20,10 +21,21 @@
 				event.item = data;
 				NemoJSX.removeAnimation(event);
 			}
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				//here i can access to the this.data object!
+				var array:Array = value.toString().split(",");
+				labelDisplay.text = array[0]; //name
+				versionDisplay.text = array[1]; //version
+			}
+						
 		]]>
 	</fx:Script>
 	
-	<s:Label id="labelDisplay" verticalCenter="0" />
+	<s:Label id="labelDisplay" verticalCenter="0" text="animation name" />
+	<s:Label id="versionDisplay" verticalCenter="0" right="55" text="version" />
 	<s:Button right="0"  width="25" icon="@Embed('assets/update.png')" click="updateButton()" />
 	<s:Button right="27" width="25" icon="@Embed('assets/delete.png')" click="deleteButton()" />
 	

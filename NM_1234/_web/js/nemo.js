@@ -9,6 +9,7 @@ var slidesToMoveTitle = [];
 var isTitleMoved = false;
 var blockSliding = false;
 var swipeTimer;
+var animationNew = true; //load aniamtions on the new style or old? (<=4)
 
 
 // "http://fonts.googleapis.com/css!css?family=PT+Sans+Narrow"
@@ -30,16 +31,14 @@ var core_scripts = [
 	"js/jquery.ui.touch-punch.min.js",
 	"js/jquery.nm_slider.js",
 	"js/jquery.nm_closedquiz.js",
-	"js/jquery.nm_experimentpane.js"
+	"js/jquery.nm_experimentpane.js",
+	"js/edge.5.0.0.min.js"
 ];
 
 var additional_scripts;
 var animations;	
 var animationNames;	
 
-// Adobe Edge configuration
-window.AdobeEdge = window.AdobeEdge || {};    	 
-window.AdobeEdge.bootstrapLoading = true;
 
 function log(msg) {
 	if (console.timeStamp) {
@@ -93,7 +92,16 @@ function nemoInit(extrascripts){
 				animUrl = $(this).attr("url").replace(/%20/g, " ");
 				console.log("found animation: " + $(this).attr("id"));
 				animationNames.push($(this).attr("id"));
-				animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js");
+				//if old version
+				if(this.hasAttribute("version")){
+					if($(this).attr("version") == "1.5"){ animationNew = false; animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js"); }
+					if($(this).attr("version") == "3.0"){ animationNew = false; animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js"); }
+					if($(this).attr("version") == "4.0"){ animationNew = false; animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js"); }
+					if($(this).attr("version") == "5.0"){ animationNew = true;  animations.push(animUrl); }
+				} else { //assume old
+					animations.push("animations/" + animUrl + "/" + animUrl + "_edgePreload.js");
+					animationNew = false;
+				}
 				totalProgress++;
 			});
 
@@ -153,34 +161,55 @@ function loadAdditionalLibs() {
 			}
 		}]);
 	} else {
-		log("yepnope complete"); 
 		loadAnims();	
 	}
 }
 
 //load the EDGE animations
 function loadAnims(){
-	log("load " + animations.length + " animations");	
 	if(animations.length>0){	
-		yepnope([{
-			load: animations,
-			callback: function (url, result, key) {
-				progress("loaded: " + url);
-			},
-			complete: function(){
-				log("initiating animation loading complete"); 
-				attachBootLoaders();
-				AdobeEdge.loadResources();
-				AdobeEdge.playWhenReady();
-				
-			}
-		}]);
+
+		if(!animationNew){
+			log("Loading "  + animations.length + " animations old style.");
+			// Adobe Edge configuration
+			// window.AdobeEdge = window.AdobeEdge || {};    	 
+			window.AdobeEdge = {}; //remove the edge5 library already loaded. The old aniamtions will load their own version.
+			window.AdobeEdge.bootstrapLoading = true;
+
+			yepnope([{
+				load: animations,
+				callback: function (url, result, key) {
+					progress("loaded: " + url);
+				},
+				complete: function(){
+					log("initiating animation loading complete"); 
+					attachBootLoaders();
+					AdobeEdge.loadResources();
+					AdobeEdge.playWhenReady();				
+				}
+			}]);
+		} else {
+			log("Loading " + animations.length + " animations new style.");
+			$.each(animations, function(index, value) {
+				log(">>"+value);
+				AdobeEdge.loadComposition('animations/'+value+"/"+value, value, {
+					scaleToFit: "none",
+					centerStage: "none",
+					minW: "0",
+					maxW: "undefined",
+					width: "550",
+					height: "400"
+				}, {"dom":{}}, {"dom":{}});
+			});
+
+			startNemoScript();
+		}
 	}else{
 		startNemoScript();
 	}
 }
 
-function attachBootLoaders(){
+function attachBootLoaders(){ //This functions is only used fore <=4 versions of Edge.
 	//This function is called everytime a Edge composition is ready for prime time.
 	//the parameter compId contains the name of the composition that has finished loading.
 	//We check if that animation was in the list of animations-that-arn't-done-loading-yet and remove it from the said list.
@@ -389,10 +418,14 @@ function startNemoScript(){
 		document.getElementsByTagName("head")[0].replaceChild(newlink, oldlink);	
 		console.log("Swapping " + oldlink.getAttribute("href") + " with " + newlink.getAttribute("href"));	
 
+		//remove all the silly "<p>&nbsp;</p>"
+		
+
 		//set original parent of each element.
 		$(".slide").children().each(function(){
 			$(this).attr("org", $(this).parent().attr("id").substring(5));
-			//console.log("set " + $(this).attr("id") + "(" + $(this).attr("class") + ") org to: " + $(this).attr("org"));
+			console.log(this);
+			console.log("set " + $(this).attr("id") + "(" + $(this).attr("class") + ") org to: " + $(this).attr("org"));
 		});
 		console.log("element origins set");
 		progress("Slides and content positioned");
@@ -463,12 +496,13 @@ function startNemoScript(){
 		progress("Load slide content");
 
 		//load our dummy js. Since yepnope is queued, this complete callback will be called when all previous files are loaded.
-		yepnope([{
-			load: ["js/finished.js"],
-			complete: function(){
+		//>> Well, we did. but Edge 5.0 doesn't like it much
+		// yepnope([{
+			// load: ["js/finished.js"],
+			// complete: function(){
 				doTextBubbles();
-			}
-		}]);
+			// }
+		// }]);
 	}
 }
 
@@ -661,9 +695,12 @@ function doSlide(){
 			updateSlideLook(currentPage, quick);
 			//put back children that are here to stay
 			$("#slide"+(currentPage-1)).children().each(function(){
+				console.log("a child");
 				if((parseInt($(this).attr("org"))+parseInt($(this).attr("stay")))>=currentPage){
 					//attach satys children to content div as temporairy storage
-					elementbuffer.push($(this));
+					console.log("stay: a thing");
+					elementbuffer.push(this);
+					console.log(elementbuffer);
 					$('#contentDiv').append( $(this) );
 				}
 			});
@@ -671,8 +708,10 @@ function doSlide(){
 			//move all slides
 			$(".slide").transition({ translate: (currentPage*-1024) }, quick?0:transSpeed, 'easeOutExpo');
 			$("html").transition({}, quick?0:transSpeed, function() {		
+				console.log("rebuilding " + currentPage);
 				elementbuffer.reverse().forEach(function(entry){
-					$(entry).prependTo($('#slide' + currentPage));
+					console.log("stay " + entry);
+					$(entry).prependTo($("#slide" + currentPage));
 				});
 				$("#slide" + (currentPage-1)).css("display", "none");
 				if(!suppresEvents)newSlideStopHdl(currentPage, false);

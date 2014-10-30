@@ -65,18 +65,17 @@ Changelog delta since 0.3.1:
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
-			<Host Name="DRWV" Version="[13.0,14.9]" />
+			<Host Name="DRWV" Version="[13.0,13.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />
 		</LocaleList>
 		<RequiredRuntimeList>
-			<RequiredRuntime Name="CSXS" Version="5.0" />
+			<RequiredRuntime Name="CSXS" Version="3.0" />
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
 		<Extension Id="com.OLO.Nemo.extension">
-
 			<DispatchInfo >
 				<Resources>
 					<SwfPath>./Nemo.swf</SwfPath>

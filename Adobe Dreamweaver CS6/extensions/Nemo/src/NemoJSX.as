@@ -31,7 +31,6 @@ package
 		private static var animationContainer: List;
 		private static var stays: Array;
 		private static var animations: Array = new Array();
-		private static var animationPaths: Array = new Array();
 		
 		private static var logBook:Array = new Array();
 		private static var statusIsOpen:Boolean = false;
@@ -96,13 +95,12 @@ package
 				
 				//fill animationsContainer
 				if(animationContainer) {
-					addToLog("updating animations (" + animations.length + ")");
 					animationContainer.dataProvider.removeAll();
 					for(i = 0; i<animations.length; i++) {
-						animationContainer.dataProvider.addItem("" + animations[i]);
+						animationContainer.dataProvider.addItem("" + animations[i].name +"," + animations[i].version);
 					}
 				}
-				addToLog("UpdateGUI. Slides: " + currentSlide + "/" + totalSlides + " and " + animations.length + " aniamtions.");				
+				addToLog("UpdateGUI. Slides: " + currentSlide + "/" + totalSlides + " and " + animations.length + " animations.");				
 			}
 		}
 		
@@ -207,19 +205,23 @@ package
 		}
 		
 		public static function getAnimationList():void
-		{			
-			addToLog("checkForAnimations");
+		{
 			var rdata:* = requestDW("checkForAnimations");
-			("" + rdata.animations);
 			if(rdata.animations == "none") {
 				//no animations found! empty the arrays
 				addToLog("no animations found");
 				animations = new Array();
-				animationPaths = new Array();
 			} else { //animations found! fill the arrys
-				animations = rdata.animations.split(",");
-				animationPaths = rdata.paths.split(",");
-				addToLog("animations: " + animations + "\npaths: " + rdata.paths.split(","));
+				animations = new Array();
+				var names:Array = rdata.animations.split(",");
+				var paths:Array = rdata.paths.split(",");
+				var heights:Array = rdata.heights.split(",");
+				var widths:Array = rdata.widths.split(",");
+				var versions:Array = rdata.versions.split(",");
+				for	(var i:int = 0; i<names.length; i++) {
+					animations.push(new Animation(names[i], paths[i], versions[i], widths[i], heights[i]));
+				}
+				addToLog("animations: " + animations.length);
 			}			
 		}
 		
@@ -229,19 +231,19 @@ package
 			if(rdata.animation == "none"){
 				addToLog("addAnimation failed");
 			} else {
-				
-				if(animations.indexOf(rdata.animation) == -1){ //add animation if not already in list.
-					animations.push(rdata.animation); 
-					animationPaths.push(rdata.path);
+				var tempAnimation:Animation = new Animation(rdata.animation, rdata.path, rdata.version, rdata.width, rdata.height);
+				if(animations.indexOf(tempAnimation) == -1){ //add animation if not already in list.
+					animations.push(tempAnimation); 
 				}
 		
 				updateGUI();
-				addToLog("Added animation: " + rdata.animation + " path: " + rdata.path);
+				addToLog("Added animation: " + tempAnimation.name + " version: " + tempAnimation.version);
 			}
 			
 		}
 		
 		public static function updateAnimation(event:ItemClickEvent):void {
+			/*
 			addToLog("update " + event.item.toString() + "(" + animationPaths[animations.indexOf(event.item.toString())] + ")");
 			
 			var rdata:* = requestDW(
@@ -255,19 +257,20 @@ package
 				animationPaths[animations.indexOf(event.item.toString())] = rdata.path; //there is a chance that there is a now path selected. so override the old one.
 				addToLog("" + rdata.animation + " updated to " + rdata.path);
 			}
+			*/
 		}
 		
 		public static function assignAnimation(event:MouseEvent):void
 		{
-			var theSelection:String = "none";
+			var theSelection:Animation;
 			if(animationContainer.selectedIndex >= 0) {
 				theSelection = animations[animationContainer.selectedIndex];
 			}
 			
 			addToLog("assign animation: " + theSelection);
-			var rstr:String = requestDW("assignAnimation", theSelection).success;
+			var rstr:String = requestDW("assignAnimation", theSelection.name, theSelection.width.toString(), theSelection.height.toString(), theSelection.version).success;
 			if(rstr == "true") {
-				//
+				addToLog("aniamtion assigned");
 			} else { 
 				addToLog("meh");
 			}
@@ -276,7 +279,7 @@ package
 		
 		public static function removeAnimation(event:ItemClickEvent):void
 		{
-			callDW("removeAnimation", event.item.toString());
+			callDW("removeAnimation", event.item.toString().split(",")[0]);
 			getAnimationList();
 			updateGUI();
 		}
@@ -340,15 +343,23 @@ package
 			slideContainer.ensureIndexIsVisible(slideContainer.selectedIndex);
 		}
 
-		private static function requestDW (givenFunctionName: String, param1: String = null, param2: String= null): * {
+		private static function requestDW (givenFunctionName: String, param1: String = null, param2: String= null, param3: String= null, param4: String= null): * {
 			//("requestDW: " + givenFunctionName);
-			if(param2){
-				var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2);
-			}else{ 
-				if(param1){
-					var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName, param1);
-				}else{ 
-					var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName);
+			if(param4){
+				var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2, param3, param4);
+			} else {
+				if(param3){
+					var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2, param3);
+				} else {
+					if(param2){
+						var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2);
+					}else{ 
+						if(param1){
+							var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName, param1);
+						}else{ 
+							var result:SyncRequestResult = CSXSInterface.getInstance().evalScript(givenFunctionName);
+						}
+					}
 				}
 			}
 			if((SyncRequestResult.COMPLETE == result.status) && result.data)
@@ -358,6 +369,7 @@ package
 				addToLog("ERROR: requestDW(" + givenFunctionName +") resturns null!");
 				return "";
 			}
+			
 		}
 		
 		public static function addToLog (givenStatus:String):void {
@@ -380,17 +392,21 @@ package
 			}
 		}
 		
-		private static function callDW (givenFunctionName: String, param1: String = null, param2: String= null): * {
+		private static function callDW (givenFunctionName: String, param1: String = null, param2: String= null, param3: String= null): * {
 			//("callDW: " + givenFunctionName);
-			if(param2){
-				CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2);
-			}else{ 
-				if(param1){
-					CSXSInterface.getInstance().evalScript(givenFunctionName, param1);
+			if(param3){
+				CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2, param3);
+			}else {
+				if(param2){
+					CSXSInterface.getInstance().evalScript(givenFunctionName, param1, param2);
 				}else{ 
-					CSXSInterface.getInstance().evalScript(givenFunctionName);
-				}
-			}			
+					if(param1){
+						CSXSInterface.getInstance().evalScript(givenFunctionName, param1);
+					}else{ 
+						CSXSInterface.getInstance().evalScript(givenFunctionName);
+					}
+				}	
+			}
 		}		
 		
 	}
