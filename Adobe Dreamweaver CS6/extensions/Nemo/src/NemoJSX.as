@@ -252,7 +252,7 @@ package
 			addToLog("update " + theSelection.name + "(" + theSelection.path + ")");
 			var rdata:* = requestDW(
 				"addAnimation", //call add, even for update
-				theSelection.name, //aniamtion name
+				theSelection.name, //animation name
 				theSelection.path //path, got by getting the index from the name
 			);
 			if(rdata.animation == "none"){
@@ -278,7 +278,7 @@ package
 			addToLog("assign animation: " + theSelection);
 			var rstr:String = requestDW("assignAnimation", theSelection.name, theSelection.width.toString(), theSelection.height.toString(), theSelection.version).success;
 			if(rstr == "true") {
-				addToLog("aniamtion assigned");
+				addToLog("animation assigned");
 			} else { 
 				addToLog("meh");
 			}
