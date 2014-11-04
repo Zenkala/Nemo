@@ -243,21 +243,29 @@ package
 		}
 		
 		public static function updateAnimation(event:ItemClickEvent):void {
-			/*
-			addToLog("update " + event.item.toString() + "(" + animationPaths[animations.indexOf(event.item.toString())] + ")");
 			
+			var theSelection:Animation;
+			if(animationContainer.selectedIndex >= 0) {
+				theSelection = animations[animationContainer.selectedIndex];
+			}
+			
+			addToLog("update " + theSelection.name + "(" + theSelection.path + ")");
 			var rdata:* = requestDW(
 				"addAnimation", //call add, even for update
-				event.item.toString(), //aniamtion name
-				animationPaths[animations.indexOf(event.item.toString())] //path, got by getting the index from the name
+				theSelection.name, //aniamtion name
+				theSelection.path //path, got by getting the index from the name
 			);
 			if(rdata.animation == "none"){
-				addToLog("updateAniamtion failed");
-			} else {
-				animationPaths[animations.indexOf(event.item.toString())] = rdata.path; //there is a chance that there is a now path selected. so override the old one.
+				addToLog("updateAnimation failed!");
+			} else { //there is a chance meta data changed for the animation
+				theSelection.path = rdata.path;
+				theSelection.version = rdata.version;
+				theSelection.width = rdata.width; 
+				theSelection.height = rdata.height; 
+				theSelection.name = rdata.animation;
 				addToLog("" + rdata.animation + " updated to " + rdata.path);
 			}
-			*/
+			updateGUI();
 		}
 		
 		public static function assignAnimation(event:MouseEvent):void
