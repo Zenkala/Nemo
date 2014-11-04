@@ -1,4 +1,10 @@
 Changelog
+0.5.2
+  Support for Edge Animate 2014.1
+  
+0.5.1
+  Slight improvements to the extension
+
 0.5.0
   Repackaged for CC 2014
 

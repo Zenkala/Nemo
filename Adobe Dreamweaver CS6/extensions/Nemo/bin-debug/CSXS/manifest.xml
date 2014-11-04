@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.5.1" Version="3.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.OLO.Nemo" ExtensionBundleName="Nemo-Extension" ExtensionBundleVersion="0.5.2" Version="3.0">
 	<Author>
 		<![CDATA[Willem van Vliet and Tjibbe van der Laan]]>
 	</Author>	<Contact mailto="w.r.vanvliet@utwente.nl">
@@ -7,7 +7,16 @@
 		<![CDATA[Made by the OLO 2014.
 For internal use withing Twente Acadamy only.]]>
 	</Legal>	<Abstract>
-		<![CDATA[Changelog delta since 0.4.4
+		<![CDATA[Changelog delta since 0.5.1
+	Added Edge Animate CC 2014.1 support.
+	Animation Edge version visible in panel.
+
+Changelog delta since 0.5.0
+	Selected slide is now always in view
+	The Next and Previous button are no longer overlapped by the status bar
+	Fixed experimenpane bug
+
+Changelog delta since 0.4.4
 	Fixed bug in Nemo.jsx while deleting experiment pane. Delete slide means swapping content; program didn't check for type attribute of slide
 	Added support for importing animations from Adobe Edge Animate CC 2.x.x and 3.x.x
 	to due so: Updated jQuery to v2.0.3

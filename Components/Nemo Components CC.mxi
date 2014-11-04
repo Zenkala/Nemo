@@ -1,9 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<macromedia-extension id="com.OLO.Nemo" name="Nemo" version="0.5.1" icon="nemo.png">
+<macromedia-extension id="com.OLO.Nemo" name="Nemo" version="0.5.2" icon="nemo.png">
 
 <description><![CDATA[
 Installs the OLO development environment for Dreamweaver and HTML5: Nemo.
 Less Jesus praising; more fish.
+
+Changelog delta since 0.5.1:
+	Extension:
+		Added Edge Animate CC 2014.1 support.
+		Animation Edge version visible in panel.
+
 Changelog delta since 0.5.0:
 	Extension:
 		Selected slide is now always in view
